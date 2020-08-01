@@ -1,0 +1,6 @@
+1. Add Exception class for empty linked list
+2. Check if Linked List operations can be simplified
+3. Check if all operations checks if the list is empty
+4. Make sure that in every class head and tail are referenced as this.head and this.tail
+5. Let Array.contains() method accept null?
+6. LinkedLists.remove() method at end instead of System.out.println() throw Exception or do nothing?
