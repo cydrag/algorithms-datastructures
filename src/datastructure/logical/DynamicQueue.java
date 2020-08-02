@@ -2,12 +2,11 @@ package datastructure.logical;
 
 import datastructure.exceptions.StatusException;
 import datastructure.nodes.Node;
-import datastructure.nodes.SingleNode;
 
 public class DynamicQueue<T> implements Queue<T> {
 
-    private SingleNode<T> head;
-    private SingleNode<T> tail;
+    private Node<T> head;
+    private Node<T> tail;
 
     public DynamicQueue() {
         this.head = this.tail = null;
@@ -15,7 +14,7 @@ public class DynamicQueue<T> implements Queue<T> {
 
     @Override
     public void enqueue(T value) {
-        SingleNode<T> newNode = new Node<>(value);
+        Node<T> newNode = new Node<>(value);
 
         if (this.tail == null) {
             this.head = this.tail = newNode;

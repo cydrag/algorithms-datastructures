@@ -1,34 +1,28 @@
 package datastructure.physical;
 
 import datastructure.nodes.Node;
-import datastructure.nodes.SingleNode;
 
-public class CircularDoubleLinkedList<T> implements LinkedList<T> {
-
-    private Node<T> head;
-    private Node<T> tail;
+public class CircularDoubleLinkedList<T> extends LinkedListBase<T> {
 
     public CircularDoubleLinkedList() {
-        this.head = this.tail = null;
+        super();
     }
 
-    @Override
-    public int size() {
-
+    public void traverse() {
         if (this.head == null) {
-            return 0;
+            throw new NullPointerException("The list is empty.");
         }
 
-        SingleNode<T> temp = head;
+        Node<T> temp = this.head;
 
-        int count = 0;
+        System.out.print("[ ");
 
         do {
+            System.out.print(temp.getData() + " ");
             temp = temp.getNext();
-            count++;
         } while (temp != this.head);
 
-        return count;
+        System.out.println("]");
     }
 
     @Override
@@ -92,27 +86,8 @@ public class CircularDoubleLinkedList<T> implements LinkedList<T> {
     }
 
     @Override
-    public boolean contains(T value) {
-
-        if (this.head == null) {
-            throw new NullPointerException("The list is empty.");
-        }
-
-        SingleNode<T> root = this.head;
-
-        do {
-            if (root.getData().equals(value)) {
-                return true;
-            }
-            root = root.getNext();
-        } while (root != this.head);
-
-        return false;
-    }
-
-    @Override
     public void add(T value, int location) {
-        if (location < 0 || location > this.size()) {
+        if (location < 0 || location > this.length()) {
             throw new IndexOutOfBoundsException("Location not in boundaries.");
         }
         else if (location == 0) {
@@ -133,7 +108,7 @@ public class CircularDoubleLinkedList<T> implements LinkedList<T> {
                 this.head = newNode;
             }
         }
-        else if (location == this.size()) {
+        else if (location == this.length()) {
             Node<T> newNode = new Node<>(value);
 
             newNode.setNext(this.head);

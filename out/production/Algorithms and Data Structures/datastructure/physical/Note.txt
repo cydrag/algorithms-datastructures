@@ -4,3 +4,5 @@
 4. Make sure that in every class head and tail are referenced as this.head and this.tail
 5. Let Array.contains() method accept null?
 6. LinkedLists.remove() method at end instead of System.out.println() throw Exception or do nothing?
+7. Remove setData() on Single and Double Nodes?
+8. Remove traverse() methods on LinkedLists.

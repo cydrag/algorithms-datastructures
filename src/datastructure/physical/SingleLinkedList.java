@@ -1,55 +1,59 @@
 package datastructure.physical;
 
 import datastructure.nodes.Node;
-import datastructure.nodes.SingleNode;
 
-public class SingleLinkedList<T> implements LinkedList<T> {
-
-    private SingleNode<T> head;
-    private SingleNode<T> tail;
+public class SingleLinkedList<T> extends LinkedListBase<T> {
 
     public SingleLinkedList() {
-        this.head = this.tail = null;
-    }
-
-    @Override
-    public int size() {
-
-        if (this.head == null) {
-            return 0;
-        }
-
-        SingleNode<T> temp = this.head;
-
-        int length = 1;
-
-        while (temp != this.tail) {
-            temp = temp.getNext();
-            length++;
-        }
-
-        return length;
+        super();
     }
 
     public void traverse() {
-        if (this.head == null) {
-            throw new NullPointerException("The list is empty.");
-        }
-        else {
-            SingleNode<T> root = this.head;
 
-            System.out.print("[ ");
-            while (root != null) {
-                System.out.print(root.getData() + " ");
-                root = root.getNext();
-            }
-            System.out.println("]");
+        Node<T> root = this.head;
+
+        System.out.print("[ ");
+        while (root != null) {
+            System.out.print(root.getData() + " ");
+            root = root.getNext();
         }
+        System.out.println("]");
+
     }
 
     @Override
-    public void destroy() {
-        this.head = this.tail = null;
+    public void add(T newData, int location) {
+        if (location < 0 || location > this.length()) {
+            throw new IndexOutOfBoundsException("Index out of boundaries.");
+        }
+
+        Node<T> newNode = new Node<>(newData);
+
+        if (this.head == null) {
+            this.head = this.tail = newNode;
+        }
+        else if (location == 0) {
+            newNode.setNext(this.head);
+            this.head = newNode;
+        }
+        else if (location == this.length()) {
+            this.tail.setNext(newNode);
+            this.tail = newNode;
+        }
+        else {
+            Node<T> current = this.head;
+            Node<T> previous = current;
+            int count = 0;
+
+            while (count < location) {
+                previous = current;
+                current = current.getNext();
+                count++;
+            }
+
+            newNode.setNext(current);
+            previous.setNext(newNode);
+        }
     }
 
     @Override
@@ -69,8 +73,8 @@ public class SingleLinkedList<T> implements LinkedList<T> {
             return;
         }
 
-        SingleNode<T> previous = this.head;
-        SingleNode<T> current = this.head;
+        Node<T> previous = this.head;
+        Node<T> current = this.head;
 
         while (current != null) {
             if (current.getData().equals(value)) {
@@ -88,65 +92,7 @@ public class SingleLinkedList<T> implements LinkedList<T> {
     }
 
     @Override
-    public boolean contains(T value) {
-
-        if (this.head != null) {
-            SingleNode<T> temp = head;
-
-            while (temp != null) {
-                if (temp.getData().equals(value)) {
-                    return true;
-                }
-                temp = temp.getNext();
-            }
-        }
-
-        return false;
-    }
-
-    public void addAtEnd(T newData) {
-        this.add(newData, this.size());
-    }
-
-    public void addAtStart(T newData) {
-        this.add(newData, 0);
-    }
-
-    @Override
-    public void add(T newData, int location) {
-        if (location < 0 || location > this.size()) {
-            throw new IndexOutOfBoundsException("Index out of boundaries.");
-        }
-        else if (location == 0) {
-            if (this.head == null) {
-                    this.head = this.tail = new Node<>(newData);
-            }
-            else {
-                SingleNode<T> newNode = new Node<>(newData);
-                newNode.setNext(this.head);
-                this.head = newNode;
-            }
-        }
-        else if (location == this.size()) {
-            SingleNode<T> newNode = new Node<>(newData);
-            this.tail.setNext(newNode);
-            this.tail = newNode;
-        }
-        else {
-            SingleNode<T> current = this.head;
-            SingleNode<T> previous = current;
-            int count = 0;
-
-            while (count < location) {
-                previous = current;
-                current = current.getNext();
-                count++;
-            }
-
-            SingleNode<T> newNode = new Node<>(newData);
-
-            newNode.setNext(current);
-            previous.setNext(newNode);
-        }
+    public void destroy() {
+        this.head = this.tail = null;
     }
 }

@@ -2,11 +2,10 @@ package datastructure.logical;
 
 import datastructure.exceptions.StatusException;
 import datastructure.nodes.Node;
-import datastructure.nodes.SingleNode;
 
 public class DynamicStack<T> implements Stack<T> {
 
-    private SingleNode<T> head;
+    private Node<T> head;
 
     public DynamicStack() {
         this.head = null;
@@ -14,7 +13,7 @@ public class DynamicStack<T> implements Stack<T> {
 
     @Override
     public void push(T element) {
-        SingleNode<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(element);
 
         if (this.head != null) {
             newNode.setNext(this.head);

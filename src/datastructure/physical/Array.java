@@ -2,7 +2,7 @@ package datastructure.physical;
 
 import java.util.Iterator;
 
-public class Array<T> implements Iterable<T> {
+public class Array<T> implements PhysicalDataStructure<T> {
 
     private Object[] array;
     private int size;
@@ -129,14 +129,28 @@ public class Array<T> implements Iterable<T> {
         array[index] = null;
     }
 
+    @Override
+    public void remove(T element) {
+
+        if (element == null) {
+            throw new NullPointerException("Removal element cannot be null.");
+        }
+
+        for (int i = 0; i < this.size; i++) {
+            if ((array[i] == element) || (element.equals(array[i]))) {
+                array[i] = null;
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     public T get(int index) {
         Array.checkBounds(this, index);
         return (T)array[index];
     }
 
-    public void set(int index, T newValue) {
+    public void add(T element, int index) {
         Array.checkBounds(this, index);
-        array[index] = newValue;
+        array[index] = element;
     }
 }

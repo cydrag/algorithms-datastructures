@@ -1,33 +1,39 @@
 package datastructure.nodes;
 
-public class Node<T> implements SingleNode<T> {
+public class Node<T> {
 
     private T data;
     private Node<T> next;
     private Node<T> previous;
+
+    public Node() {
+        this.data = null;
+        this.next = this.previous = null;
+    }
 
     public Node(T data) {
         this.data = data;
         this.next = this.previous = null;
     }
 
-    @Override
     public T getData() {
-        return data;
+        return this.data;
     }
 
-    @Override
+    public void setData(T data) {
+        this.data = data;
+    }
+
     public Node<T> getNext() {
         return this.next;
     }
 
-    @Override
-    public void setNext(SingleNode<T> next) {
-        this.next = (Node<T>) next;
+    public void setNext(Node<T> next) {
+        this.next = next;
     }
 
     public Node<T> getPrevious() {
-        return this.previous;
+        return previous;
     }
 
     public void setPrevious(Node<T> previous) {
