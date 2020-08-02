@@ -20,7 +20,7 @@ public abstract class LinkedListBase<T> implements LinkedList<T> {
 
     @Override
     public int length() {
-        if (this.head == null) {
+        if (this.isEmpty()) {
             return 0;
         }
 
@@ -87,7 +87,7 @@ public abstract class LinkedListBase<T> implements LinkedList<T> {
         this.add(newData, this.length());
     }
 
-    @Override
+    @Override // TODO: Implement this method
     public Iterator<T> iterator() {
         return null;
     }

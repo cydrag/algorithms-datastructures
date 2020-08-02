@@ -8,19 +8,6 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
         super();
     }
 
-    public void traverse() {
-
-        Node<T> root = this.head;
-
-        System.out.print("[ ");
-        while (root != null) {
-            System.out.print(root.getData() + " ");
-            root = root.getNext();
-        }
-        System.out.println("]");
-
-    }
-
     @Override
     public void add(T newData, int location) {
         if (location < 0 || location > this.length()) {
@@ -59,7 +46,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     @Override
     public void remove(T value) {
 
-        if (this.head == null) {
+        if (this.isEmpty()) {
             throw new NullPointerException("The list is empty.");
         }
 
@@ -68,26 +55,29 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
                 this.tail = this.head = null;
             }
             else {
+                Node<T> previous = this.head;
                 this.head = this.head.getNext();
+                previous.setNext(null);
             }
-            return;
         }
+        else {
+            Node<T> previous = this.head;
+            Node<T> current = this.head;
 
-        Node<T> previous = this.head;
-        Node<T> current = this.head;
+            while (current != null) {
+                if (current.getData().equals(value)) {
 
-        while (current != null) {
-            if (current.getData().equals(value)) {
+                    if (current == this.tail) {
+                        this.tail = previous;
+                    }
 
-                if (current == this.tail) {
-                    this.tail = previous;
+                    previous.setNext(current.getNext());
+                    current.setNext(null);
+                    break;
                 }
-
-                previous.setNext(current.getNext());
-                return;
+                previous = current;
+                current = current.getNext();
             }
-            previous = current;
-            current = current.getNext();
         }
     }
 

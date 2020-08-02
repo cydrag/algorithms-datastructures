@@ -10,8 +10,7 @@ class AVLNode<T> {
     AVLNode(T data) {
         this.data = data;
         this.height = 0;
-        this.left = null;
-        this.right = null;
+        this.left = this.right = null;
     }
 
     T getData() {

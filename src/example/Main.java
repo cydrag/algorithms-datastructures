@@ -1,20 +1,18 @@
 package example;
 
-import datastructure.physical.CircularDoubleLinkedList;
+import datastructure.physical.CircularSingleLinkedList;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        CircularDoubleLinkedList<Integer> linkedList = new CircularDoubleLinkedList<>();
+        CircularSingleLinkedList<Integer> linkedList = new CircularSingleLinkedList<>();
 
         linkedList.addAtStart(10);
         linkedList.addAtEnd(20);
-//        linkedList.add(30, 1);
-//        linkedList.addAtEnd(40);
-//        linkedList.addAtStart(50);
-        linkedList.traverse();
-        System.out.println(linkedList.contains(20));
+//        linkedList.addAtEnd(30);
+
+        linkedList.remove(new Integer(20));
     }
 
 }

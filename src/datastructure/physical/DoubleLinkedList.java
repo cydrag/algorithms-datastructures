@@ -8,6 +8,19 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
         super();
     }
 
+    public void traverse() {
+
+        Node<T> root = this.head;
+
+        System.out.print("[ ");
+        while (root != null) {
+            System.out.print(root.getData() + " ");
+            root = root.getNext();
+        }
+        System.out.println("]");
+
+    }
+
     @Override
     public void add(T value, int location) {
         if (location < 0 || location > this.length()) {
