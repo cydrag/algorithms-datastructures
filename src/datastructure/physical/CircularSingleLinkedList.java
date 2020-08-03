@@ -9,24 +9,24 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T value, int location) {
+    public void add(T element, int index) {
 
-        if (location < 0 || location > this.length()) {
+        if (index < 0 || index > this.length()) {
             throw new IndexOutOfBoundsException("Index not in boundaries.");
         }
 
-        Node<T> newNode = new Node<>(value);
+        Node<T> newNode = new Node<>(element);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
             this.head.setNext(this.head);
         }
-        else if (location == 0) {
+        else if (index == 0) {
             newNode.setNext(this.head);
             this.head = newNode;
             this.tail.setNext(newNode);
         }
-        else if (location == this.length()) {
+        else if (index == this.length()) {
             newNode.setNext(this.head);
             this.tail.setNext(newNode);
             this.tail = newNode;
@@ -36,7 +36,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
             Node<T> previous = root;
             int count = 0;
 
-            while (count < location) {
+            while (count < index) {
                 previous = root;
                 root = root.getNext();
                 count++;
@@ -48,7 +48,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T value) {
+    public void remove(T element) {
 
         if (this.isEmpty()) {
             throw new NullPointerException("The list is empty.");
@@ -56,7 +56,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
 
         Node<T> previous = this.head;
 
-        if (this.head.getData().equals(value)) {
+        if (this.head.getData().equals(element)) {
             if (this.head == this.tail) {
                 this.tail = this.head = null;
             }
@@ -71,7 +71,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
             while (previous.getNext() != this.head) {
                 Node<T> current = previous.getNext();
 
-                if (current.getData().equals(value)) {
+                if (current.getData().equals(element)) {
                     if (current == this.tail) {
                         this.tail = previous;
                     }

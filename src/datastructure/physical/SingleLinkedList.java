@@ -9,21 +9,21 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T newData, int location) {
-        if (location < 0 || location > this.length()) {
+    public void add(T element, int index) {
+        if (index < 0 || index > this.length()) {
             throw new IndexOutOfBoundsException("Index out of boundaries.");
         }
 
-        Node<T> newNode = new Node<>(newData);
+        Node<T> newNode = new Node<>(element);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
         }
-        else if (location == 0) {
+        else if (index == 0) {
             newNode.setNext(this.head);
             this.head = newNode;
         }
-        else if (location == this.length()) {
+        else if (index == this.length()) {
             this.tail.setNext(newNode);
             this.tail = newNode;
         }
@@ -32,7 +32,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
             Node<T> previous = current;
             int count = 0;
 
-            while (count < location) {
+            while (count < index) {
                 previous = current;
                 current = current.getNext();
                 count++;
@@ -44,13 +44,13 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T value) {
+    public void remove(T element) {
 
         if (this.isEmpty()) {
             throw new NullPointerException("The list is empty.");
         }
 
-        if (this.head.getData().equals(value)) {
+        if (this.head.getData().equals(element)) {
             if (this.head.getNext() == null) {
                 this.tail = this.head = null;
             }
@@ -65,7 +65,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
             Node<T> current = this.head;
 
             while (current != null) {
-                if (current.getData().equals(value)) {
+                if (current.getData().equals(element)) {
 
                     if (current == this.tail) {
                         this.tail = previous;

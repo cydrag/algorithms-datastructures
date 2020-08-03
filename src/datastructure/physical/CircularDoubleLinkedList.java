@@ -2,55 +2,104 @@ package datastructure.physical;
 
 import datastructure.nodes.Node;
 
-public class CircularDoubleLinkedList<T> extends LinkedListBase<T> {
+import java.util.Iterator;
+
+public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T> {
 
     public CircularDoubleLinkedList() {
         super();
     }
 
-    public void traverse() {
-        if (this.head == null) {
-            throw new NullPointerException("The list is empty.");
+    @Override
+    public Iterator<T> reverseIterator() {
+        return new Iterator<>() {
+
+            Node<T> temp = tail;
+            boolean wasHead = false;
+
+            @Override
+            public boolean hasNext() {
+                try {
+                    return !wasHead;
+                } finally {
+                    if (temp == head) {
+                        wasHead = true;
+                    }
+                }
+            }
+
+            @Override
+            public T next() {
+                try {
+                    return temp.getData();
+                } finally {
+                    temp = temp.getPrevious();
+                }
+            }
+        };
+    }
+
+    @Override // TODO: Code reduction can be done here
+    public void add(T element, int index) {
+        if (index < 0 || index > this.length()) {
+            throw new IndexOutOfBoundsException("Location not in boundaries.");
         }
 
-        Node<T> temp = this.head;
+        Node<T> newNode = new Node<>(element);
 
-        System.out.print("[ ");
+        if (this.head == null) {
+            this.head = this.tail = newNode;
+            this.head.setNext(this.head);
+            this.head.setPrevious(this.head);
+        }
+        else if (index == 0) {
+            newNode.setNext(this.head);
+            newNode.setPrevious(this.tail);
 
-        do {
-            System.out.print(temp.getData() + " ");
-            temp = temp.getNext();
-        } while (temp != this.head);
+            this.tail.setNext(newNode);
+            this.head.setPrevious(newNode);
 
-        System.out.println("]");
+            this.head = newNode;
+        }
+        else if (index == this.length()) {
+            newNode.setNext(this.head);
+            newNode.setPrevious(this.tail);
+
+            this.tail.setNext(newNode);
+            this.head.setPrevious(newNode);
+
+            this.tail = newNode;
+        }
+        else {
+
+            Node<T> current = this.head;
+            Node<T> previous = current;
+
+            int count = 0;
+
+            while (count < index) {
+                previous = current;
+                current = current.getNext();
+                count++;
+            }
+
+            newNode.setNext(current);
+            newNode.setPrevious(previous);
+
+            previous.setNext(newNode);
+            current.setPrevious(newNode);
+        }
     }
 
     @Override
-    public void destroy() {
+    public void remove(T element) {
 
-        if (this.head != null) {
-            do {
-                this.head = this.head.getNext();
-                this.head.getPrevious().setNext(null);
-                this.head.getPrevious().setPrevious(null);
-                this.head.setPrevious(null);
-            } while (this.head != this.tail);
-
-            this.tail.setNext(null);
-
-            this.head = this.tail = null;
-        }
-    }
-
-    @Override
-    public void remove(T value) {
-
-        if (this.head == null) {
+        if (this.isEmpty()) {
             throw new NullPointerException("The list is empty.");
         }
 
         Node<T> previous = this.head;
-        if (this.head.getData().equals(value)) {
+        if (this.head.getData().equals(element)) {
 
             this.head = this.head.getNext();
             this.head.setPrevious(this.tail);
@@ -67,7 +116,7 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> {
             Node<T> current = this.head.getNext();
 
             while (current != head) {
-                if (current.getData().equals(value)) {
+                if (current.getData().equals(element)) {
                     previous.setNext(current.getNext());
                     current.setPrevious(null);
                     current.getNext().setPrevious(previous);
@@ -76,7 +125,6 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> {
                     if (this.tail == current) {
                         this.tail = previous;
                     }
-
                     break;
                 }
                 previous = current;
@@ -86,59 +134,23 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T value, int location) {
-        if (location < 0 || location > this.length()) {
-            throw new IndexOutOfBoundsException("Location not in boundaries.");
-        }
-        else if (location == 0) {
-            if (this.head == null) {
-                this.head = this.tail = new Node<>(value);
-                this.head.setNext(this.head);
-                this.head.setPrevious(this.head);
-            }
-            else {
-                Node<T> newNode = new Node<>(value);
+    public void destroy() {
 
-                newNode.setNext(this.head);
-                newNode.setPrevious(this.tail);
+        if (this.head != null) {
 
-                this.tail.setNext(newNode);
-                this.head.setPrevious(newNode);
+            this.head.setPrevious(null);
+            this.tail.setNext(null);
 
-                this.head = newNode;
+            Node<T> prev = this.head;
+
+            while (this.head != this.tail) {
+                this.head = this.head.getNext();
+                prev.setNext(null);
+                this.head.setPrevious(null);
+                prev = this.head;
             }
         }
-        else if (location == this.length()) {
-            Node<T> newNode = new Node<>(value);
 
-            newNode.setNext(this.head);
-            newNode.setPrevious(this.tail);
-
-            this.tail.setNext(newNode);
-            this.head.setPrevious(newNode);
-
-            this.tail = newNode;
-        }
-        else {
-
-            Node<T> current = this.head;
-            Node<T> previous = current;
-
-            int count = 0;
-
-            while (count < location) {
-                previous = current;
-                current = current.getNext();
-                count++;
-            }
-
-            Node<T> newNode = new Node<>(value);
-
-            newNode.setNext(current);
-            newNode.setPrevious(previous);
-
-            previous.setNext(newNode);
-            current.setPrevious(newNode);
-        }
+        this.head = this.tail = null;
     }
 }

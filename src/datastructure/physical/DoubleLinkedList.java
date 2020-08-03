@@ -2,43 +2,60 @@ package datastructure.physical;
 
 import datastructure.nodes.Node;
 
-public class DoubleLinkedList<T> extends LinkedListBase<T> {
+import java.util.Iterator;
+
+public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T> {
 
     public DoubleLinkedList() {
         super();
     }
 
-    public void traverse() {
+    @Override
+    public Iterator<T> reverseIterator() {
+        return new Iterator<>() {
 
-        Node<T> root = this.head;
+            Node<T> temp = tail;
+            boolean wasHead = false;
 
-        System.out.print("[ ");
-        while (root != null) {
-            System.out.print(root.getData() + " ");
-            root = root.getNext();
-        }
-        System.out.println("]");
+            @Override
+            public boolean hasNext() {
+                try {
+                    return !wasHead;
+                } finally {
+                    if (temp == head) {
+                        wasHead = true;
+                    }
+                }
+            }
 
+            @Override
+            public T next() {
+                try {
+                    return temp.getData();
+                } finally {
+                    temp = temp.getPrevious();
+                }
+            }
+        };
     }
 
     @Override
-    public void add(T value, int location) {
-        if (location < 0 || location > this.length()) {
+    public void add(T element, int index) {
+        if (index < 0 || index > this.length()) {
             throw new IndexOutOfBoundsException("Location not in boundaries.");
         }
-        else if (location == 0) {
-            if (this.head == null) {
-                this.head = this.tail = new Node<>(value);
-            }
-            else {
-                Node<T> newNode = new Node<>(value);
-                newNode.setNext(this.head);
-                this.head.setPrevious(newNode);
-                this.head = newNode;
-            }
+
+        Node<T> newNode = new Node<>(element);
+
+        if (this.head == null) {
+            this.head = this.tail = newNode;
         }
-        else if (location == this.length()) {
-            Node<T> newNode = new Node<>(value);
+        else if (index == 0) {
+            newNode.setNext(this.head);
+            this.head.setPrevious(newNode);
+            this.head = newNode;
+        }
+        else if (index == this.length()) {
             newNode.setPrevious(this.tail);
             this.tail.setNext(newNode);
             this.tail = newNode;
@@ -49,13 +66,11 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
 
             int count = 0;
 
-            while (count < location) {
+            while (count < index) {
                 previous = current;
                 current = current.getNext();
                 count++;
             }
-
-            Node<T> newNode = new Node<>(value);
 
             newNode.setNext(current);
             newNode.setPrevious(previous);
@@ -66,13 +81,13 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T value) {
+    public void remove(T element) {
 
-        if (this.head == null) {
+        if (this.isEmpty()) {
             throw new NullPointerException("The list is empty.");
         }
 
-        if (this.head.getData().equals(value)) {
+        if (this.head.getData().equals(element)) {
             if (this.head.getNext() == null) {
                 this.head = this.tail = null;
             }
@@ -83,7 +98,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
                 prev.setNext(null);
             }
         }
-        else if (this.tail.getData().equals(value)) {
+        else if (this.tail.getData().equals(element)) {
             Node<T> current = this.tail;
             this.tail = this.tail.getPrevious();
             this.tail.setNext(null);
@@ -94,12 +109,12 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
             Node<T> current = prev;
 
             while (current != null) {
-                if (current.getData().equals(value)) {
+                if (current.getData().equals(element)) {
                     prev.setNext(current.getNext());
                     current.getNext().setPrevious(prev);
                     current.setPrevious(null);
                     current.setNext(null);
-                    return;
+                    break;
                 }
                 prev = current;
                 current = current.getNext();
@@ -110,13 +125,13 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> {
     @Override
     public void destroy() {
 
-        Node<T> temp = this.head;
+        Node<T> prev = this.head;
 
         while (this.head != this.tail) {
             this.head = this.head.getNext();
-            temp.setNext(null);
+            prev.setNext(null);
             this.head.setPrevious(null);
-            temp = this.head;
+            prev = this.head;
         }
 
         this.head = this.tail = null;

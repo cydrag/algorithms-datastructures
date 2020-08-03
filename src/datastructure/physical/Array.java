@@ -33,7 +33,6 @@ public class Array<T> implements PhysicalDataStructure<T> {
         return new ArrayItr(index);
     }
 
-
     private class Itr implements Iterator<T> {
         int cursor;
         boolean headNext;
@@ -95,6 +94,30 @@ public class Array<T> implements PhysicalDataStructure<T> {
         }
     }
 
+    public boolean isEmpty() {
+        for (Object o : array) {
+            if (o != null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int length() {
+        return size;
+    }
+
+    public void add(T element, int index) {
+        Array.checkBounds(this, index);
+        array[index] = element;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T get(int index) {
+        Array.checkBounds(this, index);
+        return (T)array[index];
+    }
+
     public boolean contains(T element) {
 
         for (Object o : array) {
@@ -109,19 +132,6 @@ public class Array<T> implements PhysicalDataStructure<T> {
         }
 
         return false;
-    }
-
-    public boolean isEmpty() {
-        for (Object o : array) {
-            if (o != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public int length() {
-        return size;
     }
 
     public void remove(int index) {
@@ -141,16 +151,5 @@ public class Array<T> implements PhysicalDataStructure<T> {
                 array[i] = null;
             }
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    public T get(int index) {
-        Array.checkBounds(this, index);
-        return (T)array[index];
-    }
-
-    public void add(T element, int index) {
-        Array.checkBounds(this, index);
-        array[index] = element;
     }
 }

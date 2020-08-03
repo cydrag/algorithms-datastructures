@@ -6,11 +6,6 @@ public class Node<T> {
     private Node<T> next;
     private Node<T> previous;
 
-    public Node() {
-        this.data = null;
-        this.next = this.previous = null;
-    }
-
     public Node(T data) {
         this.data = data;
         this.next = this.previous = null;
@@ -18,10 +13,6 @@ public class Node<T> {
 
     public T getData() {
         return this.data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 
     public Node<T> getNext() {
