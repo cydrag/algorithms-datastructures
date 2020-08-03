@@ -1,6 +1,7 @@
 package datastructure.logical;
 
-import datastructure.exceptions.StatusException;
+import datastructure.exceptions.EmptyDataStructureException;
+import datastructure.exceptions.FullDataStructureException;
 
 public class FixedQueue<T> extends ArrayQueue<T> {
 
@@ -9,43 +10,34 @@ public class FixedQueue<T> extends ArrayQueue<T> {
     }
 
     @Override
-    public void enqueue(T value) {
+    public void enqueue(T element) {
         if (this.isFull()) {
-            throw new StatusException("Cannot add element to a queue. The queue is full.");
+            throw new FullDataStructureException();
         }
-        super.values[super.end++] = value;
+        this.values[this.end++] = element;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public T dequeue() {
         if (this.isEmpty()) {
-            throw new StatusException("Cannot remove element from the queue. The queue is empty.");
+            throw new EmptyDataStructureException();
         }
 
-        Object obj = super.values[super.front++];
+        Object obj = this.values[this.front++];
         if (this.isEmpty()) {
-            super.front = super.end = 0;
+            this.front = this.end = 0;
         }
 
         return (T)obj;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public T peek() {
-        if (this.isEmpty()) {
-            throw new StatusException("Cannot peek to a queue. The queue is empty.");
-        }
-        return (T)super.values[super.front];
-    }
-
     @Override
     public boolean isEmpty() {
-        return super.front == super.end;
+        return this.front == this.end;
     }
 
     public boolean isFull() {
-        return super.end == super.values.length;
+        return this.end == this.values.length;
     }
 }

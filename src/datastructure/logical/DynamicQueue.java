@@ -1,6 +1,6 @@
 package datastructure.logical;
 
-import datastructure.exceptions.StatusException;
+import datastructure.exceptions.EmptyDataStructureException;
 import datastructure.nodes.Node;
 
 public class DynamicQueue<T> implements Queue<T> {
@@ -13,8 +13,8 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
-    public void enqueue(T value) {
-        Node<T> newNode = new Node<>(value);
+    public void enqueue(T element) {
+        Node<T> newNode = new Node<>(element);
 
         if (this.tail == null) {
             this.head = this.tail = newNode;
@@ -28,7 +28,7 @@ public class DynamicQueue<T> implements Queue<T> {
     @Override
     public T dequeue() {
         if (this.isEmpty()) {
-            throw new StatusException("Cannot remove element from the queue. The queue is empty.");
+            throw new EmptyDataStructureException();
         }
 
         T obj = this.head.getData();
@@ -42,7 +42,7 @@ public class DynamicQueue<T> implements Queue<T> {
     @Override
     public T peek() {
         if (this.isEmpty()) {
-            throw new StatusException("Cannot peek to a queue. The queue is empty.");
+            throw new EmptyDataStructureException();
         }
         return this.head.getData();
     }
@@ -53,7 +53,7 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
-    public void clear() {
+    public void destroy() {
         this.head = this.tail = null;
     }
 }

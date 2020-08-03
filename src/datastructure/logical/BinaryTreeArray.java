@@ -1,6 +1,6 @@
 package datastructure.logical;
 
-import datastructure.exceptions.StatusException;
+import datastructure.exceptions.FullDataStructureException;
 import datastructure.physical.SingleLinkedList;
 
 public class BinaryTreeArray<T> implements BinaryTree<T> {
@@ -36,11 +36,11 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public boolean contains(T data) {
+    public boolean contains(T element) {
 
-        if (data != null) {
+        if (element != null) {
             for (int i = 1; i <= this.lastUsedIndex; i++) {
-                if (this.values[i].equals(data)) {
+                if (this.values[i].equals(element)) {
                     return true;
                 }
             }
@@ -50,11 +50,11 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public void remove(T data) {
+    public void remove(T element) {
 
-        if (data != null) {
+        if (element != null) {
             for (int i = 1; i <= this.lastUsedIndex; i++) {
-                if (this.values[i].equals(data)) {
+                if (this.values[i].equals(element)) {
                     this.values[i] = this.values[this.lastUsedIndex];
                     this.values[this.lastUsedIndex--] = null;
                 }
@@ -123,16 +123,16 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public void addChild(T data) {
+    public void add(T data) {
         if (this.isFull()) {
-            throw new StatusException("The binary tree array is full.");
+            throw new FullDataStructureException();
         }
 
         this.values[++this.lastUsedIndex] = data;
     }
 
     @Override
-    public void delete() {
+    public void destroy() {
         this.values = null;
         this.lastUsedIndex = 0;
     }

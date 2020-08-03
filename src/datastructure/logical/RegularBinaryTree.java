@@ -11,7 +11,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public boolean contains(T data) {
+    public boolean contains(T element) {
         Queue<TreeNode<T>> children = new DynamicQueue<>();
         children.enqueue(super.root);
 
@@ -19,8 +19,8 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
             TreeNode<T> node = children.dequeue();
 
             if (node != null) {
-                if (node.getData().equals(data)) {
-                    children.clear();
+                if (node.getData().equals(element)) {
+                    children.destroy();
                     return true;
                 }
                 else {
@@ -34,7 +34,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public void remove(T data) {
+    public void remove(T element) {
 
         boolean found = false;
 
@@ -47,9 +47,9 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
             current = children.dequeue();
 
             if (current != null) {
-                if (current.getData().equals(data)) {
+                if (current.getData().equals(element)) {
                     found = true;
-                    children.clear();
+                    children.destroy();
                     break;
                 }
                 else {
@@ -67,7 +67,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public void addChild(T data) {
+    public void add(T data) {
 
         TreeNode<T> newChild = new TreeNode<>(data);
 
@@ -96,7 +96,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
                     children.enqueue(node.getRight());
                 }
             }
-            children.clear();
+            children.destroy();
         }
     }
 
@@ -120,12 +120,12 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
             if (currentNode.getLeft() == null) {
                 previousNode.setRight(null);
-                queue.clear();
+                queue.destroy();
                 return;
             }
             else if (currentNode.getRight() == null) {
                 currentNode.setLeft(null);
-                queue.clear();
+                queue.destroy();
                 return;
             }
             else {

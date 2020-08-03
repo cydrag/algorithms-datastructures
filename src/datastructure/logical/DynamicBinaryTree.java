@@ -87,7 +87,7 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
     }
 
     @Override
-    public void delete() {
+    public void destroy() {
         this.root = null;
     }
 }

@@ -1,5 +1,6 @@
 package datastructure.physical;
 
+import datastructure.exceptions.FullDataStructureException;
 import datastructure.exceptions.IndexNotInBoundsException;
 import datastructure.exceptions.NegativeSizeException;
 
@@ -8,7 +9,7 @@ import java.util.Iterator;
 public class Array<T> implements PhysicalDataStructure<T> {
 
     private Object[] array;
-    private int size;
+    private final int size;
 
     public Array(int size) {
         if (size < 0) {
@@ -68,7 +69,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
     private class ArrayItr extends Itr implements ArrayIterator<T> {
 
         private ArrayItr() {
-
+            super();
         }
 
         private ArrayItr(int index) {
@@ -97,6 +98,16 @@ public class Array<T> implements PhysicalDataStructure<T> {
         }
     }
 
+    private boolean hasFreeSpot() {
+        for (Object o : this.array) {
+            if (o == null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean isEmpty() {
         for (Object o : array) {
             if (o != null) {
@@ -108,6 +119,21 @@ public class Array<T> implements PhysicalDataStructure<T> {
 
     public int length() {
         return size;
+    }
+
+    @Override
+    public void add(T element) {
+        if (!this.hasFreeSpot()) {
+            throw new FullDataStructureException();
+        }
+        else {
+            for (int i = 0; i < size; i++) {
+                if (array[i] == null) {
+                    array[i] = element;
+                    break;
+                }
+            }
+        }
     }
 
     public void add(T element, int index) {

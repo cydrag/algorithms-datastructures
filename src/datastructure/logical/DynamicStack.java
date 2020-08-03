@@ -1,6 +1,6 @@
 package datastructure.logical;
 
-import datastructure.exceptions.StatusException;
+import datastructure.exceptions.EmptyDataStructureException;
 import datastructure.nodes.Node;
 
 public class DynamicStack<T> implements Stack<T> {
@@ -25,7 +25,7 @@ public class DynamicStack<T> implements Stack<T> {
     public T pop() {
 
         if (this.isEmpty()) {
-            throw new StatusException("Cannot pop element from a stack. The stack is empty.");
+            throw new EmptyDataStructureException();
         }
 
         T elem = this.head.getData();
@@ -45,7 +45,7 @@ public class DynamicStack<T> implements Stack<T> {
     }
 
     @Override
-    public void clear() {
+    public void destroy() {
         this.head = null;
     }
 }

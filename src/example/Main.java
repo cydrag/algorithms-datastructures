@@ -1,5 +1,7 @@
 package example;
 
+import algorithm.Algorithm;
+import datastructure.physical.Array;
 import datastructure.physical.SingleLinkedList;
 
 public class Main {
@@ -15,5 +17,10 @@ public class Main {
         linkedList.addAtEnd(null);
         linkedList.addAtEnd(p2);
 
+        Array<Integer> array = new Array<>(3);
+        array.add(2);
+        array.add(3);
+        array.add(4);
+        System.out.println(Algorithm.toString(array));
     }
 }

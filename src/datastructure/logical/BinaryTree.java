@@ -7,6 +7,6 @@ public interface BinaryTree<T> extends Tree<T> {
     SingleLinkedList<T> inOrder();
     SingleLinkedList<T> preOrder();
     SingleLinkedList<T> postOrder();
-    void addChild(T data);
+    void add(T data);
 
 }

@@ -1,7 +1,8 @@
 package datastructure.logical;
 
+import datastructure.exceptions.EmptyDataStructureException;
+import datastructure.exceptions.FullDataStructureException;
 import datastructure.exceptions.IllegalCapacityException;
-import datastructure.exceptions.StatusException;
 
 public class FixedStack<T> implements Stack<T> {
 
@@ -22,7 +23,7 @@ public class FixedStack<T> implements Stack<T> {
     @Override
     public void push(T element) {
         if (this.isFull()) {
-            throw new StatusException("Cannot add element to a stack. The stack is full.");
+            throw new FullDataStructureException();
         }
         else {
             this.i++;
@@ -34,7 +35,7 @@ public class FixedStack<T> implements Stack<T> {
     @Override
     public T pop() {
         if (this.isEmpty()) {
-            throw new StatusException("Cannot pop element from a stack. The stack is empty.");
+            throw new EmptyDataStructureException();
         }
         else {
             return (T)this.objects[this.i--];
@@ -45,7 +46,7 @@ public class FixedStack<T> implements Stack<T> {
     @Override
     public T peek() {
         if (this.isEmpty()) {
-            throw new StatusException("Cannot peek to a stack. The stack is empty.");
+            throw new EmptyDataStructureException();
         }
         return (T)this.objects[this.i];
     }
@@ -60,7 +61,7 @@ public class FixedStack<T> implements Stack<T> {
     }
 
     @Override
-    public void clear() {
+    public void destroy() {
         this.objects = null;
     }
 }

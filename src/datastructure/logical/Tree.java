@@ -4,8 +4,8 @@ import datastructure.physical.SingleLinkedList;
 
 public interface Tree<T> {
 
-    boolean contains(T data);
-    void remove(T data);
+    boolean contains(T element);
+    void remove(T element);
     SingleLinkedList<T> levelOrder();
-    void delete();
+    void destroy();
 }

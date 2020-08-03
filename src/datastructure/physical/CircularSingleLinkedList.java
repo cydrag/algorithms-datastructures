@@ -46,7 +46,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void remove(T element) {
-        this.checkEmpty("Cannot remove element from the list.");
+        this.checkEmpty();
 
         Node<T> previous = this.head;
 

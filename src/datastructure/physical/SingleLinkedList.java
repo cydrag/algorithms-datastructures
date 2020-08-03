@@ -43,7 +43,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void remove(T element) {
-        this.checkEmpty("Cannot remove element from the list.");
+        this.checkEmpty();
 
         if (this.head.getData().equals(element)) {
             if (this.head.getNext() == null) {

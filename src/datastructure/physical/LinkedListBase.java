@@ -15,9 +15,9 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
         this.head = this.tail = null;
     }
 
-    void checkEmpty(String message) {
+    void checkEmpty() {
         if (this.isEmpty()) {
-            throw new EmptyDataStructureException(message);
+            throw new EmptyDataStructureException();
         }
     }
 
@@ -80,8 +80,13 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
+    public void add(T element) {
+        this.addAtEnd(element);
+    }
+
+    @Override
     public T get(int index) {
-        this.checkEmpty("Cannot get element from the list.");
+        this.checkEmpty();
 
         if (index < 0 || index >= this.length()) {
             throw new IndexNotInBoundsException(index, this.length());
