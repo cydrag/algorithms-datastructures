@@ -10,9 +10,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void add(T element, int index) {
-        if (index < 0 || index > this.length()) {
-            throw new IndexOutOfBoundsException("Index out of boundaries.");
-        }
+        this.checkAddBounds(index);
 
         Node<T> newNode = new Node<>(element);
 
@@ -45,10 +43,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void remove(T element) {
-
-        if (this.isEmpty()) {
-            throw new NullPointerException("The list is empty.");
-        }
+        this.checkEmpty("Cannot remove element from the list.");
 
         if (this.head.getData().equals(element)) {
             if (this.head.getNext() == null) {

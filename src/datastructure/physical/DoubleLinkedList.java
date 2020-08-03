@@ -41,9 +41,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
 
     @Override
     public void add(T element, int index) {
-        if (index < 0 || index > this.length()) {
-            throw new IndexOutOfBoundsException("Location not in boundaries.");
-        }
+        this.checkAddBounds(index);
 
         Node<T> newNode = new Node<>(element);
 
@@ -82,10 +80,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
 
     @Override
     public void remove(T element) {
-
-        if (this.isEmpty()) {
-            throw new NullPointerException("The list is empty.");
-        }
+        this.checkEmpty("Cannot remove element from the list.");
 
         if (this.head.getData().equals(element)) {
             if (this.head.getNext() == null) {

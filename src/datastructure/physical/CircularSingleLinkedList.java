@@ -10,10 +10,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void add(T element, int index) {
-
-        if (index < 0 || index > this.length()) {
-            throw new IndexOutOfBoundsException("Index not in boundaries.");
-        }
+        this.checkAddBounds(index);
 
         Node<T> newNode = new Node<>(element);
 
@@ -49,10 +46,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     public void remove(T element) {
-
-        if (this.isEmpty()) {
-            throw new NullPointerException("The list is empty.");
-        }
+        this.checkEmpty("Cannot remove element from the list.");
 
         Node<T> previous = this.head;
 

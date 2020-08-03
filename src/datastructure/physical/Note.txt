@@ -1,3 +1,5 @@
 1. Add Exception class for empty linked list
 2. Think about access modifiers
-2. (Optional in later versions) Add cast possibility.
+3. (Optional in later versions) Add cast possibility.
+4. Use own made exceptions?
+5. Double-noded lists have same reverse iterator code (split into new class)?

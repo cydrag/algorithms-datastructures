@@ -1,17 +1,30 @@
 package datastructure.physical;
 
+import datastructure.exceptions.EmptyDataStructureException;
+import datastructure.exceptions.IndexNotInBoundsException;
 import datastructure.nodes.Node;
 
 import java.util.Iterator;
 
-// TODO: Think about access modifiers
 abstract class LinkedListBase<T> implements LinkedList<T> {
 
-    protected Node<T> head;
-    protected Node<T> tail;
+    Node<T> head;
+    Node<T> tail;
 
     LinkedListBase() {
         this.head = this.tail = null;
+    }
+
+    void checkEmpty(String message) {
+        if (this.isEmpty()) {
+            throw new EmptyDataStructureException(message);
+        }
+    }
+
+    void checkAddBounds(int index) {
+        if ((index < 0) || (index > this.length())) {
+            throw new IndexNotInBoundsException(index, this.length());
+        }
     }
 
     @Override
@@ -68,12 +81,10 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
 
     @Override
     public T get(int index) {
-        if (this.isEmpty()) {
-            throw new NullPointerException("The list is empty.");
-        }
+        this.checkEmpty("Cannot get element from the list.");
 
         if (index < 0 || index >= this.length()) {
-            throw new IndexOutOfBoundsException("Index out of boundaries.");
+            throw new IndexNotInBoundsException(index, this.length());
         }
 
         Node<T> current = this.head;
@@ -93,9 +104,17 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
             Node<T> temp = this.head;
 
             do {
-                if (temp.getData().equals(element)) {
+                T currentElem = temp.getData();
+
+                if (currentElem == element) {
                     return true;
                 }
+                else if (element != null) {
+                    if (element.equals(currentElem)) {
+                        return true;
+                    }
+                }
+
                 temp = temp.getNext();
             } while ((temp != this.head) && (temp != null));
         }

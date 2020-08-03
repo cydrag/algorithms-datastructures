@@ -1,5 +1,8 @@
 package datastructure.physical;
 
+import datastructure.exceptions.IndexNotInBoundsException;
+import datastructure.exceptions.NegativeSizeException;
+
 import java.util.Iterator;
 
 public class Array<T> implements PhysicalDataStructure<T> {
@@ -9,15 +12,15 @@ public class Array<T> implements PhysicalDataStructure<T> {
 
     public Array(int size) {
         if (size < 0) {
-            throw new NegativeArraySizeException();
+            throw new NegativeSizeException(size);
         }
         array = new Object[size];
         this.size = size;
     }
 
-    private static void checkBounds(Array<?> array, int index) {
-        if (index < 0 || index >= array.length()) {
-            throw new IndexOutOfBoundsException(index);
+    private void checkBounds(int index) {
+        if (index < 0 || index >= this.length()) {
+            throw new IndexNotInBoundsException(index, this.length());
         }
     }
 
@@ -69,7 +72,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
         }
 
         private ArrayItr(int index) {
-            Array.checkBounds(Array.this, index);
+            Array.this.checkBounds(index);
             cursor = index;
         }
 
@@ -89,7 +92,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
 
         @Override
         public void setIndex(int index) {
-            Array.checkBounds(Array.this, index);
+            Array.this.checkBounds(index);
             cursor = index;
         }
     }
@@ -108,13 +111,13 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public void add(T element, int index) {
-        Array.checkBounds(this, index);
+        this.checkBounds(index);
         array[index] = element;
     }
 
     @SuppressWarnings("unchecked")
     public T get(int index) {
-        Array.checkBounds(this, index);
+        this.checkBounds(index);
         return (T)array[index];
     }
 
@@ -135,20 +138,18 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public void remove(int index) {
-        Array.checkBounds(this, index);
+        this.checkBounds(index);
         array[index] = null;
     }
 
     @Override
     public void remove(T element) {
 
-        if (element == null) {
-            throw new NullPointerException("Removal element cannot be null.");
-        }
-
-        for (int i = 0; i < this.size; i++) {
-            if ((array[i] == element) || (element.equals(array[i]))) {
-                array[i] = null;
+        if (element != null) {
+            for (int i = 0; i < this.size; i++) {
+                if ((array[i] == element) || (element.equals(array[i]))) {
+                    array[i] = null;
+                }
             }
         }
     }
