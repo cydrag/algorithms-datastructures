@@ -1,5 +1,6 @@
 package example;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Person implements Comparable<Person> {
@@ -30,7 +31,14 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        return 0;
+        Comparator<Person> comparator = new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        };
+
+        return comparator.compare(this, o);
     }
 
     @Override

@@ -105,24 +105,27 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
 
     @Override
     public boolean contains(T element) {
-        if (this.head != null) {
-            Node<T> temp = this.head;
 
-            do {
-                T currentElem = temp.getData();
+        if (this.isEmpty()) {
+            return false;
+        }
 
-                if (currentElem == element) {
+        Node<T> temp = this.head;
+
+        do {
+            T currentElem = temp.getData();
+
+            if (currentElem == element) {
+                return true;
+            }
+            else if (element != null) {
+                if (element.equals(currentElem)) {
                     return true;
                 }
-                else if (element != null) {
-                    if (element.equals(currentElem)) {
-                        return true;
-                    }
-                }
+            }
 
-                temp = temp.getNext();
-            } while ((temp != this.head) && (temp != null));
-        }
+            temp = temp.getNext();
+        } while ((temp != this.head) && (temp != null));
 
         return false;
     }
