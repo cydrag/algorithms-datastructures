@@ -3,21 +3,23 @@ package datastructure.logical;
 import datastructure.exceptions.EmptyDataStructureException;
 import datastructure.exceptions.FullDataStructureException;
 import datastructure.exceptions.IllegalCapacityException;
+import datastructure.physical.Array;
 
 public class FixedStack<T> implements Stack<T> {
 
-    private Object[] objects;
+    private Array<T> array;
 
-    private int i = -1;
+    private int i;
     private int lastIndex;
 
-    public FixedStack(int capacity) {
-        if (capacity < 1) {
+    public FixedStack(int size) {
+        if (size < 1) {
             throw new IllegalCapacityException();
         }
 
-        this.objects = new Object[capacity];
-        this.lastIndex = capacity - 1;
+        this.array = new Array<>(size);
+        this.i = -1;
+        this.lastIndex = size - 1;
     }
 
     @Override
@@ -26,44 +28,31 @@ public class FixedStack<T> implements Stack<T> {
             throw new FullDataStructureException();
         }
         else {
-            this.objects[++this.i] = element;
+            this.array.add(element, ++this.i);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T pop() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
         else {
-            return (T)this.objects[this.i--];
+            return this.array.get(this.i--);
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T peek() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
-        return (T)this.objects[this.i];
+        return this.array.get(this.i);
     }
 
     @Override
     public boolean contains(T element) {
-        for (Object o : this.objects) {
-            if (o == element) {
-                return true;
-            }
-            else if (o != null) {
-                if (o.equals(element)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return this.array.contains(element);
     }
 
     @Override
@@ -76,7 +65,9 @@ public class FixedStack<T> implements Stack<T> {
     }
 
     @Override
-    public void destroy() {
-        this.objects = null;
+    public void clear() {
+        this.array.clear();
+        this.i = -1;
+        this.lastIndex = this.array.length() - 1;
     }
 }

@@ -2,10 +2,11 @@ package datastructure.logical;
 
 import datastructure.exceptions.EmptyDataStructureException;
 import datastructure.exceptions.IllegalCapacityException;
+import datastructure.physical.Array;
 
 abstract class ArrayQueue<T> implements Queue<T> {
 
-    Object[] values;
+    Array<T> array;
     int front, end;
 
     ArrayQueue(int size) {
@@ -13,7 +14,7 @@ abstract class ArrayQueue<T> implements Queue<T> {
             throw new IllegalCapacityException();
         }
 
-        this.values = new Object[size];
+        this.array = new Array<>(size);
         this.front = this.end = 0;
     }
 
@@ -30,32 +31,20 @@ abstract class ArrayQueue<T> implements Queue<T> {
 
     @Override
     public boolean contains(T element) {
-        for (Object o : this.values) {
-            if (o == element) {
-                return true;
-            }
-            else if (o != null) {
-                if (o.equals(element)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return array.contains(element);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T peek() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
-        return (T)this.values[this.front];
+        return array.get(this.front);
     }
 
     @Override
-    public final void destroy() {
-        this.values = null;
+    public final void clear() {
+        array.clear();
         this.front = this.end = 0;
     }
 }

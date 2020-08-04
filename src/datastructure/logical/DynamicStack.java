@@ -39,7 +39,7 @@ public class DynamicStack<T> implements Stack<T> {
     }
 
     @Override
-    public void destroy() {
-        this.linkedList.destroy();
+    public void clear() {
+        this.linkedList.clear();
     }
 }

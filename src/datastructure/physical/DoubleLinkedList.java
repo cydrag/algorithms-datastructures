@@ -118,7 +118,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public void destroy() {
+    public void clear() {
 
         Node<T> prev = this.head;
 

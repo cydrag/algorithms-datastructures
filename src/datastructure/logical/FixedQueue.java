@@ -14,22 +14,21 @@ public class FixedQueue<T> extends ArrayQueue<T> {
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
-        this.values[this.end++] = element;
+        this.array.add(element, this.end++);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public T dequeue() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
 
-        Object obj = this.values[this.front++];
+        T obj = this.array.get(this.front++);
         if (this.isEmpty()) {
             this.front = this.end = 0;
         }
 
-        return (T)obj;
+        return obj;
     }
 
     @Override
@@ -38,6 +37,6 @@ public class FixedQueue<T> extends ArrayQueue<T> {
     }
 
     public boolean isFull() {
-        return this.end == this.values.length;
+        return this.end == this.array.length();
     }
 }

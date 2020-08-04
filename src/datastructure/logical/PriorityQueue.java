@@ -18,19 +18,6 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
         }
     }
 
-    public void traverse() {
-        System.out.print("[ ");
-
-        Node<T> temp = this.head;
-
-        while (temp != null) {
-            System.out.print(temp.getData() + " ");
-            temp = temp.getNext();
-        }
-
-        System.out.println("]");
-    }
-
     @Override
     public void enqueue(T element) {
 
@@ -127,7 +114,7 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
     }
 
     @Override
-    public void destroy() {
-        this.head = null;
+    public void clear() {
+        this.head = this.tail = null;
     }
 }

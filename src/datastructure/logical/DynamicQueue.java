@@ -39,7 +39,7 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
-    public void destroy() {
-        this.linkedList.destroy();
+    public void clear() {
+        this.linkedList.clear();
     }
 }

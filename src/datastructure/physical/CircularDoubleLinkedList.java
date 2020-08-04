@@ -129,7 +129,7 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     }
 
     @Override
-    public void destroy() {
+    public void clear() {
 
         if (this.head != null) {
 

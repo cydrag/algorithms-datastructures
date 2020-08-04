@@ -79,7 +79,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void destroy() {
+    public void clear() {
         if (this.tail != null) {
             this.tail.setNext(null);
         }

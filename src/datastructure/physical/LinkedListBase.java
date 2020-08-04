@@ -175,5 +175,5 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     public abstract void remove(T element);
 
     @Override
-    public abstract void destroy();
+    public abstract void clear();
 }

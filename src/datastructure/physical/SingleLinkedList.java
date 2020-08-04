@@ -77,7 +77,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void destroy() {
+    public void clear() {
         this.head = this.tail = null;
     }
 }

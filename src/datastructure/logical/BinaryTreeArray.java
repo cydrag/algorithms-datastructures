@@ -1,11 +1,13 @@
 package datastructure.logical;
 
 import datastructure.exceptions.FullDataStructureException;
+import datastructure.exceptions.NullValueException;
+import datastructure.physical.Array;
 import datastructure.physical.SingleLinkedList;
 
 public class BinaryTreeArray<T> implements BinaryTree<T> {
 
-    private Object[] values;
+    private Array<T> array;
     private int lastUsedIndex;
 
     public BinaryTreeArray(int size) {
@@ -13,14 +15,20 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
             throw new NegativeArraySizeException();
         }
 
-        this.values = new Object[size + 1];
-        this.values[0] = null;
+        this.array = new Array<>(size + 1);
+        this.array.add(null, 0);
         this.lastUsedIndex = 0;
     }
 
     public BinaryTreeArray(int size, T initializer) {
         this(size);
-        this.values[++this.lastUsedIndex] = initializer;
+        this.array.add(initializer, ++this.lastUsedIndex);
+    }
+
+    private void checkNullValue(T element) {
+        if (element == null) {
+            throw new NullValueException();
+        }
     }
 
     public boolean isFull() {
@@ -32,34 +40,43 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     public int getCapacity() {
-        return this.values.length - 1;
+        return this.array.length() - 1;
     }
 
     @Override
-    public boolean contains(T element) {
+    public void add(T element) {
 
-        if (element != null) {
-            for (int i = 1; i <= this.lastUsedIndex; i++) {
-                if (this.values[i].equals(element)) {
-                    return true;
-                }
-            }
+        if (this.isFull()) {
+            throw new FullDataStructureException();
         }
 
-        return false;
+        this.array.add(element, ++this.lastUsedIndex);
     }
 
     @Override
     public void remove(T element) {
+        this.checkNullValue(element);
 
-        if (element != null) {
-            for (int i = 1; i <= this.lastUsedIndex; i++) {
-                if (this.values[i].equals(element)) {
-                    this.values[i] = this.values[this.lastUsedIndex];
-                    this.values[this.lastUsedIndex--] = null;
-                }
+        for (int i = 1; i <= this.lastUsedIndex; i++) {
+            if (element.equals(array.get(i))) {
+                this.array.add(this.array.get(this.lastUsedIndex), i);
+                this.array.add(null, this.lastUsedIndex--);
             }
         }
+
+    }
+
+    @Override
+    public boolean contains(T element) {
+        this.checkNullValue(element);
+
+        for (int i = 1; i <= this.lastUsedIndex; i++) {
+            if (element.equals(this.array.get(i))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -69,11 +86,10 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         return list;
     }
 
-    @SuppressWarnings("unchecked")
     private void inOrderTraverse(SingleLinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
             inOrderTraverse(list, index * 2);
-            list.addAtEnd((T)this.values[index]);
+            list.addAtEnd(this.array.get(index));
             inOrderTraverse(list, index * 2 + 1);
         }
     }
@@ -85,10 +101,9 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         return list;
     }
 
-    @SuppressWarnings("unchecked")
     private void preOrderTraverse(SingleLinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
-            list.addAtEnd((T)this.values[index]);
+            list.addAtEnd(this.array.get(index));
             preOrderTraverse(list, index * 2);
             preOrderTraverse(list, index * 2 + 1);
         }
@@ -101,39 +116,28 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         return list;
     }
 
-    @SuppressWarnings("unchecked")
     private void postOrderTraverse(SingleLinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
             postOrderTraverse(list, index * 2);
             postOrderTraverse(list, index * 2 + 1);
-            list.addAtEnd((T)this.values[index]);
+            list.addAtEnd(this.array.get(index));
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public SingleLinkedList<T> levelOrder() {
         SingleLinkedList<T> list = new SingleLinkedList<>();
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            list.addAtEnd((T)this.values[i]);
+            list.addAtEnd(this.array.get(i));
         }
 
         return list;
     }
 
     @Override
-    public void add(T element) {
-        if (this.isFull()) {
-            throw new FullDataStructureException();
-        }
-
-        this.values[++this.lastUsedIndex] = element;
-    }
-
-    @Override
-    public void destroy() {
-        this.values = null;
+    public void clear() {
+        this.array.clear();
         this.lastUsedIndex = 0;
     }
 }

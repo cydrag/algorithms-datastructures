@@ -5,5 +5,5 @@ public interface DataStructure<T> {
     void remove(T element);
     boolean contains(T element);
     boolean isEmpty();
-    void destroy();
+    void clear();
 }

@@ -199,8 +199,9 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     @Override
-    public void destroy() {
-        this.size = -1;
-        this.array = null;
+    public void clear() {
+        for (int i = 0; i < this.size; i++) {
+            this.array[i] = null;
+        }
     }
 }

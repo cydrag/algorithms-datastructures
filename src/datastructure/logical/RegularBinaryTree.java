@@ -20,7 +20,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
             if (node != null) {
                 if (node.getData().equals(element)) {
-                    children.destroy();
+                    children.clear();
                     return true;
                 }
                 else {
@@ -49,7 +49,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
             if (current != null) {
                 if (current.getData().equals(element)) {
                     found = true;
-                    children.destroy();
+                    children.clear();
                     break;
                 }
                 else {
@@ -96,13 +96,13 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
                     children.enqueue(node.getRight());
                 }
             }
-            children.destroy();
+            children.clear();
         }
     }
 
     private void removeLastChild() {
 
-        // Check if root is null
+        // TODO: Check if root is null
 
         if ((super.root.getLeft() == null) && (super.root.getRight() == null)) {
             super.root = null;
@@ -120,12 +120,12 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
             if (currentNode.getLeft() == null) {
                 previousNode.setRight(null);
-                queue.destroy();
+                queue.clear();
                 return;
             }
             else if (currentNode.getRight() == null) {
                 currentNode.setLeft(null);
-                queue.destroy();
+                queue.clear();
                 return;
             }
             else {
@@ -157,7 +157,5 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
         return current;
     }
-
-
 
 }
