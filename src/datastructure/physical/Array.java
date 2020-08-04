@@ -1,5 +1,6 @@
 package datastructure.physical;
 
+import datastructure.exceptions.DestroyedDataStructureException;
 import datastructure.exceptions.FullDataStructureException;
 import datastructure.exceptions.IndexNotInBoundsException;
 import datastructure.exceptions.NegativeSizeException;
@@ -9,7 +10,7 @@ import java.util.Iterator;
 public class Array<T> implements PhysicalDataStructure<T> {
 
     private Object[] array;
-    private final int size;
+    private int size;
 
     public Array(int size) {
         if (size < 0) {
@@ -19,6 +20,12 @@ public class Array<T> implements PhysicalDataStructure<T> {
         this.size = size;
     }
 
+    private void checkIfDestroyed() {
+        if (this.array == null) {
+            throw new DestroyedDataStructureException();
+        }
+    }
+
     private void checkBounds(int index) {
         if (index < 0 || index >= this.length()) {
             throw new IndexNotInBoundsException(index, this.length());
@@ -26,14 +33,17 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public Iterator<T> iterator() {
+        this.checkIfDestroyed();
         return new Itr();
     }
 
     public ArrayIterator<T> arrayIterator() {
+        this.checkIfDestroyed();
         return new ArrayItr();
     }
 
     public ArrayIterator<T> arrayIterator(int index) {
+        this.checkIfDestroyed();
         return new ArrayItr(index);
     }
 
@@ -99,6 +109,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     private boolean hasFreeSpot() {
+        this.checkIfDestroyed();
         for (Object o : this.array) {
             if (o == null) {
                 return true;
@@ -109,6 +120,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public boolean isEmpty() {
+        this.checkIfDestroyed();
         for (Object o : array) {
             if (o != null) {
                 return false;
@@ -123,6 +135,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
 
     @Override
     public void add(T element) {
+        this.checkIfDestroyed();
         if (!this.hasFreeSpot()) {
             throw new FullDataStructureException();
         }
@@ -137,17 +150,20 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public void add(T element, int index) {
+        this.checkIfDestroyed();
         this.checkBounds(index);
         array[index] = element;
     }
 
     @SuppressWarnings("unchecked")
     public T get(int index) {
+        this.checkIfDestroyed();
         this.checkBounds(index);
         return (T)array[index];
     }
 
     public boolean contains(T element) {
+        this.checkIfDestroyed();
 
         for (Object o : array) {
             if (o == element) {
@@ -164,12 +180,14 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     public void remove(int index) {
+        this.checkIfDestroyed();
         this.checkBounds(index);
         array[index] = null;
     }
 
     @Override
     public void remove(T element) {
+        this.checkIfDestroyed();
 
         if (element != null) {
             for (int i = 0; i < this.size; i++) {
@@ -178,5 +196,11 @@ public class Array<T> implements PhysicalDataStructure<T> {
                 }
             }
         }
+    }
+
+    @Override
+    public void destroy() {
+        this.size = -1;
+        this.array = null;
     }
 }

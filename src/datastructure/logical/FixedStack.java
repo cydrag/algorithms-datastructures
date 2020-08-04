@@ -26,8 +26,7 @@ public class FixedStack<T> implements Stack<T> {
             throw new FullDataStructureException();
         }
         else {
-            this.i++;
-            this.objects[this.i] = element;
+            this.objects[++this.i] = element;
         }
     }
 
@@ -49,6 +48,22 @@ public class FixedStack<T> implements Stack<T> {
             throw new EmptyDataStructureException();
         }
         return (T)this.objects[this.i];
+    }
+
+    @Override
+    public boolean contains(T element) {
+        for (Object o : this.objects) {
+            if (o == element) {
+                return true;
+            }
+            else if (o != null) {
+                if (o.equals(element)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -154,6 +154,18 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
+    public T getAtStart() {
+        this.checkEmpty();
+        return this.head.getData();
+    }
+
+    @Override
+    public T getAtEnd() {
+        this.checkEmpty();
+        return this.tail.getData();
+    }
+
+    @Override
     public abstract void add(T element, int index);
 
     @Override

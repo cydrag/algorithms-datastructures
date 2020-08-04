@@ -67,9 +67,9 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public void add(T data) {
+    public void add(T element) {
 
-        TreeNode<T> newChild = new TreeNode<>(data);
+        TreeNode<T> newChild = new TreeNode<>(element);
 
         if (super.root == null) {
             super.root = newChild;

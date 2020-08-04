@@ -123,12 +123,12 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public void add(T data) {
+    public void add(T element) {
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
 
-        this.values[++this.lastUsedIndex] = data;
+        this.values[++this.lastUsedIndex] = element;
     }
 
     @Override

@@ -3,7 +3,7 @@ package datastructure.logical;
 import datastructure.exceptions.EmptyDataStructureException;
 import datastructure.exceptions.IllegalCapacityException;
 
-public abstract class ArrayQueue<T> implements Queue<T> {
+abstract class ArrayQueue<T> implements Queue<T> {
 
     Object[] values;
     int front, end;
@@ -27,6 +27,22 @@ public abstract class ArrayQueue<T> implements Queue<T> {
     public abstract boolean isEmpty();
 
     public abstract boolean isFull();
+
+    @Override
+    public boolean contains(T element) {
+        for (Object o : this.values) {
+            if (o == element) {
+                return true;
+            }
+            else if (o != null) {
+                if (o.equals(element)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     @SuppressWarnings("unchecked")
     @Override

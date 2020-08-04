@@ -1,51 +1,45 @@
 package datastructure.logical;
 
-import datastructure.exceptions.EmptyDataStructureException;
-import datastructure.nodes.Node;
+import datastructure.physical.LinkedList;
+import datastructure.physical.SingleLinkedList;
 
 public class DynamicStack<T> implements Stack<T> {
 
-    private Node<T> head;
+    private final LinkedList<T> linkedList;
 
     public DynamicStack() {
-        this.head = null;
+        this.linkedList = new SingleLinkedList<>();
     }
 
     @Override
     public void push(T element) {
-        Node<T> newNode = new Node<>(element);
-
-        if (this.head != null) {
-            newNode.setNext(this.head);
-        }
-        this.head = newNode;
+        this.linkedList.addAtStart(element);
     }
 
     @Override
     public T pop() {
-
-        if (this.isEmpty()) {
-            throw new EmptyDataStructureException();
-        }
-
-        T elem = this.head.getData();
-        this.head = this.head.getNext();
-
+        T elem = this.linkedList.getAtStart();
+        this.linkedList.removeAtStart();
         return elem;
     }
 
     @Override
     public T peek() {
-        return this.head.getData();
+        return this.linkedList.getAtStart();
+    }
+
+    @Override
+    public boolean contains(T element) {
+        return this.linkedList.contains(element);
     }
 
     @Override
     public boolean isEmpty() {
-        return this.head == null;
+        return this.linkedList.isEmpty();
     }
 
     @Override
     public void destroy() {
-        this.head = null;
+        this.linkedList.destroy();
     }
 }

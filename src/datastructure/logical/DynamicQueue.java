@@ -1,59 +1,45 @@
 package datastructure.logical;
 
-import datastructure.exceptions.EmptyDataStructureException;
-import datastructure.nodes.Node;
+import datastructure.physical.LinkedList;
+import datastructure.physical.SingleLinkedList;
 
 public class DynamicQueue<T> implements Queue<T> {
 
-    private Node<T> head;
-    private Node<T> tail;
+    private final LinkedList<T> linkedList;
 
     public DynamicQueue() {
-        this.head = this.tail = null;
+        this.linkedList = new SingleLinkedList<>();
     }
 
     @Override
     public void enqueue(T element) {
-        Node<T> newNode = new Node<>(element);
-
-        if (this.tail == null) {
-            this.head = this.tail = newNode;
-        }
-        else {
-            this.tail.setNext(newNode);
-            this.tail = newNode;
-        }
+        this.linkedList.addAtEnd(element);
     }
 
     @Override
     public T dequeue() {
-        if (this.isEmpty()) {
-            throw new EmptyDataStructureException();
-        }
-
-        T obj = this.head.getData();
-        this.head = this.head.getNext();
-        if (this.head == null) {
-            this.tail = null;
-        }
-        return obj;
+        T elem = this.linkedList.getAtStart();
+        this.linkedList.removeAtStart();
+        return elem;
     }
 
     @Override
     public T peek() {
-        if (this.isEmpty()) {
-            throw new EmptyDataStructureException();
-        }
-        return this.head.getData();
+        return this.linkedList.getAtStart();
+    }
+
+    @Override
+    public boolean contains(T element) {
+        return this.linkedList.contains(element);
     }
 
     @Override
     public boolean isEmpty() {
-        return this.head == null;
+        return this.linkedList.isEmpty();
     }
 
     @Override
     public void destroy() {
-        this.head = this.tail = null;
+        this.linkedList.destroy();
     }
 }

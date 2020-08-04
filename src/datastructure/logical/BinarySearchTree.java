@@ -21,8 +21,8 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
     }
 
     @Override
-    public void add(T data) {
-        super.root = this.insert(super.root, data);
+    public void add(T element) {
+        super.root = this.insert(super.root, element);
     }
 
     private boolean search(TreeNode<T> currentNode, T dataToSearch) {

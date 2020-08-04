@@ -5,5 +5,6 @@ public interface LinkedList<T> extends PhysicalDataStructure<T> {
     void addAtEnd(T element);
     void removeAtStart();
     void removeAtEnd();
-    void destroy();
+    T getAtStart();
+    T getAtEnd();
 }
