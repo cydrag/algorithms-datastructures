@@ -3,11 +3,13 @@ package datastructure.logical;
 import datastructure.exceptions.FullDataStructureException;
 import datastructure.exceptions.NullValueException;
 import datastructure.physical.Array;
+import datastructure.physical.LinkedList;
 import datastructure.physical.SingleLinkedList;
 
+// TODO: Actually allow null values?
 public class BinaryTreeArray<T> implements BinaryTree<T> {
 
-    private Array<T> array;
+    private final Array<T> array;
     private int lastUsedIndex;
 
     public BinaryTreeArray(int size) {
@@ -20,15 +22,21 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         this.lastUsedIndex = 0;
     }
 
-    public BinaryTreeArray(int size, T initializer) {
+    public BinaryTreeArray(int size, T root) {
         this(size);
-        this.array.add(initializer, ++this.lastUsedIndex);
+        this.checkNullValue(root);
+        this.array.add(root, ++this.lastUsedIndex);
     }
 
     private void checkNullValue(T element) {
         if (element == null) {
             throw new NullValueException();
         }
+    }
+
+    @Override
+    public boolean isStrict() {
+        return this.lastUsedIndex % 2 == 1;
     }
 
     public boolean isFull() {
@@ -45,7 +53,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public void add(T element) {
-
+        this.checkNullValue(element);
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
@@ -61,6 +69,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
             if (element.equals(array.get(i))) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
+                break;
             }
         }
 
@@ -80,28 +89,28 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public SingleLinkedList<T> inOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.inOrderTraverse(list, 1);
-        return list;
+    public LinkedList<T> inOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.inOrder(linkedList, 1);
+        return linkedList;
     }
 
-    private void inOrderTraverse(SingleLinkedList<T> list, int index) {
+    private void inOrder(LinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
-            inOrderTraverse(list, index * 2);
+            this.inOrder(list, index * 2);
             list.addAtEnd(this.array.get(index));
-            inOrderTraverse(list, index * 2 + 1);
+            this.inOrder(list, index * 2 + 1);
         }
     }
 
     @Override
-    public SingleLinkedList<T> preOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.preOrderTraverse(list, 1);
-        return list;
+    public LinkedList<T> preOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.preOrderTraverse(linkedList, 1);
+        return linkedList;
     }
 
-    private void preOrderTraverse(SingleLinkedList<T> list, int index) {
+    private void preOrderTraverse(LinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
             list.addAtEnd(this.array.get(index));
             preOrderTraverse(list, index * 2);
@@ -110,29 +119,29 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public SingleLinkedList<T> postOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.postOrderTraverse(list, 1);
-        return list;
+    public LinkedList<T> postOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.postOrder(linkedList, 1);
+        return linkedList;
     }
 
-    private void postOrderTraverse(SingleLinkedList<T> list, int index) {
+    private void postOrder(LinkedList<T> list, int index) {
         if (index <= this.lastUsedIndex) {
-            postOrderTraverse(list, index * 2);
-            postOrderTraverse(list, index * 2 + 1);
+            this.postOrder(list, index * 2);
+            this.postOrder(list, index * 2 + 1);
             list.addAtEnd(this.array.get(index));
         }
     }
 
     @Override
-    public SingleLinkedList<T> levelOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
+    public LinkedList<T> levelOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            list.addAtEnd(this.array.get(i));
+            linkedList.addAtEnd(this.array.get(i));
         }
 
-        return list;
+        return linkedList;
     }
 
     @Override

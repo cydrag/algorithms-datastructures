@@ -1,5 +1,6 @@
 package datastructure.logical;
 
+import datastructure.physical.LinkedList;
 import datastructure.physical.SingleLinkedList;
 
 abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
@@ -10,35 +11,94 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
         this.root = null;
     }
 
-    DynamicBinaryTree(T data) {
-        this.root = new TreeNode<>(data);
+    DynamicBinaryTree(T root) {
+        this.root = new TreeNode<>(root);
+    }
+
+    // TODO: Make package-private method to check if entered root value is null
+
+    @Override
+    public boolean isStrict() {
+        if (this.root != null) {
+
+            boolean strict = true;
+
+            Queue<TreeNode<T>> nodes = new DynamicQueue<>();
+            nodes.enqueue(this.root);
+
+            while (!nodes.isEmpty()) {
+                TreeNode<T> currentNode = nodes.dequeue();
+
+                if (!(((currentNode.getLeft() == null) && (currentNode.getRight() == null)) ||
+                        ((currentNode.getLeft() != null) && (currentNode.getRight() != null)))) {
+                    strict = false;
+                    break;
+                }
+                else {
+                    if (currentNode.getLeft() != null) {
+                        nodes.enqueue(currentNode.getLeft());
+                    }
+
+                    if (currentNode.getRight() != null) {
+                        nodes.enqueue(currentNode.getRight());
+                    }
+                }
+            }
+            nodes.clear();
+            return strict;
+        }
+        return false;
     }
 
     @Override
-    public SingleLinkedList<T> inOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.inOrderTraverse(list, this.root);
-        return list;
+    public LinkedList<T> inOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.inOrder(linkedList, this.root);
+        return linkedList;
+    }
+
+    private void inOrder(LinkedList<T> list, TreeNode<T> root) {
+        if (root != null) {
+            this.inOrder(list, root.getLeft());
+            list.addAtEnd(root.getData());
+            this.inOrder(list, root.getRight());
+        }
     }
 
     @Override
-    public SingleLinkedList<T> preOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.preOrderTraverse(list, this.root);
-        return list;
+    public LinkedList<T> preOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.preOrder(linkedList, this.root);
+        return linkedList;
+    }
+
+    private void preOrder(LinkedList<T> list, TreeNode<T> root) {
+        if (root != null) {
+            list.addAtEnd(root.getData());
+            this.preOrder(list, root.getLeft());
+            this.preOrder(list, root.getRight());
+        }
     }
 
     @Override
-    public SingleLinkedList<T> postOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
-        this.postOrderTraverse(list, this.root);
-        return list;
+    public LinkedList<T> postOrder() {
+        LinkedList<T> linkedList = new SingleLinkedList<>();
+        this.postOrder(linkedList, this.root);
+        return linkedList;
+    }
+
+    private void postOrder(LinkedList<T> list, TreeNode<T> root) {
+        if (root != null) {
+            this.postOrder(list, root.getLeft());
+            this.postOrder(list, root.getRight());
+            list.addAtEnd(root.getData());
+        }
     }
 
     @Override
-    public SingleLinkedList<T> levelOrder() {
-        SingleLinkedList<T> list = new SingleLinkedList<>();
+    public LinkedList<T> levelOrder() {
 
+        LinkedList<T> linkedList = new SingleLinkedList<>();
         Queue<TreeNode<T>> queue = new DynamicQueue<>();
 
         if (this.root != null) {
@@ -48,7 +108,7 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
         while (!queue.isEmpty()) {
             TreeNode<T> node = queue.dequeue();
 
-            list.addAtEnd(node.getData());
+            linkedList.addAtEnd(node.getData());
 
             if (node.getLeft() != null) {
                 queue.enqueue(node.getLeft());
@@ -59,31 +119,7 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
             }
         }
 
-        return list;
-    }
-
-    private void inOrderTraverse(SingleLinkedList<T> list, TreeNode<T> root) {
-        if (root != null) {
-            inOrderTraverse(list, root.getLeft());
-            list.addAtEnd(root.getData());
-            inOrderTraverse(list, root.getRight());
-        }
-    }
-
-    private void preOrderTraverse(SingleLinkedList<T> list, TreeNode<T> root) {
-        if (root != null) {
-            list.addAtEnd(root.getData());
-            preOrderTraverse(list, root.getLeft());
-            preOrderTraverse(list, root.getRight());
-        }
-    }
-
-    private void postOrderTraverse(SingleLinkedList<T> list, TreeNode<T> root) {
-        if (root != null) {
-            postOrderTraverse(list, root.getLeft());
-            postOrderTraverse(list, root.getRight());
-            list.addAtEnd(root.getData());
-        }
+        return linkedList;
     }
 
     @Override
@@ -95,4 +131,13 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
     public void clear() {
         this.root = null;
     }
+
+    @Override
+    public abstract void add(T element);
+
+    @Override
+    public abstract void remove(T element);
+
+    @Override
+    public abstract boolean contains(T element);
 }

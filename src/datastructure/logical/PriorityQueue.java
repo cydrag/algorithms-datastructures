@@ -26,13 +26,13 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
         if (this.isEmpty()) {
             this.head = this.tail = newNode;
         }
-        else if (this.head.getData() == null) {
-            newNode.setNext(this.head);
-            this.head = newNode;
-        }
         else if (element == null) {
             this.tail.setNext(newNode);
             this.tail = newNode;
+        }
+        else if (this.head.getData() == null) {
+            newNode.setNext(this.head);
+            this.head = newNode;
         }
         else {
             Node<T> current = this.head;
@@ -42,7 +42,12 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
 
                 T currentData = current.getData();
 
-                if (element.compareTo(currentData) < 0) {
+                if (currentData == null) {
+                    newNode.setNext(current);
+                    previous.setNext(newNode);
+                    break;
+                }
+                else if (element.compareTo(currentData) > 0) {
                     if (current == this.head) {
                         newNode.setNext(this.head);
                         this.head = newNode;

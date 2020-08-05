@@ -6,23 +6,23 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
         super();
     }
 
-    public BinarySearchTree(T data) {
-        super(data);
+    public BinarySearchTree(T root) {
+        super(root);
     }
 
     @Override
     public boolean contains(T element) {
-        return search(super.root, element);
+        return search(this.root, element);
     }
 
     @Override
     public void remove(T element) {
-        super.root = this.erase(super.root, element);
+        this.root = this.erase(this.root, element);
     }
 
     @Override
     public void add(T element) {
-        super.root = this.insert(super.root, element);
+        this.root = this.insert(this.root, element);
     }
 
     private boolean search(TreeNode<T> currentNode, T dataToSearch) {

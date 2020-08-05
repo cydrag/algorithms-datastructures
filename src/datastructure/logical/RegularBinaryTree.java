@@ -13,7 +13,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     @Override
     public boolean contains(T element) {
         Queue<TreeNode<T>> children = new DynamicQueue<>();
-        children.enqueue(super.root);
+        children.enqueue(this.root);
 
         while (!children.isEmpty()) {
             TreeNode<T> node = children.dequeue();
@@ -39,7 +39,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
         boolean found = false;
 
         Queue<TreeNode<T>> children = new DynamicQueue<>();
-        children.enqueue(super.root);
+        children.enqueue(this.root);
 
         TreeNode<T> current = null;
 
@@ -71,16 +71,16 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
         TreeNode<T> newChild = new TreeNode<>(element);
 
-        if (super.root == null) {
-            super.root = newChild;
+        if (this.root == null) {
+            this.root = newChild;
         }
         else {
             Queue<TreeNode<T>> children = new DynamicQueue<>();
             boolean found = false;
 
-            children.enqueue(super.root);
+            children.enqueue(this.root);
 
-            while (!found) {
+            while ((!found) && (!children.isEmpty())) {
                 TreeNode<T> node = children.dequeue();
 
                 if (node.getLeft() == null) {
@@ -102,17 +102,16 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
     private void removeLastChild() {
 
-        // TODO: Check if root is null
-
-        if ((super.root.getLeft() == null) && (super.root.getRight() == null)) {
-            super.root = null;
+        if ((this.root.getLeft() == null) && (this.root.getRight() == null)) {
+            this.root = null;
             return;
         }
 
         Queue<TreeNode<T>> queue = new DynamicQueue<>();
-        TreeNode<T> currentNode = super.root, previousNode;
+        TreeNode<T> currentNode = this.root;
+        TreeNode<T> previousNode;
 
-        queue.enqueue(super.root);
+        queue.enqueue(this.root);
 
         while (!queue.isEmpty()) {
             previousNode = currentNode;
@@ -120,25 +119,25 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
             if (currentNode.getLeft() == null) {
                 previousNode.setRight(null);
-                queue.clear();
-                return;
+                break;
             }
             else if (currentNode.getRight() == null) {
                 currentNode.setLeft(null);
-                queue.clear();
-                return;
+                break;
             }
             else {
                 queue.enqueue(currentNode.getLeft());
                 queue.enqueue(currentNode.getRight());
             }
         }
+
+        queue.clear();
     }
 
     private TreeNode<T> getDeepestNode() {
 
         Queue<TreeNode<T>> queue = new DynamicQueue<>();
-        queue.enqueue(super.root);
+        queue.enqueue(this.root);
 
         TreeNode<T> current = null;
 

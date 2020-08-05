@@ -1,11 +1,10 @@
 package datastructure.logical;
 
-import datastructure.physical.SingleLinkedList;
+import datastructure.physical.LinkedList;
 
 public interface BinaryTree<T> extends Tree<T> {
-
-    SingleLinkedList<T> inOrder();
-    SingleLinkedList<T> preOrder();
-    SingleLinkedList<T> postOrder();
-
+    boolean isStrict();
+    LinkedList<T> inOrder();
+    LinkedList<T> preOrder();
+    LinkedList<T> postOrder();
 }

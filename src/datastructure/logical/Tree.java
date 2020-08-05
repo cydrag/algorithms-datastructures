@@ -1,8 +1,8 @@
 package datastructure.logical;
 
 import datastructure.DataStructure;
-import datastructure.physical.SingleLinkedList;
+import datastructure.physical.LinkedList;
 
 public interface Tree<T> extends DataStructure<T> {
-    SingleLinkedList<T> levelOrder();
+    LinkedList<T> levelOrder();
 }
