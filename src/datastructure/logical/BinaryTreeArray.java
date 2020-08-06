@@ -1,12 +1,11 @@
 package datastructure.logical;
 
 import datastructure.exceptions.FullDataStructureException;
-import datastructure.exceptions.NullValueException;
 import datastructure.physical.Array;
 import datastructure.physical.LinkedList;
 import datastructure.physical.SingleLinkedList;
 
-// TODO: Actually allow null values?
+@Deprecated
 public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     private final Array<T> array;
@@ -24,13 +23,17 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     public BinaryTreeArray(int size, T root) {
         this(size);
-        this.checkNullValue(root);
         this.array.add(root, ++this.lastUsedIndex);
     }
 
-    private void checkNullValue(T element) {
-        if (element == null) {
-            throw new NullValueException();
+    @Override
+    public boolean isFull() {
+        if (this.lastUsedIndex == 0) {
+            return false;
+        }
+        else {
+            double result = Math.log(this.lastUsedIndex + 1) / Math.log(2);
+            return result % 1 == 0;
         }
     }
 
@@ -39,7 +42,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         return this.lastUsedIndex % 2 == 1;
     }
 
-    public boolean isFull() {
+    public boolean isFilled() {
         return this.lastUsedIndex == this.getCapacity();
     }
 
@@ -53,8 +56,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public void add(T element) {
-        this.checkNullValue(element);
-        if (this.isFull()) {
+        if (this.isFilled()) {
             throw new FullDataStructureException();
         }
 
@@ -63,10 +65,14 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public void remove(T element) {
-        this.checkNullValue(element);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if (element.equals(array.get(i))) {
+            if (element == array.get(i)) {
+                this.array.add(this.array.get(this.lastUsedIndex), i);
+                this.array.add(null, this.lastUsedIndex--);
+                break;
+            }
+            else if (element != null) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
                 break;
@@ -77,10 +83,9 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public boolean contains(T element) {
-        this.checkNullValue(element);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if (element.equals(this.array.get(i))) {
+            if ((element == array.get(i)) || (element.equals(this.array.get(i)))) {
                 return true;
             }
         }

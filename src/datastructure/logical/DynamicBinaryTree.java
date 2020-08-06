@@ -1,5 +1,6 @@
 package datastructure.logical;
 
+import datastructure.exceptions.NullValueException;
 import datastructure.physical.LinkedList;
 import datastructure.physical.SingleLinkedList;
 
@@ -12,10 +13,73 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
     }
 
     DynamicBinaryTree(T root) {
+        checkIfNull(root);
         this.root = new TreeNode<>(root);
     }
 
-    // TODO: Make package-private method to check if entered root value is null
+    void checkIfNull(T element) {
+        if (element == null) {
+            throw new NullValueException();
+        }
+    }
+
+    @Override
+    public boolean isFull() {
+        if (this.root == null) {
+            return false;
+        }
+        else {
+            Queue<TreeNode<T>> queue = new DynamicQueue<>();
+
+            queue.enqueue(this.root);
+            int expected = 1; // broj dece koji se ocekiva na jednom nivou ukoliko svaki roditelj na istom nivou ima dece
+
+            while (!queue.isEmpty()) {
+
+                boolean firstHasChildren = true, first = true;
+
+                for (int i = 0; i < expected; i++) {
+                    TreeNode<T> current = queue.dequeue();
+
+                    if (first) { // Uvek se prvi put na novom nivou pita roditelj da li ima dece
+                        if ((current.getLeft() == null) && (current.getRight() == null)) { // ako nema onda se ocekuje da sledeci roditelji na istom nivou nemaju decu
+                            firstHasChildren = false;
+                        }
+                        else if ((current.getLeft() != null) && (current.getRight() != null)) { // ako ima onda svi roditelji na istom nivou moraju da imaju decu
+                            queue.enqueue(current.getLeft());
+                            queue.enqueue(current.getRight());
+                            firstHasChildren = true;
+                        }
+                        else { // Ukoliko bar jedan roditelj ima samo jedno dete, automatski nije potpuno stablo
+                            queue.clear();
+                            return false;
+                        }
+                        first = false;
+                    }
+                    else { // Sudbina potpunog stabla zavisi od prvog roditelja
+                        if ((current.getLeft() != null && current.getRight() != null)) {
+                            if (!firstHasChildren) {
+                                queue.clear();
+                                return false;
+                            }
+                            queue.enqueue(current.getLeft());
+                            queue.enqueue(current.getRight());
+                        }
+                        else {
+                            if (firstHasChildren) {
+                                queue.clear();
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                expected *= 2;
+            }
+
+            return true;
+        }
+    }
 
     @Override
     public boolean isStrict() {
@@ -132,12 +196,26 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
         this.root = null;
     }
 
+    // TODO: Razmisliti o ovom dizajnu
     @Override
-    public abstract void add(T element);
+    public void add(T element) {
+        this.checkIfNull(element);
+        this.addElement(element);
+    }
 
     @Override
-    public abstract void remove(T element);
+    public void remove(T element) {
+        this.checkIfNull(element);
+        this.removeElement(element);
+    }
 
     @Override
-    public abstract boolean contains(T element);
+    public boolean contains(T element) {
+        this.checkIfNull(element);
+        return this.containsElement(element);
+    }
+
+    protected abstract void addElement(T element);
+    protected abstract void removeElement(T element);
+    protected abstract boolean containsElement(T element);
 }

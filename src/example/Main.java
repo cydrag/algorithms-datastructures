@@ -1,9 +1,9 @@
 package example;
 
-import datastructure.logical.BinaryTreeArray;
+import datastructure.logical.BinaryTree;
 import datastructure.logical.FixedQueue;
-import datastructure.logical.PriorityQueue;
 import datastructure.logical.Queue;
+import datastructure.logical.RegularBinaryTree;
 
 public class Main {
 
@@ -18,28 +18,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        BinaryTreeArray<Integer> binaryTreeArray = new BinaryTreeArray<>(5);
-//
-//        binaryTreeArray.add(5);
-//        binaryTreeArray.add(10);
-//        binaryTreeArray.add(10);
-//        binaryTreeArray.add(20);
-//        binaryTreeArray.add(30);
-//
-//        System.out.println(binaryTreeArray.isStrict());
-//        System.out.println(binaryTreeArray.isFull());
+        BinaryTree<Integer> binaryTree = new RegularBinaryTree<>();
 
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>();
-
-        priorityQueue.enqueue(2);
-        priorityQueue.enqueue(null);
-        priorityQueue.enqueue(3);
-        priorityQueue.enqueue(null);
-        priorityQueue.enqueue(1);
-        priorityQueue.enqueue(22);
-
-        while (!priorityQueue.isEmpty()) {
-            System.out.println(priorityQueue.dequeue());
-        }
+        binaryTree.add(1);
+        binaryTree.add(2);
+        binaryTree.add(3);
+        System.out.println(binaryTree.isFull());
     }
 }

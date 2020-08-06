@@ -11,7 +11,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public boolean contains(T element) {
+    protected boolean containsElement(T element) {
         Queue<TreeNode<T>> children = new DynamicQueue<>();
         children.enqueue(this.root);
 
@@ -34,7 +34,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public void remove(T element) {
+    protected void removeElement(T element) {
 
         boolean found = false;
 
@@ -67,7 +67,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    public void add(T element) {
+    protected void addElement(T element) {
 
         TreeNode<T> newChild = new TreeNode<>(element);
 
