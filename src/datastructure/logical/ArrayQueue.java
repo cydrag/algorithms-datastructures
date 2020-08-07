@@ -19,7 +19,7 @@ abstract class ArrayQueue<T> implements Queue<T> {
     }
 
     @Override
-    public abstract void enqueue(T element);
+    public abstract void enqueue(T value);
 
     @Override
     public abstract T dequeue();
@@ -30,8 +30,8 @@ abstract class ArrayQueue<T> implements Queue<T> {
     public abstract boolean isFull();
 
     @Override
-    public boolean contains(T element) {
-        return array.contains(element);
+    public boolean contains(T value) {
+        return array.contains(value);
     }
 
     @Override

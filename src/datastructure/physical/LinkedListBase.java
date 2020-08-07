@@ -80,8 +80,8 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
-    public void add(T element) {
-        this.addAtEnd(element);
+    public void add(T value) {
+        this.addAtEnd(value);
     }
 
     @Override
@@ -104,7 +104,7 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(T value) {
 
         if (this.isEmpty()) {
             return false;
@@ -115,11 +115,11 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
         do {
             T currentElem = temp.getData();
 
-            if (currentElem == element) {
+            if (currentElem == value) {
                 return true;
             }
-            else if (element != null) {
-                if (element.equals(currentElem)) {
+            else if (value != null) {
+                if (value.equals(currentElem)) {
                     return true;
                 }
             }
@@ -137,13 +137,13 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
-    public void addAtStart(T element) {
-        this.add(element, 0);
+    public void addAtStart(T value) {
+        this.add(value, 0);
     }
 
     @Override
-    public void addAtEnd(T element) {
-        this.add(element, this.length());
+    public void addAtEnd(T value) {
+        this.add(value, this.length());
     }
 
     @Override
@@ -169,10 +169,10 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
-    public abstract void add(T element, int index);
+    public abstract void add(T value, int index);
 
     @Override
-    public abstract void remove(T element);
+    public abstract void remove(T value);
 
     @Override
     public abstract void clear();

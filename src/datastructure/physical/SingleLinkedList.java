@@ -9,10 +9,10 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T element, int index) {
+    public void add(T value, int index) {
         this.checkAddBounds(index);
 
-        Node<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
@@ -42,10 +42,10 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
         this.checkEmpty();
 
-        if (this.head.getData().equals(element)) {
+        if (this.head.getData().equals(value)) {
             if (this.head.getNext() == null) {
                 this.tail = this.head = null;
             }
@@ -60,7 +60,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
             Node<T> current = this.head;
 
             while (current != null) {
-                if (current.getData().equals(element)) {
+                if (current.getData().equals(value)) {
 
                     if (current == this.tail) {
                         this.tail = previous;

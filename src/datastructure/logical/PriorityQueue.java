@@ -19,14 +19,14 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
     }
 
     @Override
-    public void enqueue(T element) {
+    public void enqueue(T value) {
 
-        Node<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(value);
 
         if (this.isEmpty()) {
             this.head = this.tail = newNode;
         }
-        else if (element == null) {
+        else if (value == null) {
             this.tail.setNext(newNode);
             this.tail = newNode;
         }
@@ -47,7 +47,7 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
                     previous.setNext(newNode);
                     break;
                 }
-                else if (element.compareTo(currentData) > 0) {
+                else if (value.compareTo(currentData) > 0) {
                     if (current == this.head) {
                         newNode.setNext(this.head);
                         this.head = newNode;
@@ -88,7 +88,7 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(T value) {
         if (this.isEmpty()) {
             return false;
         }
@@ -98,11 +98,11 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
         do {
             T currentElem = temp.getData();
 
-            if (currentElem == element) {
+            if (currentElem == value) {
                 return true;
             }
-            else if (element != null) {
-                if (element.equals(currentElem)) {
+            else if (value != null) {
+                if (value.equals(currentElem)) {
                     return true;
                 }
             }

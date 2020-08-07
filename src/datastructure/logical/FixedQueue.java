@@ -10,11 +10,11 @@ public class FixedQueue<T> extends ArrayQueue<T> {
     }
 
     @Override
-    public void enqueue(T element) {
+    public void enqueue(T value) {
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
-        this.array.add(element, this.end++);
+        this.array.add(value, this.end++);
     }
 
     @Override

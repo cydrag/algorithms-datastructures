@@ -2,8 +2,8 @@ package datastructure.logical;
 
 public interface Queue<T> extends Orderable<T> {
     @Override
-    default void add(T element) {
-        this.enqueue(element);
+    default void add(T value) {
+        this.enqueue(value);
     }
 
     @Override
@@ -11,6 +11,6 @@ public interface Queue<T> extends Orderable<T> {
         return this.dequeue();
     }
 
-    void enqueue(T element);
+    void enqueue(T value);
     T dequeue();
 }

@@ -1,28 +1,28 @@
 package example;
 
-import datastructure.logical.BinaryTree;
-import datastructure.logical.FixedQueue;
-import datastructure.logical.Queue;
 import datastructure.logical.RegularBinaryTree;
 
 public class Main {
 
-    private void test() {
-        Queue<Integer> queue = new FixedQueue<>(3); // CircularQueue instead of FixedQueue
-
-        queue.enqueue(5);
-        queue.enqueue(3);
-        queue.enqueue(2);
-        queue.dequeue();
-        queue.enqueue(4);
-    }
-
     public static void main(String[] args) {
-        BinaryTree<Integer> binaryTree = new RegularBinaryTree<>();
 
-        binaryTree.add(1);
-        binaryTree.add(2);
-        binaryTree.add(3);
-        System.out.println(binaryTree.isFull());
+        RegularBinaryTree<Integer> binarySearchTree = new RegularBinaryTree<>();
+        binarySearchTree.add(100);
+        binarySearchTree.add(80);
+        binarySearchTree.add(200);
+        binarySearchTree.add(150);
+        binarySearchTree.add(300);
+        binarySearchTree.add(160);
+        binarySearchTree.add(155);
+        binarySearchTree.add(170);
+
+        binarySearchTree.remove(170);
+
+        System.out.println(binarySearchTree.isFull());
+
+        for (Integer num : binarySearchTree.levelOrder()) {
+            System.out.println(num);
+        }
+
     }
 }

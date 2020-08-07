@@ -15,13 +15,13 @@ public class CircularQueue<T> extends ArrayQueue<T> {
     }
 
     @Override
-    public void enqueue(T element) {
+    public void enqueue(T value) {
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
 
         this.numberOfElements++;
-        this.array.add(element, this.end);
+        this.array.add(value, this.end);
         this.end = (this.end + 1) % this.maxSize;
     }
 

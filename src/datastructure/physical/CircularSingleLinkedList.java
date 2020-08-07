@@ -9,10 +9,10 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T element, int index) {
+    public void add(T value, int index) {
         this.checkAddBounds(index);
 
-        Node<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
@@ -45,12 +45,12 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
         this.checkEmpty();
 
         Node<T> previous = this.head;
 
-        if (this.head.getData().equals(element)) {
+        if (this.head.getData().equals(value)) {
             if (this.head == this.tail) {
                 this.tail = this.head = null;
             }
@@ -65,7 +65,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
             while (previous.getNext() != this.head) {
                 Node<T> current = previous.getNext();
 
-                if (current.getData().equals(element)) {
+                if (current.getData().equals(value)) {
                     if (current == this.tail) {
                         this.tail = previous;
                     }

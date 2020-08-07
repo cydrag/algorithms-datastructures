@@ -6,7 +6,7 @@ import datastructure.exceptions.ForbiddenOperationException;
 public interface Orderable<T> extends DataStructure<T> {
     @Override
     @Deprecated
-    default void remove(T element) {
+    default void remove(T value) {
         throw new ForbiddenOperationException();
     }
 

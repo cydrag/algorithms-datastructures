@@ -40,10 +40,10 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public void add(T element, int index) {
+    public void add(T value, int index) {
         this.checkAddBounds(index);
 
-        Node<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
@@ -79,10 +79,10 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
         this.checkEmpty();
 
-        if (this.head.getData().equals(element)) {
+        if (this.head.getData().equals(value)) {
             if (this.head.getNext() == null) {
                 this.head = this.tail = null;
             }
@@ -93,7 +93,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
                 prev.setNext(null);
             }
         }
-        else if (this.tail.getData().equals(element)) {
+        else if (this.tail.getData().equals(value)) {
             Node<T> current = this.tail;
             this.tail = this.tail.getPrevious();
             this.tail.setNext(null);
@@ -104,7 +104,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
             Node<T> current = prev;
 
             while (current != null) {
-                if (current.getData().equals(element)) {
+                if (current.getData().equals(value)) {
                     prev.setNext(current.getNext());
                     current.getNext().setPrevious(prev);
                     current.setPrevious(null);

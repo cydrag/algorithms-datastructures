@@ -12,8 +12,8 @@ public class DynamicStack<T> implements Stack<T> {
     }
 
     @Override
-    public void push(T element) {
-        this.linkedList.addAtStart(element);
+    public void push(T value) {
+        this.linkedList.addAtStart(value);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class DynamicStack<T> implements Stack<T> {
     }
 
     @Override
-    public boolean contains(T element) {
-        return this.linkedList.contains(element);
+    public boolean contains(T value) {
+        return this.linkedList.contains(value);
     }
 
     @Override

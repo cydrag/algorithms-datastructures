@@ -40,10 +40,10 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     }
 
     @Override // TODO: Code reduction can be done here
-    public void add(T element, int index) {
+    public void add(T value, int index) {
         this.checkAddBounds(index);
 
-        Node<T> newNode = new Node<>(element);
+        Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
             this.head = this.tail = newNode;
@@ -90,11 +90,11 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
         this.checkEmpty();
 
         Node<T> previous = this.head;
-        if (this.head.getData().equals(element)) {
+        if (this.head.getData().equals(value)) {
 
             this.head = this.head.getNext();
             this.head.setPrevious(this.tail);
@@ -111,7 +111,7 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
             Node<T> current = this.head.getNext();
 
             while (current != head) {
-                if (current.getData().equals(element)) {
+                if (current.getData().equals(value)) {
                     previous.setNext(current.getNext());
                     current.setPrevious(null);
                     current.getNext().setPrevious(previous);

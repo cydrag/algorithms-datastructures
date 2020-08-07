@@ -134,7 +134,7 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     @Override
-    public void add(T element) {
+    public void add(T value) {
         this.checkIfDestroyed();
         if (!this.hasFreeSpot()) {
             throw new FullDataStructureException();
@@ -142,17 +142,17 @@ public class Array<T> implements PhysicalDataStructure<T> {
         else {
             for (int i = 0; i < size; i++) {
                 if (array[i] == null) {
-                    array[i] = element;
+                    array[i] = value;
                     break;
                 }
             }
         }
     }
 
-    public void add(T element, int index) {
+    public void add(T value, int index) {
         this.checkIfDestroyed();
         this.checkBounds(index);
-        array[index] = element;
+        array[index] = value;
     }
 
     @SuppressWarnings("unchecked")
@@ -162,15 +162,15 @@ public class Array<T> implements PhysicalDataStructure<T> {
         return (T)array[index];
     }
 
-    public boolean contains(T element) {
+    public boolean contains(T value) {
         this.checkIfDestroyed();
 
         for (Object o : array) {
-            if (o == element) {
+            if (o == value) {
                 return true;
             }
             else if (o != null) {
-                if (o.equals(element)) {
+                if (o.equals(value)) {
                     return true;
                 }
             }
@@ -186,12 +186,12 @@ public class Array<T> implements PhysicalDataStructure<T> {
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
         this.checkIfDestroyed();
 
-        if (element != null) {
+        if (value != null) {
             for (int i = 0; i < this.size; i++) {
-                if ((array[i] == element) || (element.equals(array[i]))) {
+                if ((array[i] == value) || (value.equals(array[i]))) {
                     array[i] = null;
                 }
             }

@@ -55,24 +55,24 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public void add(T element) {
+    public void add(T value) {
         if (this.isFilled()) {
             throw new FullDataStructureException();
         }
 
-        this.array.add(element, ++this.lastUsedIndex);
+        this.array.add(value, ++this.lastUsedIndex);
     }
 
     @Override
-    public void remove(T element) {
+    public void remove(T value) {
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if (element == array.get(i)) {
+            if (value == array.get(i)) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
                 break;
             }
-            else if (element != null) {
+            else if (value != null) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
                 break;
@@ -82,10 +82,10 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     @Override
-    public boolean contains(T element) {
+    public boolean contains(T value) {
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if ((element == array.get(i)) || (element.equals(this.array.get(i)))) {
+            if ((value == array.get(i)) || (value.equals(this.array.get(i)))) {
                 return true;
             }
         }

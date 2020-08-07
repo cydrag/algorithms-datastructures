@@ -23,12 +23,12 @@ public class FixedStack<T> implements Stack<T> {
     }
 
     @Override
-    public void push(T element) {
+    public void push(T value) {
         if (this.isFull()) {
             throw new FullDataStructureException();
         }
         else {
-            this.array.add(element, ++this.i);
+            this.array.add(value, ++this.i);
         }
     }
 
@@ -51,8 +51,8 @@ public class FixedStack<T> implements Stack<T> {
     }
 
     @Override
-    public boolean contains(T element) {
-        return this.array.contains(element);
+    public boolean contains(T value) {
+        return this.array.contains(value);
     }
 
     @Override

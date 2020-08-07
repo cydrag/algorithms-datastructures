@@ -1,9 +1,9 @@
 package datastructure;
 
 public interface DataStructure<T> {
-    void add(T element);
-    void remove(T element);
-    boolean contains(T element);
+    void add(T value);
+    void remove(T value);
+    boolean contains(T value);
     boolean isEmpty();
     void clear();
 }

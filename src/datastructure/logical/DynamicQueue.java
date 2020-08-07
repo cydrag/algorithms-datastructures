@@ -12,8 +12,8 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
-    public void enqueue(T element) {
-        this.linkedList.addAtEnd(element);
+    public void enqueue(T value) {
+        this.linkedList.addAtEnd(value);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
-    public boolean contains(T element) {
-        return this.linkedList.contains(element);
+    public boolean contains(T value) {
+        return this.linkedList.contains(value);
     }
 
     @Override

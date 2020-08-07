@@ -1,5 +1,7 @@
 package datastructure.logical;
 
+import datastructure.nodes.TreeNode;
+
 public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
 
     public RegularBinaryTree() {
@@ -11,65 +13,9 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
     }
 
     @Override
-    protected boolean containsElement(T element) {
-        Queue<TreeNode<T>> children = new DynamicQueue<>();
-        children.enqueue(this.root);
+    protected void addValue(T value) {
 
-        while (!children.isEmpty()) {
-            TreeNode<T> node = children.dequeue();
-
-            if (node != null) {
-                if (node.getData().equals(element)) {
-                    children.clear();
-                    return true;
-                }
-                else {
-                    children.enqueue(node.getLeft());
-                    children.enqueue(node.getRight());
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    protected void removeElement(T element) {
-
-        boolean found = false;
-
-        Queue<TreeNode<T>> children = new DynamicQueue<>();
-        children.enqueue(this.root);
-
-        TreeNode<T> current = null;
-
-        while (!children.isEmpty()) {
-            current = children.dequeue();
-
-            if (current != null) {
-                if (current.getData().equals(element)) {
-                    found = true;
-                    children.clear();
-                    break;
-                }
-                else {
-                    children.enqueue(current.getLeft());
-                    children.enqueue(current.getRight());
-                }
-            }
-        }
-
-        if (found) {
-            TreeNode<T> deepestNode = this.getDeepestNode();
-            current.setData(deepestNode.getData());
-            this.removeLastChild();
-        }
-    }
-
-    @Override
-    protected void addElement(T element) {
-
-        TreeNode<T> newChild = new TreeNode<>(element);
+        TreeNode<T> newChild = new TreeNode<>(value);
 
         if (this.root == null) {
             this.root = newChild;
@@ -98,6 +44,62 @@ public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
             }
             children.clear();
         }
+    }
+
+    @Override
+    protected void removeValue(T value) {
+
+        boolean found = false;
+
+        Queue<TreeNode<T>> children = new DynamicQueue<>();
+        children.enqueue(this.root);
+
+        TreeNode<T> current = null;
+
+        while (!children.isEmpty()) {
+            current = children.dequeue();
+
+            if (current != null) {
+                if (current.getData().equals(value)) {
+                    found = true;
+                    children.clear();
+                    break;
+                }
+                else {
+                    children.enqueue(current.getLeft());
+                    children.enqueue(current.getRight());
+                }
+            }
+        }
+
+        if (found) {
+            TreeNode<T> deepestNode = this.getDeepestNode();
+            current.setData(deepestNode.getData());
+            this.removeLastChild();
+        }
+    }
+
+    @Override
+    protected boolean containsValue(T value) {
+        Queue<TreeNode<T>> children = new DynamicQueue<>();
+        children.enqueue(this.root);
+
+        while (!children.isEmpty()) {
+            TreeNode<T> node = children.dequeue();
+
+            if (node != null) {
+                if (node.getData().equals(value)) {
+                    children.clear();
+                    return true;
+                }
+                else {
+                    children.enqueue(node.getLeft());
+                    children.enqueue(node.getRight());
+                }
+            }
+        }
+
+        return false;
     }
 
     private void removeLastChild() {

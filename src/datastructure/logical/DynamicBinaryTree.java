@@ -1,6 +1,7 @@
 package datastructure.logical;
 
 import datastructure.exceptions.NullValueException;
+import datastructure.nodes.TreeNode;
 import datastructure.physical.LinkedList;
 import datastructure.physical.SingleLinkedList;
 
@@ -17,8 +18,8 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
         this.root = new TreeNode<>(root);
     }
 
-    void checkIfNull(T element) {
-        if (element == null) {
+    void checkIfNull(T value) {
+        if (value == null) {
             throw new NullValueException();
         }
     }
@@ -198,24 +199,24 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
 
     // TODO: Razmisliti o ovom dizajnu
     @Override
-    public void add(T element) {
-        this.checkIfNull(element);
-        this.addElement(element);
+    public void add(T value) {
+        this.checkIfNull(value);
+        this.addValue(value);
     }
 
     @Override
-    public void remove(T element) {
-        this.checkIfNull(element);
-        this.removeElement(element);
+    public void remove(T value) {
+        this.checkIfNull(value);
+        this.removeValue(value);
     }
 
     @Override
-    public boolean contains(T element) {
-        this.checkIfNull(element);
-        return this.containsElement(element);
+    public boolean contains(T value) {
+        this.checkIfNull(value);
+        return this.containsValue(value);
     }
 
-    protected abstract void addElement(T element);
-    protected abstract void removeElement(T element);
-    protected abstract boolean containsElement(T element);
+    protected abstract void addValue(T value);
+    protected abstract void removeValue(T value);
+    protected abstract boolean containsValue(T value);
 }

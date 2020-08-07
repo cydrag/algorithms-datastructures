@@ -3,8 +3,8 @@ package datastructure.logical;
 public interface Stack<T> extends Orderable<T> {
 
     @Override
-    default void add(T element) {
-        this.push(element);
+    default void add(T value) {
+        this.push(value);
     }
 
     @Override
@@ -12,6 +12,6 @@ public interface Stack<T> extends Orderable<T> {
         return this.pop();
     }
 
-    void push(T element);
+    void push(T value);
     T pop();
 }
