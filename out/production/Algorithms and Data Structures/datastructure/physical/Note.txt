@@ -1,3 +1,0 @@
-1. Think about access modifiers
-2. (Optional in later versions) Add cast possibility.
-3. Double-noded lists have same reverse iterator code (split into new class)?
