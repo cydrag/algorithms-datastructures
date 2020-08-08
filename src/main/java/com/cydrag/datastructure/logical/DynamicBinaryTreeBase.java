@@ -5,15 +5,15 @@ import com.cydrag.datastructure.nodes.TreeNode;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
-abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
+abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
 
     TreeNode<T> root;
 
-    DynamicBinaryTree() {
+    DynamicBinaryTreeBase() {
         this.root = null;
     }
 
-    DynamicBinaryTree(T root) {
+    DynamicBinaryTreeBase(T root) {
         checkIfNull(root);
         this.root = new TreeNode<>(root);
     }
@@ -197,7 +197,6 @@ abstract class DynamicBinaryTree<T> implements BinaryTree<T> {
         this.root = null;
     }
 
-    // TODO: Razmisliti o ovom dizajnu
     @Override
     public void add(T value) {
         this.checkIfNull(value);

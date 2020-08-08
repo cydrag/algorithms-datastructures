@@ -2,7 +2,7 @@ package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.nodes.TreeNode;
 
-public class RegularBinaryTree<T> extends DynamicBinaryTree<T> {
+public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
 
     public RegularBinaryTree() {
         super();

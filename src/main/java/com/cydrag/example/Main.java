@@ -1,28 +1,19 @@
 package com.cydrag.example;
 
-import com.cydrag.datastructure.logical.RegularBinaryTree;
+import com.cydrag.datastructure.logical.AVLTree;
+import com.cydrag.datastructure.logical.BinaryTree;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        RegularBinaryTree<Integer> binarySearchTree = new RegularBinaryTree<>();
-        binarySearchTree.add(100);
-        binarySearchTree.add(80);
-        binarySearchTree.add(200);
-        binarySearchTree.add(150);
-        binarySearchTree.add(300);
-        binarySearchTree.add(160);
-        binarySearchTree.add(155);
-        binarySearchTree.add(170);
+        BinaryTree<Integer> tree = new AVLTree<>(10);
 
-        binarySearchTree.remove(170);
+        tree.add(20);
+        tree.add(30);
+        tree.add(40);
+        tree.add(55);
 
-        System.out.println(binarySearchTree.isFull());
-
-        for (Integer num : binarySearchTree.levelOrder()) {
-            System.out.println(num);
-        }
-
+        System.out.println(tree.contains(20));
     }
 }

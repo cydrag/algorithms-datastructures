@@ -2,7 +2,8 @@ package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.nodes.TreeNode;
 
-public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBinaryTree<T> {
+// TODO: Set height values for inserted nodes
+public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBinaryTreeBase<T> {
 
     public BinarySearchTree() {
         super();
@@ -14,48 +15,49 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
 
     @Override
     protected void addValue(T value) {
-        this.root = this.add(value, this.root);
+        this.root = this.add(this.root, value);
     }
 
     @Override
     protected void removeValue(T value) {
-        this.root = this.remove(value, this.root);
+        this.root = this.remove(this.root, value);
     }
 
     @Override
     protected boolean containsValue(T value) {
-        return this.contains(value, this.root);
+        return this.contains(this.root, value);
     }
 
-    private TreeNode<T> add(T value, TreeNode<T> currentNode) {
+    private TreeNode<T> add(TreeNode<T> currentNode, T value) {
         if (currentNode == null) {
             return new TreeNode<>(value);
         }
-        else if (currentNode.getData().compareTo(value) >= 0) {
-            currentNode.setLeft(this.add(value, currentNode.getLeft()));
-            return currentNode;
-        }
         else {
-            currentNode.setRight(this.add(value, currentNode.getRight()));
+            if (currentNode.getData().compareTo(value) >= 0) {
+                currentNode.setLeft(this.add(currentNode.getLeft(), value));
+            }
+            else {
+                currentNode.setRight(this.add(currentNode.getRight(), value));
+            }
             return currentNode;
         }
     }
 
-    private TreeNode<T> remove(T value, TreeNode<T> currentNode) {
+    private TreeNode<T> remove(TreeNode<T> currentNode, T value) {
         if (currentNode == null) {
             return null;
         }
         else if (currentNode.getData().compareTo(value) > 0) {
-            currentNode.setLeft(remove(value, currentNode.getLeft()));
+            currentNode.setLeft(remove(currentNode.getLeft(), value));
         }
         else if (currentNode.getData().compareTo(value) < 0) {
-            currentNode.setRight(remove(value, currentNode.getRight()));
+            currentNode.setRight(remove(currentNode.getRight(), value));
         }
         else {
             if ((currentNode.getLeft() != null) && (currentNode.getRight() != null)) {
                 TreeNode<T> successor = minimumNode(currentNode.getRight());
                 currentNode.setData(successor.getData());
-                currentNode.setRight(remove(successor.getData(), currentNode.getRight()));
+                currentNode.setRight(remove(currentNode.getRight(), successor.getData()));
             }
             else if (currentNode.getLeft() == null) {
                 currentNode = currentNode.getRight();
@@ -71,18 +73,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
         return currentNode;
     }
 
-    private boolean contains(T dataToSearch, TreeNode<T> currentNode) {
+    private boolean contains(TreeNode<T> currentNode, T value) {
         if (currentNode == null) {
             return false;
         }
-        else if (currentNode.getData().compareTo(dataToSearch) == 0) {
+        else if (currentNode.getData().compareTo(value) == 0) {
             return true;
         }
-        else if (currentNode.getData().compareTo(dataToSearch) > 0) {
-            return this.contains(dataToSearch, currentNode.getLeft());
+        else if (currentNode.getData().compareTo(value) > 0) {
+            return this.contains(currentNode.getLeft(), value);
         }
         else {
-            return this.contains(dataToSearch, currentNode.getRight());
+            return this.contains(currentNode.getRight(), value);
         }
     }
 

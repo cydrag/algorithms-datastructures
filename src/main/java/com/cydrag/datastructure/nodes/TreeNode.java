@@ -3,11 +3,13 @@ package com.cydrag.datastructure.nodes;
 public class TreeNode<T> {
 
     private T data;
+    private int height;
     private TreeNode<T> left;
     private TreeNode<T> right;
 
     public TreeNode(T data) {
        this.data = data;
+       this.height = 0;
        this.left = this.right = null;
     }
 
@@ -17,6 +19,14 @@ public class TreeNode<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public TreeNode<T> getLeft() {
