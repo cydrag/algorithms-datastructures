@@ -1,15 +1,15 @@
 package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.exceptions.FullDataStructureException;
+import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.physical.Array;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
-@Deprecated
 public class BinaryTreeArray<T> implements BinaryTree<T> {
 
-    private final Array<T> array;
-    private int lastUsedIndex;
+    final Array<T> array;
+    int lastUsedIndex;
 
     public BinaryTreeArray(int size) {
         if (size < 0) {
@@ -24,6 +24,12 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     public BinaryTreeArray(int size, T root) {
         this(size);
         this.array.add(root, ++this.lastUsedIndex);
+    }
+
+    void checkIfNull(T value) {
+        if (value == null) {
+            throw new NullValueException();
+        }
     }
 
     @Override
@@ -56,6 +62,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public void add(T value) {
+        checkIfNull(value);
         if (this.isFilled()) {
             throw new FullDataStructureException();
         }
@@ -65,24 +72,20 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public void remove(T value) {
+        checkIfNull(value);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if (value == array.get(i)) {
-                this.array.add(this.array.get(this.lastUsedIndex), i);
-                this.array.add(null, this.lastUsedIndex--);
-                break;
-            }
-            else if (value != null) {
+            if ((value == array.get(i)) || (value.equals(array.get(i)))) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
                 break;
             }
         }
-
     }
 
     @Override
     public boolean contains(T value) {
+        checkIfNull(value);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
             if ((value == array.get(i)) || (value.equals(this.array.get(i)))) {

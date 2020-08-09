@@ -1,4 +1,0 @@
-1. Finish off BinaryTree
-2. Set TreeNode and BinaryTree fields to private access
-3. Check in all methods if tree is empty
-4. Check BinarySearchTree.contains() method with Person object

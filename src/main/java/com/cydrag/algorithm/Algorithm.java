@@ -1,6 +1,8 @@
 package com.cydrag.algorithm;
 
+import com.cydrag.datastructure.logical.BinaryTree;
 import com.cydrag.datastructure.physical.Array;
+import com.cydrag.datastructure.physical.LinkedList;
 
 public final class Algorithm {
 
@@ -23,5 +25,9 @@ public final class Algorithm {
         }
 
         return sb.toString();
+    }
+
+    public static <T> LinkedList<T> traverseInOrder(BinaryTree<T> binaryTree) {
+        return binaryTree.inOrder();
     }
 }

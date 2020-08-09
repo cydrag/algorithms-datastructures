@@ -188,16 +188,6 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
     }
 
     @Override
-    public boolean isEmpty() {
-        return this.root == null;
-    }
-
-    @Override
-    public void clear() {
-        this.root = null;
-    }
-
-    @Override
     public void add(T value) {
         this.checkIfNull(value);
         this.addValue(value);
@@ -213,6 +203,16 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
     public boolean contains(T value) {
         this.checkIfNull(value);
         return this.containsValue(value);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.root == null;
+    }
+
+    @Override
+    public void clear() {
+        this.root = null;
     }
 
     protected abstract void addValue(T value);
