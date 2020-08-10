@@ -19,27 +19,22 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
 
             @Override
             public boolean hasNext() {
-                try {
-                    return !wasHead;
-                } finally {
-                    if (temp == head) {
-                        wasHead = true;
-                    }
-                }
+                return (temp != null) && (!wasHead);
             }
 
             @Override
             public T next() {
-                try {
-                    return temp.getData();
-                } finally {
-                    temp = temp.getPrevious();
+                T value = temp.getData();
+                if (temp == CircularDoubleLinkedList.super.head) {
+                    wasHead = true;
                 }
+                temp = temp.getPrevious();
+                return value;
             }
         };
     }
 
-    @Override // TODO: Code reduction can be done here
+    @Override
     public void add(T value, int index) {
         this.checkAddBounds(index);
 

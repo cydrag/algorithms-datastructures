@@ -6,6 +6,10 @@ import com.cydrag.datastructure.physical.Array;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
+/**
+ *
+ * New nodes are always level-order added for now...
+ */
 public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     final Array<T> array;
@@ -49,14 +53,14 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     public boolean isFilled() {
-        return this.lastUsedIndex == this.getCapacity();
+        return this.lastUsedIndex == this.capacity();
     }
 
     public boolean isEmpty() {
         return this.lastUsedIndex == 0;
     }
 
-    public int getCapacity() {
+    public int capacity() {
         return this.array.length() - 1;
     }
 

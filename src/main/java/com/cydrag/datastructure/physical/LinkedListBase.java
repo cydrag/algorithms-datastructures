@@ -31,27 +31,22 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     public Iterator<T> iterator() {
         return new Iterator<>() {
 
-            Node<T> temp = head;
+            Node<T> temp = LinkedListBase.this.head;
             boolean wasTail = false;
 
             @Override
             public boolean hasNext() {
-                try {
-                    return !wasTail;
-                } finally {
-                    if (temp == tail) {
-                        wasTail = true;
-                    }
-                }
+                return (this.temp != null) && (!this.wasTail);
             }
 
             @Override
             public T next() {
-                try {
-                    return temp.getData();
-                } finally {
-                    temp = temp.getNext();
+                T value = this.temp.getData();
+                if (this.temp == LinkedListBase.this.tail) {
+                    this.wasTail = true;
                 }
+                this.temp = this.temp.getNext();
+                return value;
             }
         };
     }

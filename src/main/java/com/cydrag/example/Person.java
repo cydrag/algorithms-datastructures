@@ -31,12 +31,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        Comparator<Person> comparator = new Comparator<Person>() {
-            @Override
-            public int compare(Person o1, Person o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
+        Comparator<Person> comparator = Comparator.comparing(Person::getName);
 
         return comparator.compare(this, o);
     }
@@ -52,7 +47,7 @@ public class Person implements Comparable<Person> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, balance);
+        return Objects.hash(name);
     }
 
     @Override

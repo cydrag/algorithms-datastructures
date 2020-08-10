@@ -4,38 +4,44 @@ import com.cydrag.datastructure.nodes.TreeNode;
 
 public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
 
+    private int size;
+
     public RegularBinaryTree() {
         super();
+        this.size = 0;
     }
 
     public RegularBinaryTree(T root) {
         super(root);
+        this.size = 1;
     }
 
     @Override
     protected void addValue(T value) {
 
         TreeNode<T> newChild = new TreeNode<>(value);
+        this.size++;
+        int height = (int)(Math.log(this.size) / Math.log(2));
+        newChild.setHeight(height);
 
         if (this.root == null) {
             this.root = newChild;
         }
         else {
             Queue<TreeNode<T>> children = new DynamicQueue<>();
-            boolean found = false;
 
             children.enqueue(this.root);
 
-            while ((!found) && (!children.isEmpty())) {
+            while (!children.isEmpty()) {
                 TreeNode<T> node = children.dequeue();
 
                 if (node.getLeft() == null) {
                     node.setLeft(newChild);
-                    found = true;
+                    break;
                 }
                 else if (node.getRight() == null) {
                     node.setRight(newChild);
-                    found = true;
+                    break;
                 }
                 else {
                     children.enqueue(node.getLeft());
@@ -76,6 +82,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
             TreeNode<T> deepestNode = this.getDeepestNode();
             current.setData(deepestNode.getData());
             this.removeLastChild();
+            this.size--;
         }
     }
 

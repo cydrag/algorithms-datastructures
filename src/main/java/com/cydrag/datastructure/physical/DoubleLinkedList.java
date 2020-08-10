@@ -19,22 +19,17 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
 
             @Override
             public boolean hasNext() {
-                try {
-                    return !wasHead;
-                } finally {
-                    if (temp == head) {
-                        wasHead = true;
-                    }
-                }
+                return (temp != null) && (!wasHead);
             }
 
             @Override
             public T next() {
-                try {
-                    return temp.getData();
-                } finally {
-                    temp = temp.getPrevious();
+                T value = temp.getData();
+                if (temp == DoubleLinkedList.super.head) {
+                    wasHead = true;
                 }
+                temp = temp.getPrevious();
+                return value;
             }
         };
     }

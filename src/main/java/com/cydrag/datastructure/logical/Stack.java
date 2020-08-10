@@ -1,6 +1,6 @@
 package com.cydrag.datastructure.logical;
 
-public interface Stack<T> extends Orderable<T> {
+public interface Stack<T> extends OrderedStructure<T> {
 
     @Override
     default void add(T value) {

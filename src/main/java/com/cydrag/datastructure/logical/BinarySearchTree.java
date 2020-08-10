@@ -2,7 +2,6 @@ package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.nodes.TreeNode;
 
-// TODO: Set height values for inserted nodes
 public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBinaryTreeBase<T> {
 
     public BinarySearchTree() {
@@ -15,7 +14,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
 
     @Override
     protected void addValue(T value) {
-        this.root = this.add(this.root, value);
+        this.root = this.add(this.root, value, 0);
     }
 
     @Override
@@ -28,16 +27,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
         return this.contains(this.root, value);
     }
 
-    private TreeNode<T> add(TreeNode<T> currentNode, T value) {
+    private TreeNode<T> add(TreeNode<T> currentNode, T value, int height) {
         if (currentNode == null) {
-            return new TreeNode<>(value);
+            TreeNode<T> newNode = new TreeNode<>(value);
+            newNode.setHeight(height);
+            return newNode;
         }
         else {
             if (currentNode.getData().compareTo(value) >= 0) {
-                currentNode.setLeft(this.add(currentNode.getLeft(), value));
+                currentNode.setLeft(this.add(currentNode.getLeft(), value, height + 1));
             }
             else {
-                currentNode.setRight(this.add(currentNode.getRight(), value));
+                currentNode.setRight(this.add(currentNode.getRight(), value, height + 1));
             }
             return currentNode;
         }
@@ -60,10 +61,18 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
                 currentNode.setRight(remove(currentNode.getRight(), successor.getData()));
             }
             else if (currentNode.getLeft() == null) {
+                int currentHeight = currentNode.getHeight();
                 currentNode = currentNode.getRight();
+                if (currentNode != null) {
+                    currentNode.setHeight(currentHeight);
+                }
             }
             else if (currentNode.getRight() == null) {
+                int currentHeight = currentNode.getHeight();
                 currentNode = currentNode.getLeft();
+                if (currentNode != null) {
+                    currentNode.setHeight(currentHeight);
+                }
             }
             else {
                 currentNode = null;
