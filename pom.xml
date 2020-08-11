@@ -6,7 +6,7 @@
 
     <groupId>com.cydrag</groupId>
     <artifactId>algorithms-datastructures</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Algorithms and Data structures</name>
 
     <build>

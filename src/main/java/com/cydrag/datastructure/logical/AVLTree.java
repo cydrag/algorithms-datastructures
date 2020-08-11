@@ -2,7 +2,7 @@ package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.nodes.TreeNode;
 
-// TODO: Implement delete method
+// TODO: Test this class and see if code reduction can be done?
 public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T> {
 
     public AVLTree() {
@@ -16,6 +16,73 @@ public class AVLTree<T extends Comparable<? super T>> extends BinarySearchTree<T
     @Override
     protected void addValue(T value) {
         this.root = this.add(this.root, value);
+    }
+
+    @Override
+    protected void removeValue(T value) {
+        this.root = this.removeValue(this.root, value);
+    }
+
+    private TreeNode<T> removeValue(TreeNode<T> currentNode, T value) {
+
+        if (currentNode == null) {
+            return null;
+        }
+
+        if (currentNode.getData().compareTo(value) > 0) {
+            currentNode.setLeft(this.removeValue(currentNode.getLeft(), value));
+        }
+        else if (currentNode.getData().compareTo(value) < 0) {
+            currentNode.setRight(this.removeValue(currentNode.getRight(), value));
+        }
+        else {
+            if ((currentNode.getLeft() != null) && (currentNode.getRight() != null)) {
+                TreeNode<T> minNodeForRight = minimumNode(currentNode.getRight());
+
+                currentNode.setData(minNodeForRight.getData());
+
+                removeValue(currentNode.getRight(), minNodeForRight.getData());
+            }
+            else if (currentNode.getLeft() != null) {
+                currentNode = currentNode.getLeft();
+            }
+            else if (currentNode.getRight() != null) {
+                currentNode = currentNode.getRight();
+            }
+            else {
+                currentNode = null;
+            }
+
+            return currentNode;
+        }
+
+        int balance = calculateBalance(currentNode.getLeft(), currentNode.getRight());
+
+        if (balance > 1) {
+            if (calculateBalance(currentNode.getLeft().getLeft(), currentNode.getLeft().getRight()) > 0) {
+                currentNode = rightRotate(currentNode);
+            } else {
+                currentNode.setLeft(leftRotate(currentNode.getLeft()));
+                currentNode = rightRotate(currentNode);
+            }
+        } else if (balance < -1) {
+            if (calculateBalance(currentNode.getRight().getRight(), currentNode.getRight().getLeft()) > 0) {
+                currentNode = leftRotate(currentNode);
+            } else {
+                currentNode.setRight(rightRotate(currentNode.getRight()));
+                currentNode = leftRotate(currentNode);
+            }
+        }
+
+        if (currentNode.getLeft() != null) {
+            currentNode.getLeft().setHeight(calculateHeight(currentNode.getLeft()));
+        }
+        if (currentNode.getRight() != null) {
+            currentNode.getRight().setHeight(calculateHeight(currentNode.getRight()));
+        }
+        currentNode.setHeight(calculateHeight(currentNode));
+        return currentNode;
+
     }
 
     private TreeNode<T> add(TreeNode<T> currentNode, T value) {

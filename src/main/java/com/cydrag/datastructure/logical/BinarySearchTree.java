@@ -97,7 +97,7 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
         }
     }
 
-    private static <T> TreeNode<T> minimumNode(TreeNode<T> root) {
+    protected static <T> TreeNode<T> minimumNode(TreeNode<T> root) {
         if (root.getLeft() == null) {
             return root;
         }

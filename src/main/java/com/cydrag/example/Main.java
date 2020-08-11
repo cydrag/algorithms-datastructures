@@ -1,8 +1,6 @@
 package com.cydrag.example;
 
 import com.cydrag.datastructure.logical.BinaryHeap;
-import com.cydrag.datastructure.logical.BinarySearchTree;
-import com.cydrag.datastructure.logical.RegularBinaryTree;
 
 import java.util.Comparator;
 
@@ -28,20 +26,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        RegularBinaryTree<Integer> binaryTree = new RegularBinaryTree<>();
 
-        binaryTree.add(1);
-        binaryTree.add(2);
-        binaryTree.add(3);
-        binaryTree.add(4);
-        binaryTree.add(5);
-        binaryTree.add(6);
-        binaryTree.add(7);
-        binaryTree.add(8);
-        binaryTree.add(9);
-
-        binaryTree.remove(2);
-
-        System.out.println("Hello");
     }
 }

@@ -13,17 +13,15 @@ import com.cydrag.datastructure.physical.SingleLinkedList;
 public class HashTable<K, V> implements DataStructure<K> {
 
     private final Array<LinkedList<HashNode<K, V>>> hashtable;
-    private final int numberOfBuckets;
     private int numOfElements;
 
-    private static final int SIZE = 100;
+    private static final int BUCKET_SIZE = 50;
 
     public HashTable() {
-        this.hashtable = new Array<>(SIZE);
-        this.numberOfBuckets = SIZE;
+        this.hashtable = new Array<>(BUCKET_SIZE);
         this.numOfElements = 0;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < BUCKET_SIZE; i++) {
             this.hashtable.add(new SingleLinkedList<>(), i);
         }
     }
@@ -36,7 +34,7 @@ public class HashTable<K, V> implements DataStructure<K> {
 
     private int bucketIndex(K key) {
         this.checkIfNull(key);
-        return Math.abs(key.hashCode()) % this.numberOfBuckets;
+        return Math.abs(key.hashCode()) % BUCKET_SIZE;
     }
 
     public V add(K key, V value) {
@@ -114,6 +112,21 @@ public class HashTable<K, V> implements DataStructure<K> {
 
     public int length() {
         return this.numOfElements;
+    }
+
+    public LinkedList<K> keys() {
+
+        LinkedList<K> keys = new SingleLinkedList<>();
+
+        for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
+            if (!bucket.isEmpty()) {
+                for (HashNode<K, V> node : bucket) {
+                    keys.addAtEnd(node.getKey());
+                }
+            }
+        }
+
+        return keys;
     }
 
     @Override
