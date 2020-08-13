@@ -46,7 +46,7 @@ public class HashTable<K, V> implements DataStructure<K> {
         V returnValue = null;
 
         if (bucket.isEmpty()) {
-            bucket.addAtEnd(new HashNode<>(key, value));
+            bucket.add(new HashNode<>(key, value));
             this.numOfElements++;
         }
         else {
@@ -62,7 +62,7 @@ public class HashTable<K, V> implements DataStructure<K> {
             }
 
             if (!exists) {
-                bucket.addAtEnd(new HashNode<>(key, value));
+                bucket.add(new HashNode<>(key, value));
                 this.numOfElements++;
             }
         }
@@ -121,12 +121,23 @@ public class HashTable<K, V> implements DataStructure<K> {
         for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
             if (!bucket.isEmpty()) {
                 for (HashNode<K, V> node : bucket) {
-                    keys.addAtEnd(node.getKey());
+                    keys.add(node.getKey());
                 }
             }
         }
 
         return keys;
+    }
+
+    public LinkedList<V> values() {
+        LinkedList<V> values = new SingleLinkedList<>();
+        LinkedList<K> keys = this.keys();
+
+        for (K key : keys) {
+            values.add(this.get(key));
+        }
+
+        return values;
     }
 
     @Override

@@ -1,15 +1,23 @@
 package com.cydrag.datastructure.logical;
 
+import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.TrieNode;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
+// TODO: Check if value is null?
 public class Trie implements Tree<String> {
 
     private final TrieNode root;
 
     public Trie() {
         this.root = new TrieNode();
+    }
+
+    private void checkIfNull(String value) {
+        if (value == null) {
+            throw new NullValueException();
+        }
     }
 
     public boolean hasWord(String value) {
@@ -77,6 +85,8 @@ public class Trie implements Tree<String> {
 
     @Override
     public void add(String value) {
+        this.checkIfNull(value);
+
         char[] characters = value.toCharArray();
 
         TrieNode current = this.root;
@@ -95,6 +105,8 @@ public class Trie implements Tree<String> {
 
     @Override
     public void remove(String value) {
+        this.checkIfNull(value);
+
         if (this.hasWord(value)) {
             this.remove(this.root, value, 0);
         }
@@ -144,6 +156,8 @@ public class Trie implements Tree<String> {
 
     @Override
     public boolean contains(String value) {
+        this.checkIfNull(value);
+
         char[] characters = value.toCharArray();
 
         TrieNode current = this.root;
