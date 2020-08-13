@@ -4,7 +4,7 @@ import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
-public abstract class UnweightedGraph<T> implements Graph<T> {
+public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
     protected final HashTable<Vertex<T>, Set<Vertex<T>>> adjacencyList;
 
@@ -12,82 +12,97 @@ public abstract class UnweightedGraph<T> implements Graph<T> {
         this.adjacencyList = new HashTable<>();
     }
 
-    Vertex<T> getVertexRefByValue(T value) {
-        Vertex<T> vertexToFind = new Vertex<>(value);
-        Vertex<T> found = null;
+    public static <T> LinkedList<T> searchList(UnweightedGraph<T> graph,
+                                               Vertex<T> rootVertex,
+                                               Graph.SearchStrategy searchStrategy) {
+        if (!graph.contains(rootVertex)) {
+            throw new RuntimeException("Graph doesn't contain vertex: " + rootVertex);
+        }
+        graph.resetVisitation();
 
-        for (Vertex<T> tempVert : this.adjacencyList.keys()) {
-            if (tempVert.equals(vertexToFind)) {
-                found = tempVert;
-                break;
+        OrderedStructure<Vertex<T>> orderedStructure =
+                (searchStrategy == Graph.SearchStrategy.BREADTH_FIRST_SEARCH) ? new DynamicQueue<>() : new DynamicStack<>();
+        LinkedList<T> traversalList = new SingleLinkedList<>();
+
+        orderedStructure.add(rootVertex);
+
+        while (!orderedStructure.isEmpty()) {
+            Vertex<T> current = orderedStructure.remove();
+            if (!current.isVisited()) {
+                traversalList.add(current.getData());
+                current.setVisited(true);
+            }
+
+            for (Vertex<T> neighbour : graph.adjacencyList.get(current)) {
+                if (!neighbour.isVisited()) {
+                    orderedStructure.add(neighbour);
+                }
             }
         }
 
-        return found;
+        graph.resetVisitation();
+        return traversalList;
     }
 
-    public static <T> LinkedList<T> bfs(UnweightedGraph<T> graph, T rootVertex) {
-        graph.resetVisitation();
-
-        LinkedList<T> traversalList = new SingleLinkedList<>();
-
-        Vertex<T> found = graph.getVertexRefByValue(rootVertex);
-
-        if (found == null) {
-            return traversalList;
+    public LinkedList<Vertex<T>> shortestPathBreadthFirstSearch(Vertex<T> startVertex, Vertex<T> endVertex) {
+        if (!this.adjacencyList.contains(startVertex)) {
+            throw new RuntimeException("Vertex " + startVertex + " with value " + startVertex.getData() + " doesn't exist in graph.");
+        }
+        if (!this.adjacencyList.contains(endVertex)) {
+            throw new RuntimeException("Vertex " + endVertex + " with value " + endVertex.getData() + " doesn't exist in graph.");
         }
 
+        boolean found = false;
+        boolean first = true;
+
+        this.resetVisitation();
+        this.resetParents();
+
         Queue<Vertex<T>> queue = new DynamicQueue<>();
-        queue.enqueue(found);
+        queue.enqueue(startVertex);
 
         while (!queue.isEmpty()) {
             Vertex<T> current = queue.dequeue();
-            if (!current.isVisited()) {
-                traversalList.add(current.getData());
+            if (!first) {
                 current.setVisited(true);
             }
+            first = false;
 
-            for (Vertex<T> neighbour : graph.adjacencyList.get(current)) {
-                if (!neighbour.isVisited()) {
-                    queue.add(neighbour);
+            for (Vertex<T> neighbour : this.adjacencyList.get(current)) {
+                neighbour.setParent(current);
+                if (neighbour == endVertex) {
+                    found = true;
+                    queue.clear();
+                    break;
+                }
+                else {
+                    if (!neighbour.isVisited()) {
+                        queue.enqueue(neighbour);
+                    }
                 }
             }
         }
 
-        graph.resetVisitation();
-        return traversalList;
-    }
+        this.resetVisitation();
 
-    public static <T> LinkedList<T> dfs(UnweightedGraph<T> graph, T rootVertex) {
-        graph.resetVisitation();
+        LinkedList<Vertex<T>> shortestPath = new SingleLinkedList<>();
 
-        LinkedList<T> traversalList = new SingleLinkedList<>();
-
-        Vertex<T> found = graph.getVertexRefByValue(rootVertex);
-
-        if (found == null) {
-            return traversalList;
-        }
-
-        Stack<Vertex<T>> stack = new DynamicStack<>();
-        stack.push(found);
-
-        while (!stack.isEmpty()) {
-            Vertex<T> current = stack.pop();
-            if (!current.isVisited()) {
-                traversalList.add(current.getData());
-                current.setVisited(true);
-            }
-
-            for (Vertex<T> neighbour : graph.adjacencyList.get(current)) {
-                if (!neighbour.isVisited()) {
-                    stack.push(neighbour);
+        if (found) {
+            while (endVertex != null) {
+                if (!endVertex.isVisited()) {
+                    shortestPath.addAtStart(endVertex);
+                    endVertex.setVisited(true);
                 }
+                else {
+                    break;
+                }
+                endVertex = endVertex.getParent();
             }
         }
 
-        graph.resetVisitation();
-        return traversalList;
+        this.resetVisitation();
+        this.resetParents();
+        return shortestPath;
     }
 
     private void resetVisitation() {
@@ -96,28 +111,41 @@ public abstract class UnweightedGraph<T> implements Graph<T> {
         }
     }
 
-    public abstract void addEdge(T vertex, T neighbourVertex);
+    private void resetParents() {
+        for (Vertex<T> vertex : this.adjacencyList.keys()) {
+            vertex.setParent(null);
+        }
+    }
 
-    @Override
-    public void add(T vertex) {
-        Vertex<T> v = new Vertex<>(vertex);
-        this.adjacencyList.add(v, new Set<>());
+    protected abstract void addEdgeHook(Vertex<T> vertex, Vertex<T> neighbourVertex);
+
+    public void addEdge(Vertex<T> vertex, Vertex<T> neighbourVertex) {
+        if (!this.adjacencyList.contains(vertex)) {
+            throw new RuntimeException("Vertex " + vertex + " with value " + vertex.getData() + " doesn't exist in graph.");
+        }
+        else if (!this.adjacencyList.contains(neighbourVertex)) {
+            throw new RuntimeException("Vertex " + neighbourVertex + " with value " + neighbourVertex.getData() + " doesn't exist in graph.");
+        }
+        else {
+            this.addEdgeHook(vertex, neighbourVertex);
+        }
     }
 
     @Override
-    public void remove(T value) {
-        Vertex<T> vertex = new Vertex<>(value);
-
-        for (Set<Vertex<T>> edge : this.adjacencyList.values()) {
-            edge.remove(vertex);
+    public void add(Vertex<T> vertex) {
+        if (!this.adjacencyList.contains(vertex)) {
+            this.adjacencyList.add(vertex, new Set<>());
         }
+    }
 
+    @Override
+    public void remove(Vertex<T> vertex) {
         this.adjacencyList.remove(vertex);
     }
 
     @Override
-    public boolean contains(T vertex) {
-        return this.getVertexRefByValue(vertex) != null;
+    public boolean contains(Vertex<T> vertex) {
+        return this.adjacencyList.contains(vertex);
     }
 
     @Override

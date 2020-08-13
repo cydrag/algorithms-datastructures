@@ -1,8 +1,8 @@
 package com.cydrag.example;
 
-import com.cydrag.datastructure.logical.BinaryHeap;
-import com.cydrag.datastructure.logical.UndirectedUnweightedGraph;
-import com.cydrag.datastructure.logical.UnweightedGraph;
+import com.cydrag.datastructure.logical.*;
+import com.cydrag.datastructure.nodes.Vertex;
+import com.cydrag.datastructure.physical.LinkedList;
 
 import java.util.Comparator;
 
@@ -38,17 +38,29 @@ public class Main {
         System.out.println(Math.abs("Marie".hashCode()) % 50);
         System.out.println(Math.abs("Nicolai".hashCode()) % 50);
 
-        graph.add("Bob");
-        graph.add("Marie");
-        graph.add("Nicolai");
+        Vertex<String> bob = new Vertex<>("Bob");
+        Vertex<String> marie = new Vertex<>("Marie");
+        Vertex<String> nicolai = new Vertex<>("Nicolai");
+        Vertex<String> ricardo = new Vertex<>("Ricardo");
 
-        graph.addEdge("Bob", "Marie");
-        graph.addEdge("Bob", "Nicolai");
-        graph.addEdge("Bob", "Bob");
-        graph.addEdge("Marie", "Nicolai");
+        graph.add(bob);
+        graph.add(marie);
+        graph.add(nicolai);
+        graph.add(ricardo);
 
-        for (String vert : UnweightedGraph.bfs(graph, "Bob")) {
-            System.out.println(vert);
+        graph.addEdge(bob, marie);
+        graph.addEdge(bob, nicolai);
+        graph.addEdge(bob, bob);
+
+//        graph.addEdge(marie, nicolai);
+//        graph.addEdge(ricardo, marie);
+
+        LinkedList<Vertex<String>> shortestPath = graph.shortestPathBreadthFirstSearch(bob, bob);
+
+        System.out.println(shortestPath.length());
+
+        for (Vertex<String> vert : shortestPath) {
+            System.out.println(vert.getData());
         }
     }
 }

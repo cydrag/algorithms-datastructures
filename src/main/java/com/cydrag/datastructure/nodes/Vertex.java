@@ -1,15 +1,15 @@
 package com.cydrag.datastructure.nodes;
 
-import java.util.Objects;
-
 public class Vertex<T> {
 
     private final T data;
     private boolean visited;
+    private Vertex<T> parent;
 
     public Vertex(T data) {
         this.data = data;
         this.visited = false;
+        this.parent = null;
     }
 
     public T getData() {
@@ -24,16 +24,11 @@ public class Vertex<T> {
         this.visited = visited;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Vertex<?> vertex = (Vertex<?>) o;
-        return Objects.equals(data, vertex.data);
+    public Vertex<T> getParent() {
+        return parent;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(data);
+    public void setParent(Vertex<T> parent) {
+        this.parent = parent;
     }
 }
