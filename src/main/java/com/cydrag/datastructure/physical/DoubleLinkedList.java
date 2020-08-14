@@ -48,7 +48,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
             this.head.setPrevious(newNode);
             this.head = newNode;
         }
-        else if (index == this.length()) {
+        else if (index == this.size()) {
             newNode.setPrevious(this.tail);
             this.tail.setNext(newNode);
             this.tail = newNode;

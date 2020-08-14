@@ -110,10 +110,6 @@ public class HashTable<K, V> implements DataStructure<K> {
         return null;
     }
 
-    public int length() {
-        return this.numOfElements;
-    }
-
     public LinkedList<K> keys() {
 
         LinkedList<K> keys = new SingleLinkedList<>();
@@ -162,6 +158,11 @@ public class HashTable<K, V> implements DataStructure<K> {
         }
 
         return hasKey;
+    }
+
+    @Override
+    public int size() {
+        return this.numOfElements;
     }
 
     @Override

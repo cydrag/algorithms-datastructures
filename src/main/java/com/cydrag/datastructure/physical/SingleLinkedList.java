@@ -21,7 +21,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
             newNode.setNext(this.head);
             this.head = newNode;
         }
-        else if (index == this.length()) {
+        else if (index == this.size()) {
             this.tail.setNext(newNode);
             this.tail = newNode;
         }

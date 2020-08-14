@@ -7,7 +7,7 @@ import com.cydrag.datastructure.physical.Array;
 
 public class FixedStack<T> implements Stack<T> {
 
-    private Array<T> array;
+    private final Array<T> array;
 
     private int i;
     private int lastIndex;
@@ -56,6 +56,11 @@ public class FixedStack<T> implements Stack<T> {
     }
 
     @Override
+    public int size() {
+        return this.array.size();
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.i == -1;
     }
@@ -68,6 +73,6 @@ public class FixedStack<T> implements Stack<T> {
     public void clear() {
         this.array.clear();
         this.i = -1;
-        this.lastIndex = this.array.length() - 1;
+        this.lastIndex = this.array.size() - 1;
     }
 }

@@ -6,7 +6,7 @@ import com.cydrag.datastructure.physical.Array;
 
 abstract class ArrayQueue<T> implements Queue<T> {
 
-    Array<T> array;
+    final Array<T> array;
     int front, end;
 
     ArrayQueue(int size) {
@@ -18,20 +18,16 @@ abstract class ArrayQueue<T> implements Queue<T> {
         this.front = this.end = 0;
     }
 
-    @Override
-    public abstract void enqueue(T value);
-
-    @Override
-    public abstract T dequeue();
-
-    @Override
-    public abstract boolean isEmpty();
-
     public abstract boolean isFull();
 
     @Override
     public boolean contains(T value) {
-        return array.contains(value);
+        return this.array.contains(value);
+    }
+
+    @Override
+    public int size() {
+        return this.array.size();
     }
 
     @Override
@@ -39,12 +35,12 @@ abstract class ArrayQueue<T> implements Queue<T> {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
-        return array.get(this.front);
+        return this.array.get(this.front);
     }
 
     @Override
     public final void clear() {
-        array.clear();
+        this.array.clear();
         this.front = this.end = 0;
     }
 }

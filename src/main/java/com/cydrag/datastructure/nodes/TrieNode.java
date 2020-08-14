@@ -34,7 +34,7 @@ public class TrieNode {
     }
 
     public int length() {
-        return this.holder.length();
+        return this.holder.size();
     }
 
     public String characters() {

@@ -2,7 +2,7 @@ package com.cydrag.datastructure.nodes;
 
 public class Node<T> {
 
-    private T data;
+    private final T data;
     private Node<T> next;
     private Node<T> previous;
 

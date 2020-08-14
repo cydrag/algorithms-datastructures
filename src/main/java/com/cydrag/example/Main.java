@@ -2,7 +2,7 @@ package com.cydrag.example;
 
 import com.cydrag.datastructure.logical.*;
 import com.cydrag.datastructure.nodes.Vertex;
-import com.cydrag.datastructure.physical.LinkedList;
+import com.cydrag.datastructure.nodes.WeightedVertex;
 
 import java.util.Comparator;
 
@@ -32,35 +32,69 @@ public class Main {
         Person p2 = new Person("Adam", 32.00d);
         Person p3 = new Person("Adam", 33.00d);
 
-        UnweightedGraph<String> graph = new UndirectedUnweightedGraph<>();
+        Vertex<String> v1 = new Vertex<>("v1");
+        Vertex<String> v2 = new Vertex<>("v2");
+        Vertex<String> v3 = new Vertex<>("v3");
+        Vertex<String> v4 = new Vertex<>("v4");
 
-        System.out.println(Math.abs("Bob".hashCode()) % 50);
-        System.out.println(Math.abs("Marie".hashCode()) % 50);
-        System.out.println(Math.abs("Nicolai".hashCode()) % 50);
+        System.out.println(Math.abs(v1.hashCode()) % 50);
+        System.out.println(Math.abs(v2.hashCode()) % 50);
+        System.out.println(Math.abs(v3.hashCode()) % 50);
+        System.out.println(Math.abs(v4.hashCode()) % 50);
 
-        Vertex<String> bob = new Vertex<>("Bob");
-        Vertex<String> marie = new Vertex<>("Marie");
-        Vertex<String> nicolai = new Vertex<>("Nicolai");
-        Vertex<String> ricardo = new Vertex<>("Ricardo");
+        UnweightedGraph<String> unweightedGraph = new UndirectedUnweightedGraph<>();
 
-        graph.add(bob);
-        graph.add(marie);
-        graph.add(nicolai);
-        graph.add(ricardo);
+        unweightedGraph.add(v1);
+        unweightedGraph.add(v2);
+        unweightedGraph.add(v3);
+        unweightedGraph.add(v4);
 
-        graph.addEdge(bob, marie);
-        graph.addEdge(bob, nicolai);
-        graph.addEdge(bob, bob);
+        unweightedGraph.addEdge(v1, v2);
+        unweightedGraph.addEdge(v2, v3);
+        unweightedGraph.addEdge(v4, v1);
+        unweightedGraph.addEdge(v3, v4);
 
-//        graph.addEdge(marie, nicolai);
-//        graph.addEdge(ricardo, marie);
+        unweightedGraph.remove(v3);
 
-        LinkedList<Vertex<String>> shortestPath = graph.shortestPathBreadthFirstSearch(bob, bob);
-
-        System.out.println(shortestPath.length());
-
-        for (Vertex<String> vert : shortestPath) {
-            System.out.println(vert.getData());
+        for (Vertex<String> vertex : unweightedGraph.shortestPathBreadthFirstSearch(v2, v4)) {
+            System.out.println(vertex.getData());
         }
+
+        WeightedGraph<String> graph = new UndirectedWeightedGraph<>();
+
+        WeightedVertex<String> a = new WeightedVertex<>("A");
+        WeightedVertex<String> b = new WeightedVertex<>("B");
+        WeightedVertex<String> c = new WeightedVertex<>("C");
+        WeightedVertex<String> d = new WeightedVertex<>("D");
+        WeightedVertex<String> e = new WeightedVertex<>("E");
+
+        System.out.println(Math.abs(a.hashCode()) % 50);
+        System.out.println(Math.abs(b.hashCode()) % 50);
+        System.out.println(Math.abs(c.hashCode()) % 50);
+        System.out.println(Math.abs(d.hashCode()) % 50);
+        System.out.println(Math.abs(e.hashCode()) % 50);
+
+        graph.add(a);
+        graph.add(b);
+        graph.add(c);
+        graph.add(d);
+        graph.add(e);
+
+//        graph.addEdge(a, a, 6);
+        graph.addEdge(a, b, 6);
+        graph.addEdge(a, d, 1);
+        graph.addEdge(d, b, 2);
+        graph.addEdge(d, e, 1);
+        graph.addEdge(b, e, 2);
+        graph.addEdge(b, c, 5);
+        graph.addEdge(e, c, 5);
+
+//        graph.remove(a);
+//        graph.add(a);
+
+        for (WeightedVertex<String> weightedVertex : graph.shortestPathDijkstra(a, c)) {
+            System.out.println(weightedVertex.getData());
+        }
+
     }
 }

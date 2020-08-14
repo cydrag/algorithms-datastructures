@@ -54,7 +54,7 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
 
             this.head = newNode;
         }
-        else if (index == this.length()) {
+        else if (index == this.size()) {
             newNode.setNext(this.head);
             newNode.setPrevious(this.tail);
 

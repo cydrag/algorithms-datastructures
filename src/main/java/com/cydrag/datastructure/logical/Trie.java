@@ -5,7 +5,6 @@ import com.cydrag.datastructure.nodes.TrieNode;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
 
-// TODO: Check if value is null?
 public class Trie implements Tree<String> {
 
     private final TrieNode root;
@@ -21,6 +20,7 @@ public class Trie implements Tree<String> {
     }
 
     public boolean hasWord(String value) {
+        this.checkIfNull(value);
         char[] characters = value.toCharArray();
 
         TrieNode current = this.root;
@@ -179,6 +179,12 @@ public class Trie implements Tree<String> {
     @Override
     public boolean isEmpty() {
         return this.root.isEmpty();
+    }
+
+    // Think about this, maybe new optimized code in future?
+    @Override
+    public int size() {
+        return this.levelOrder().size();
     }
 
     @Override

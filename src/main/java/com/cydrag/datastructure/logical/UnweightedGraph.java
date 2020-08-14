@@ -1,5 +1,6 @@
 package com.cydrag.datastructure.logical;
 
+import com.cydrag.datastructure.exceptions.NoSuchVertexException;
 import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SingleLinkedList;
@@ -12,44 +13,43 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
         this.adjacencyList = new HashTable<>();
     }
 
-    public static <T> LinkedList<T> searchList(UnweightedGraph<T> graph,
-                                               Vertex<T> rootVertex,
-                                               Graph.SearchStrategy searchStrategy) {
-        if (!graph.contains(rootVertex)) {
-            throw new RuntimeException("Graph doesn't contain vertex: " + rootVertex);
+    public LinkedList<Vertex<T>> searchList(Vertex<T> rootVertex, Graph.SearchStrategy searchStrategy) {
+
+        if (!this.contains(rootVertex)) {
+            throw new NoSuchVertexException(rootVertex);
         }
-        graph.resetVisitation();
+        this.resetVisitation();
 
         OrderedStructure<Vertex<T>> orderedStructure =
                 (searchStrategy == Graph.SearchStrategy.BREADTH_FIRST_SEARCH) ? new DynamicQueue<>() : new DynamicStack<>();
-        LinkedList<T> traversalList = new SingleLinkedList<>();
+        LinkedList<Vertex<T>> traversalList = new SingleLinkedList<>();
 
         orderedStructure.add(rootVertex);
 
         while (!orderedStructure.isEmpty()) {
             Vertex<T> current = orderedStructure.remove();
             if (!current.isVisited()) {
-                traversalList.add(current.getData());
+                traversalList.add(current);
                 current.setVisited(true);
             }
 
-            for (Vertex<T> neighbour : graph.adjacencyList.get(current)) {
+            for (Vertex<T> neighbour : this.adjacencyList.get(current)) {
                 if (!neighbour.isVisited()) {
                     orderedStructure.add(neighbour);
                 }
             }
         }
 
-        graph.resetVisitation();
+        this.resetVisitation();
         return traversalList;
     }
 
     public LinkedList<Vertex<T>> shortestPathBreadthFirstSearch(Vertex<T> startVertex, Vertex<T> endVertex) {
         if (!this.adjacencyList.contains(startVertex)) {
-            throw new RuntimeException("Vertex " + startVertex + " with value " + startVertex.getData() + " doesn't exist in graph.");
+            throw new NoSuchVertexException(startVertex);
         }
         if (!this.adjacencyList.contains(endVertex)) {
-            throw new RuntimeException("Vertex " + endVertex + " with value " + endVertex.getData() + " doesn't exist in graph.");
+            throw new NoSuchVertexException(endVertex);
         }
 
         boolean found = false;
@@ -121,10 +121,10 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
     public void addEdge(Vertex<T> vertex, Vertex<T> neighbourVertex) {
         if (!this.adjacencyList.contains(vertex)) {
-            throw new RuntimeException("Vertex " + vertex + " with value " + vertex.getData() + " doesn't exist in graph.");
+            throw new NoSuchVertexException(vertex);
         }
         else if (!this.adjacencyList.contains(neighbourVertex)) {
-            throw new RuntimeException("Vertex " + neighbourVertex + " with value " + neighbourVertex.getData() + " doesn't exist in graph.");
+            throw new NoSuchVertexException(neighbourVertex);
         }
         else {
             this.addEdgeHook(vertex, neighbourVertex);
@@ -140,12 +140,20 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
     @Override
     public void remove(Vertex<T> vertex) {
+        for (Set<Vertex<T>> neighbour : this.adjacencyList.values()) {
+            neighbour.remove(vertex);
+        }
         this.adjacencyList.remove(vertex);
     }
 
     @Override
     public boolean contains(Vertex<T> vertex) {
         return this.adjacencyList.contains(vertex);
+    }
+
+    @Override
+    public int size() {
+        return this.adjacencyList.keys().size();
     }
 
     @Override

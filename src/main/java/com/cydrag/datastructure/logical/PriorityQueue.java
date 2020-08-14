@@ -3,13 +3,23 @@ package com.cydrag.datastructure.logical;
 import com.cydrag.datastructure.exceptions.EmptyDataStructureException;
 import com.cydrag.datastructure.nodes.Node;
 
+import java.util.Comparator;
+
+// TODO: Code reduction, expose all structures on one package only
 public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> {
 
     private Node<T> head;
     private Node<T> tail;
+    private final Comparator<T> comparator;
 
     public PriorityQueue() {
         this.head = this.tail = null;
+        this.comparator = Comparator.naturalOrder();
+    }
+
+    public PriorityQueue(Comparator<T> comparator) {
+        this.head = this.tail = null;
+        this.comparator = comparator;
     }
 
     private void checkEmpty() {
@@ -47,7 +57,7 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
                     previous.setNext(newNode);
                     break;
                 }
-                else if (value.compareTo(currentData) > 0) {
+                else if (comparator.compare(value, currentData) > 0) {
                     if (current == this.head) {
                         newNode.setNext(this.head);
                         this.head = newNode;
@@ -64,8 +74,45 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
             }
 
             if (current == null) {
-                previous.setNext(newNode);
+                if (previous != null) {
+                    previous.setNext(newNode);
+                }
                 this.tail = newNode;
+            }
+        }
+    }
+
+    @Override
+    public void remove(T value) {
+        this.checkEmpty();
+
+        if (this.head.getData().equals(value)) {
+            if (this.head.getNext() == null) {
+                this.tail = this.head = null;
+            }
+            else {
+                Node<T> previous = this.head;
+                this.head = this.head.getNext();
+                previous.setNext(null);
+            }
+        }
+        else {
+            Node<T> previous = this.head;
+            Node<T> current = this.head;
+
+            while (current != null) {
+                if (current.getData().equals(value)) {
+
+                    if (current == this.tail) {
+                        this.tail = previous;
+                    }
+
+                    previous.setNext(current.getNext());
+                    current.setNext(null);
+                    break;
+                }
+                previous = current;
+                current = current.getNext();
             }
         }
     }
@@ -111,6 +158,24 @@ public class PriorityQueue<T extends Comparable<? super T>> implements Queue<T> 
         } while ((temp != this.head) && (temp != null));
 
         return false;
+    }
+
+    @Override
+    public int size() {
+        if (this.isEmpty()) {
+            return 0;
+        }
+
+        Node<T> temp = this.head;
+
+        int size = 1;
+
+        while (temp != this.tail) {
+            temp = temp.getNext();
+            size++;
+        }
+
+        return size;
     }
 
     @Override

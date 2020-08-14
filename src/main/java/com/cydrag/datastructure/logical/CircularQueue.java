@@ -6,12 +6,10 @@ import com.cydrag.datastructure.exceptions.FullDataStructureException;
 public class CircularQueue<T> extends ArrayQueue<T> {
 
     private int numberOfElements;
-    private final int maxSize;
 
     public CircularQueue(int size) {
         super(size);
         this.numberOfElements = 0;
-        this.maxSize = size;
     }
 
     @Override
@@ -22,7 +20,7 @@ public class CircularQueue<T> extends ArrayQueue<T> {
 
         this.numberOfElements++;
         this.array.add(value, this.end);
-        this.end = (this.end + 1) % this.maxSize;
+        this.end = (this.end + 1) % this.array.size();
     }
 
     @Override
@@ -33,7 +31,7 @@ public class CircularQueue<T> extends ArrayQueue<T> {
 
         this.numberOfElements--;
         T obj = this.array.get(this.front);
-        this.front = (this.front + 1) % this.maxSize;
+        this.front = (this.front + 1) % this.array.size();
         return obj;
     }
 
@@ -44,6 +42,6 @@ public class CircularQueue<T> extends ArrayQueue<T> {
 
     @Override
     public boolean isFull() {
-        return this.numberOfElements == this.maxSize;
+        return this.numberOfElements == this.array.size();
     }
 }

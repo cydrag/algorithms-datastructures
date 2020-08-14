@@ -23,7 +23,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
             this.head = newNode;
             this.tail.setNext(newNode);
         }
-        else if (index == this.length()) {
+        else if (index == this.size()) {
             newNode.setNext(this.head);
             this.tail.setNext(newNode);
             this.tail = newNode;

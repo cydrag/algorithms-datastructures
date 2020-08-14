@@ -53,15 +53,17 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     }
 
     public boolean isFilled() {
-        return this.lastUsedIndex == this.capacity();
+        return this.lastUsedIndex == this.size();
     }
 
+    @Override
+    public int size() {
+        return this.array.size() - 1;
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.lastUsedIndex == 0;
-    }
-
-    public int capacity() {
-        return this.array.length() - 1;
     }
 
     @Override

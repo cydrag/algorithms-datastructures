@@ -1,49 +1,44 @@
 package com.cydrag.datastructure.physical;
 
-import com.cydrag.datastructure.exceptions.DestroyedDataStructureException;
 import com.cydrag.datastructure.exceptions.FullDataStructureException;
 import com.cydrag.datastructure.exceptions.IndexNotInBoundsException;
-import com.cydrag.datastructure.exceptions.NegativeSizeException;
+import com.cydrag.datastructure.exceptions.NegativeValueException;
 
 import java.util.Iterator;
 
-public class Array<T> implements PhysicalDataStructure<T> {
+public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
 
-    private Object[] array;
-    private int size;
+    private final Object[] array;
+    private final int size;
 
     public Array(int size) {
         if (size < 0) {
-            throw new NegativeSizeException(size);
+            throw new NegativeValueException(size);
         }
-        array = new Object[size];
+        this.array = new Object[size];
         this.size = size;
     }
 
-    private void checkIfDestroyed() {
-        if (this.array == null) {
-            throw new DestroyedDataStructureException();
-        }
-    }
-
     private void checkBounds(int index) {
-        if (index < 0 || index >= this.length()) {
-            throw new IndexNotInBoundsException(index, this.length());
+        if (index < 0 || index >= this.size()) {
+            throw new IndexNotInBoundsException(index, this.size());
         }
     }
 
     public Iterator<T> iterator() {
-        this.checkIfDestroyed();
         return new Itr();
     }
 
+    @Override
+    public Iterator<T> reverseIterator() {
+        return new ReverseItr();
+    }
+
     public ArrayIterator<T> arrayIterator() {
-        this.checkIfDestroyed();
         return new ArrayItr();
     }
 
     public ArrayIterator<T> arrayIterator(int index) {
-        this.checkIfDestroyed();
         return new ArrayItr(index);
     }
 
@@ -52,27 +47,46 @@ public class Array<T> implements PhysicalDataStructure<T> {
         boolean headNext;
 
         private Itr() {
-            cursor = 0;
-            headNext = false;
+            this.cursor = 0;
+            this.headNext = false;
         }
 
         @Override
         public boolean hasNext() {
-            return cursor != size;
+            return this.cursor != Array.this.size;
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public T next() {
-            if (cursor < 0) {
-                cursor = 0;
+            if (this.cursor < 0) {
+                this.cursor = 0;
             }
-            return (T)array[cursor++];
+            return (T)Array.this.array[this.cursor++];
         }
 
         @Override
         public void remove() {
-            array[cursor] = null;
+            Array.this.array[this.cursor] = null;
+        }
+    }
+
+    private class ReverseItr implements Iterator<T> {
+        int cursor;
+
+        public ReverseItr() {
+            this.cursor = Array.this.size - 1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return this.cursor != -1;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public T next() {
+            return (T)Array.this.array[this.cursor--];
         }
     }
 
@@ -84,32 +98,31 @@ public class Array<T> implements PhysicalDataStructure<T> {
 
         private ArrayItr(int index) {
             Array.this.checkBounds(index);
-            cursor = index;
+            this.cursor = index;
         }
 
         @Override
         public boolean hasPrevious() {
-            return cursor != -1;
+            return this.cursor != -1;
         }
 
         @SuppressWarnings("unchecked")
         @Override
         public T previous() {
-            if (cursor >= size) {
-                cursor = size - 1;
+            if (this.cursor >= Array.this.size) {
+                this.cursor = Array.this.size - 1;
             }
-            return (T)array[cursor--];
+            return (T)Array.this.array[this.cursor--];
         }
 
         @Override
         public void setIndex(int index) {
             Array.this.checkBounds(index);
-            cursor = index;
+            this.cursor = index;
         }
     }
 
     private boolean hasFreeSpot() {
-        this.checkIfDestroyed();
         for (Object o : this.array) {
             if (o == null) {
                 return true;
@@ -119,53 +132,54 @@ public class Array<T> implements PhysicalDataStructure<T> {
         return false;
     }
 
-    public boolean isEmpty() {
-        this.checkIfDestroyed();
-        for (Object o : array) {
-            if (o != null) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public void add(T value, int index) {
+        this.checkBounds(index);
+        this.array[index] = value;
     }
 
-    public int length() {
-        return size;
+    @SuppressWarnings("unchecked")
+    @Override
+    public T get(int index) {
+        this.checkBounds(index);
+        return (T)this.array[index];
+    }
+
+    @Override
+    public void remove(int index) {
+        this.checkBounds(index);
+        this.array[index] = null;
     }
 
     @Override
     public void add(T value) {
-        this.checkIfDestroyed();
         if (!this.hasFreeSpot()) {
             throw new FullDataStructureException();
         }
         else {
-            for (int i = 0; i < size; i++) {
-                if (array[i] == null) {
-                    array[i] = value;
+            for (int i = 0; i < this.size; i++) {
+                if (this.array[i] == null) {
+                    this.array[i] = value;
                     break;
                 }
             }
         }
     }
 
-    public void add(T value, int index) {
-        this.checkIfDestroyed();
-        this.checkBounds(index);
-        array[index] = value;
+    @Override
+    public void remove(T value) {
+        if (value != null) {
+            for (int i = 0; i < this.size; i++) {
+                if ((this.array[i] == value) || (value.equals(this.array[i]))) {
+                    this.array[i] = null;
+                }
+            }
+        }
     }
 
-    @SuppressWarnings("unchecked")
-    public T get(int index) {
-        this.checkIfDestroyed();
-        this.checkBounds(index);
-        return (T)array[index];
-    }
-
+    @Override
     public boolean contains(T value) {
-        this.checkIfDestroyed();
-
-        for (Object o : array) {
+        for (Object o : this.array) {
             if (o == value) {
                 return true;
             }
@@ -179,23 +193,19 @@ public class Array<T> implements PhysicalDataStructure<T> {
         return false;
     }
 
-    public void remove(int index) {
-        this.checkIfDestroyed();
-        this.checkBounds(index);
-        array[index] = null;
+    @Override
+    public int size() {
+        return this.size;
     }
 
     @Override
-    public void remove(T value) {
-        this.checkIfDestroyed();
-
-        if (value != null) {
-            for (int i = 0; i < this.size; i++) {
-                if ((array[i] == value) || (value.equals(array[i]))) {
-                    array[i] = null;
-                }
+    public boolean isEmpty() {
+        for (Object o : array) {
+            if (o != null) {
+                return false;
             }
         }
+        return true;
     }
 
     @Override

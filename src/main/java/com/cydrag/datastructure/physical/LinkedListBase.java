@@ -22,8 +22,8 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     void checkAddBounds(int index) {
-        if ((index < 0) || (index > this.length())) {
-            throw new IndexNotInBoundsException(index, this.length());
+        if ((index < 0) || (index > this.size())) {
+            throw new IndexNotInBoundsException(index, this.size());
         }
     }
 
@@ -57,21 +57,21 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     }
 
     @Override
-    public int length() {
+    public int size() {
         if (this.isEmpty()) {
             return 0;
         }
 
         Node<T> temp = this.head;
 
-        int length = 1;
+        int size = 1;
 
         while (temp != this.tail) {
             temp = temp.getNext();
-            length++;
+            size++;
         }
 
-        return length;
+        return size;
     }
 
     @Override
@@ -83,8 +83,8 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     public T get(int index) {
         this.checkEmpty();
 
-        if (index < 0 || index >= this.length()) {
-            throw new IndexNotInBoundsException(index, this.length());
+        if (index < 0 || index >= this.size()) {
+            throw new IndexNotInBoundsException(index, this.size());
         }
 
         Node<T> current = this.head;
@@ -138,7 +138,7 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
 
     @Override
     public void addAtEnd(T value) {
-        this.add(value, this.length());
+        this.add(value, this.size());
     }
 
     @Override
@@ -148,7 +148,7 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
 
     @Override
     public void removeAtEnd() {
-        this.remove(this.length() - 1);
+        this.remove(this.size() - 1);
     }
 
     @Override

@@ -12,7 +12,7 @@ public final class Algorithm {
 
         StringBuilder sb = new StringBuilder("[");
 
-        int iMax = array.length() - 1;
+        int iMax = array.size() - 1;
 
         for (int i = 0; i <= iMax; i++) {
             sb.append(array.get(i));

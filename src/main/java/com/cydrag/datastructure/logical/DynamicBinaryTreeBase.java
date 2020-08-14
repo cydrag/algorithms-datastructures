@@ -187,6 +187,10 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
         return linkedList;
     }
 
+    protected abstract void addValue(T value);
+    protected abstract void removeValue(T value);
+    protected abstract boolean containsValue(T value);
+
     @Override
     public void add(T value) {
         this.checkIfNull(value);
@@ -206,6 +210,31 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
     }
 
     @Override
+    public int size() {
+        int numberOfNodes = 0;
+        Queue<TreeNode<T>> queue = new DynamicQueue<>();
+
+        if (this.root != null) {
+            queue.enqueue(this.root);
+        }
+
+        while (!queue.isEmpty()) {
+            TreeNode<T> node = queue.dequeue();
+            numberOfNodes++;
+
+            if (node.getLeft() != null) {
+                queue.enqueue(node.getLeft());
+            }
+
+            if (node.getRight() != null) {
+                queue.enqueue(node.getRight());
+            }
+        }
+
+        return numberOfNodes;
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.root == null;
     }
@@ -214,8 +243,4 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
     public void clear() {
         this.root = null;
     }
-
-    protected abstract void addValue(T value);
-    protected abstract void removeValue(T value);
-    protected abstract boolean containsValue(T value);
 }

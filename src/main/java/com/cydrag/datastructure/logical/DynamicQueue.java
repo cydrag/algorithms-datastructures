@@ -34,6 +34,11 @@ public class DynamicQueue<T> implements Queue<T> {
     }
 
     @Override
+    public int size() {
+        return this.linkedList.size();
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.linkedList.isEmpty();
     }

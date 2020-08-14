@@ -34,6 +34,11 @@ public class Set<T> implements ExpendableDataStructure<T>, Iterable<T> {
     }
 
     @Override
+    public int size() {
+        return this.set.size();
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.set.isEmpty();
     }

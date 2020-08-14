@@ -37,6 +37,6 @@ public class FixedQueue<T> extends ArrayQueue<T> {
     }
 
     public boolean isFull() {
-        return this.end == this.array.length();
+        return this.end == this.array.size();
     }
 }
