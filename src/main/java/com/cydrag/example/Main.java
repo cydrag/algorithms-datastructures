@@ -3,6 +3,10 @@ package com.cydrag.example;
 import com.cydrag.datastructure.logical.*;
 import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.nodes.WeightedVertex;
+import com.cydrag.datastructure.physical.BidirectionalIterator;
+import com.cydrag.datastructure.physical.CircularDoubleLinkedList;
+import com.cydrag.datastructure.physical.DoubleLinkedList;
+import com.cydrag.datastructure.physical.LinkedList;
 
 import java.util.Comparator;
 
@@ -26,8 +30,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-
+    private static void test2() {
         Person p1 = new Person("Adam", 21.00d);
         Person p2 = new Person("Adam", 32.00d);
         Person p3 = new Person("Adam", 33.00d);
@@ -95,6 +98,9 @@ public class Main {
         for (WeightedVertex<String> weightedVertex : graph.shortestPathDijkstra(a, c)) {
             System.out.println(weightedVertex.getData());
         }
+    }
+
+    public static void main(String[] args) {
 
     }
 }

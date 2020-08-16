@@ -1,7 +1,9 @@
 package com.cydrag.datastructure.physical;
 
+import com.cydrag.datastructure.exceptions.ConcurrentChangeException;
 import com.cydrag.datastructure.exceptions.EmptyDataStructureException;
 import com.cydrag.datastructure.exceptions.IndexNotInBoundsException;
+import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
@@ -10,18 +12,20 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
 
     Node<T> head;
     Node<T> tail;
+    long modificationCount;
 
     LinkedListBase() {
         this.head = this.tail = null;
+        this.modificationCount = Long.MIN_VALUE;
     }
 
-    void checkEmpty() {
+    private void checkEmpty() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
     }
 
-    void checkAddBounds(int index) {
+    private void checkAddBounds(int index) {
         if ((index < 0) || (index > this.size())) {
             throw new IndexNotInBoundsException(index, this.size());
         }
@@ -31,20 +35,32 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
     public Iterator<T> iterator() {
         return new Iterator<>() {
 
-            Node<T> temp = LinkedListBase.this.head;
+            Node<T> temp = head;
             boolean wasTail = false;
+            final long modCount = modificationCount;
 
             @Override
             public boolean hasNext() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
                 return (this.temp != null) && (!this.wasTail);
             }
 
             @Override
             public T next() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                if (this.temp == null) {
+                    throw new NullValueException();
+                }
                 T value = this.temp.getData();
-                if (this.temp == LinkedListBase.this.tail) {
+
+                if (this.temp == tail) {
                     this.wasTail = true;
                 }
+
                 this.temp = this.temp.getNext();
                 return value;
             }
@@ -163,12 +179,24 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
         return this.tail.getData();
     }
 
-    @Override
-    public abstract void add(T value, int index);
+    public void add(T value, int index) {
+        this.checkAddBounds(index);
+        this.addHook(value, index);
+        this.modificationCount++;
+    }
 
-    @Override
-    public abstract void remove(T value);
+    public void remove(T value) {
+        this.checkEmpty();
+        this.removeHook(value);
+        this.modificationCount++;
+    }
 
-    @Override
-    public abstract void clear();
+    public void clear() {
+        this.clearHook();
+        this.modificationCount++;
+    }
+
+    protected abstract void addHook(T value, int index);
+    protected abstract void removeHook(T value);
+    protected abstract void clearHook();
 }

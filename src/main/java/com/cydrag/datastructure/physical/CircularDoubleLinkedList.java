@@ -1,43 +1,77 @@
 package com.cydrag.datastructure.physical;
 
+import com.cydrag.datastructure.exceptions.ConcurrentChangeException;
+import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
 
-public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T> {
+public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T>, Loopable<T> {
 
     public CircularDoubleLinkedList() {
         super();
     }
 
     @Override
-    public Iterator<T> reverseIterator() {
-        return new Iterator<>() {
+    public BidirectionalIterator<T> bidirectionalIterator() {
+        return new BidirectionalIterator<>() {
 
-            Node<T> temp = tail;
-            boolean wasHead = false;
+            private Node<T> temp = head;
+            final long modCount = modificationCount;
+
+            @Override
+            public T previous() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                if (this.temp == null) {
+                    throw new NullValueException();
+                }
+
+                T value = this.temp.getData();
+                this.temp = this.temp.getPrevious();
+                return value;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                return temp != null;
+            }
 
             @Override
             public boolean hasNext() {
-                return (temp != null) && (!wasHead);
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                return temp != null;
             }
 
             @Override
             public T next() {
-                T value = temp.getData();
-                if (temp == CircularDoubleLinkedList.super.head) {
-                    wasHead = true;
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
                 }
-                temp = temp.getPrevious();
+                if (this.temp == null) {
+                    throw new NullValueException();
+                }
+
+                T value = this.temp.getData();
+                this.temp = this.temp.getNext();
                 return value;
             }
         };
     }
 
     @Override
-    public void add(T value, int index) {
-        this.checkAddBounds(index);
+    public Iterator<T> loopIterator() {
+        return new LoopIterator<>(this);
+    }
 
+    @Override
+    protected void addHook(T value, int index) {
         Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
@@ -85,10 +119,9 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     }
 
     @Override
-    public void remove(T value) {
-        this.checkEmpty();
-
+    protected void removeHook(T value) {
         Node<T> previous = this.head;
+
         if (this.head.getData().equals(value)) {
 
             this.head = this.head.getNext();
@@ -124,7 +157,7 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     }
 
     @Override
-    public void clear() {
+    protected void clearHook() {
 
         if (this.head != null) {
 

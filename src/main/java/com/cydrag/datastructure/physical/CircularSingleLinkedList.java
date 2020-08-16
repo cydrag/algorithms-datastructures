@@ -2,16 +2,21 @@ package com.cydrag.datastructure.physical;
 
 import com.cydrag.datastructure.nodes.Node;
 
-public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
+import java.util.Iterator;
+
+public class CircularSingleLinkedList<T> extends LinkedListBase<T> implements Loopable<T> {
 
     public CircularSingleLinkedList() {
         super();
     }
 
     @Override
-    public void add(T value, int index) {
-        this.checkAddBounds(index);
+    public Iterator<T> loopIterator() {
+        return new LoopIterator<>(this);
+    }
 
+    @Override
+    protected void addHook(T value, int index) {
         Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
@@ -45,9 +50,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T value) {
-        this.checkEmpty();
-
+    protected void removeHook(T value) {
         Node<T> previous = this.head;
 
         if (this.head.getData().equals(value)) {
@@ -79,7 +82,7 @@ public class CircularSingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void clear() {
+    protected void clearHook() {
         if (this.tail != null) {
             this.tail.setNext(null);
         }

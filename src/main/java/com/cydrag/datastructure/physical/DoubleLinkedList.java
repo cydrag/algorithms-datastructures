@@ -1,8 +1,8 @@
 package com.cydrag.datastructure.physical;
 
+import com.cydrag.datastructure.exceptions.ConcurrentChangeException;
+import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
-
-import java.util.Iterator;
 
 public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T> {
 
@@ -11,33 +11,63 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public Iterator<T> reverseIterator() {
-        return new Iterator<>() {
+    public BidirectionalIterator<T> bidirectionalIterator() {
+        return new BidirectionalIterator<>() {
 
-            Node<T> temp = tail;
-            boolean wasHead = false;
+            private Node<T> current = head;
+            private Node<T> previous = head;
+            private final long modCount = modificationCount;
 
             @Override
             public boolean hasNext() {
-                return (temp != null) && (!wasHead);
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                return current != null;
             }
 
             @Override
             public T next() {
-                T value = temp.getData();
-                if (temp == DoubleLinkedList.super.head) {
-                    wasHead = true;
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
                 }
-                temp = temp.getPrevious();
+                if (this.current == null) {
+                    throw new NullValueException();
+                }
+                this.previous = this.current;
+
+                T value = this.current.getData();
+                this.current = this.current.getNext();
+                return value;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                return this.previous != null;
+            }
+
+            @Override
+            public T previous() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                if (this.previous == null) {
+                    throw new NullValueException();
+                }
+                this.current = this.previous;
+
+                T value = this.previous.getData();
+                this.previous = this.previous.getPrevious();
                 return value;
             }
         };
     }
 
     @Override
-    public void add(T value, int index) {
-        this.checkAddBounds(index);
-
+    protected void addHook(T value, int index) {
         Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
@@ -74,8 +104,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public void remove(T value) {
-        this.checkEmpty();
+    protected void removeHook(T value) {
 
         if (this.head.getData().equals(value)) {
             if (this.head.getNext() == null) {
@@ -113,7 +142,7 @@ public class DoubleLinkedList<T> extends LinkedListBase<T> implements Reversible
     }
 
     @Override
-    public void clear() {
+    public void clearHook() {
 
         Node<T> prev = this.head;
 

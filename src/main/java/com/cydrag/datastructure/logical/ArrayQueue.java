@@ -39,7 +39,7 @@ abstract class ArrayQueue<T> implements Queue<T> {
     }
 
     @Override
-    public final void clear() {
+    public void clear() {
         this.array.clear();
         this.front = this.end = 0;
     }
