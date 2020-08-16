@@ -2,7 +2,7 @@ package com.cydrag.datastructure.physical;
 
 import java.util.Iterator;
 
-public interface ReverseIterator<T> extends Iterator<T> {
-    T previous();
+public interface BidirectionalIterator<T> extends Iterator<T> {
     boolean hasPrevious();
+    T previous();
 }

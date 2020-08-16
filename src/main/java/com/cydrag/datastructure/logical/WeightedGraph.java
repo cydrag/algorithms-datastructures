@@ -69,7 +69,7 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         startVertex.setDistance(0);
 
         PriorityQueue<WeightedVertex<T>> distanceVerticesQueue =
-                new PriorityQueue<>((o1, o2) -> o2.getDistance() - o1.getDistance());
+                new PriorityQueue<>();
 
         for (WeightedVertex<T> vertex : this.adjacencyList.keys()) {
             distanceVerticesQueue.add(vertex);
@@ -91,6 +91,85 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
                 }
             }
             current.setVisited(true);
+        }
+
+        this.resetVisitation();
+        LinkedList<WeightedVertex<T>> shortestPath = new SingleLinkedList<>();
+
+        if ((endVertex.getDistance() == Integer.MAX_VALUE) || (startVertex == endVertex)) {
+            return shortestPath;
+        }
+        else {
+            while ((endVertex.getParent() != null) && (!endVertex.isVisited())) {
+                shortestPath.addAtStart(endVertex);
+                endVertex.setVisited(true);
+                endVertex = endVertex.getParent();
+            }
+            shortestPath.addAtStart(endVertex);
+        }
+
+        this.resetVisitation();
+        this.resetParents();
+        if (startVertex != endVertex) {
+            shortestPath.clear();
+        }
+        return shortestPath;
+    }
+
+    public LinkedList<WeightedVertex<T>> shortestPathBellmanFord(WeightedVertex<T> startVertex, WeightedVertex<T> endVertex) {
+        if (!this.adjacencyList.contains(startVertex)) {
+            throw new NoSuchVertexException(startVertex);
+        }
+        if (!this.adjacencyList.contains(endVertex)) {
+            throw new NoSuchVertexException(endVertex);
+        }
+
+        this.resetVisitation();
+        this.resetParents();
+
+        for (WeightedVertex<T> weightedVertex : this.adjacencyList.keys()) {
+            weightedVertex.setDistance(Integer.MAX_VALUE);
+        }
+        startVertex.setDistance(0);
+
+        LinkedList<HashTable.Pair<WeightedVertex<T>, HashTable.Pair<WeightedVertex<T>, Integer>>> allEdges
+                = new SingleLinkedList<>();
+
+        for (WeightedVertex<T> vertex : this.adjacencyList.keys()) {
+            HashTable<WeightedVertex<T>, Integer> edges = this.adjacencyList.get(vertex);
+
+            for (HashTable.Pair<WeightedVertex<T>, Integer> edge : edges.pairs()) {
+                allEdges.add(new HashTable.Pair<>(vertex, new HashTable.Pair<>(edge.key, edge.value)));
+            }
+        }
+
+        final int maxIterations = this.adjacencyList.keys().size() - 1;
+
+        for (int i = 0; i < maxIterations; i++) {
+            for (HashTable.Pair<WeightedVertex<T>, HashTable.Pair<WeightedVertex<T>, Integer>> edge : allEdges) {
+                WeightedVertex<T> sourceVertex = edge.getKey();
+                WeightedVertex<T> targetVertex = edge.getValue().getKey();
+                Integer edgeWeight = edge.getValue().getValue();
+
+                if (sourceVertex.getDistance() != Integer.MAX_VALUE) {
+                    if (sourceVertex.getDistance() + edgeWeight < targetVertex.getDistance()) {
+                        targetVertex.setDistance(sourceVertex.getDistance() + edgeWeight);
+                        targetVertex.setParent(sourceVertex);
+                    }
+                }
+            }
+        }
+
+        for (HashTable.Pair<WeightedVertex<T>, HashTable.Pair<WeightedVertex<T>, Integer>> edge : allEdges) {
+            WeightedVertex<T> sourceVertex = edge.getKey();
+            WeightedVertex<T> targetVertex = edge.getValue().getKey();
+            Integer edgeWeight = edge.getValue().getValue();
+
+            if (sourceVertex.getDistance() != Integer.MAX_VALUE) {
+                if (sourceVertex.getDistance() + edgeWeight < targetVertex.getDistance()) {
+                    throw new NegativeValueException("Graph contains negative weight cycle.");
+                }
+            }
         }
 
         this.resetVisitation();
@@ -139,6 +218,13 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         }
         else {
             this.addEdgeHook(vertex, neighbourVertex, weight);
+        }
+    }
+
+    @SafeVarargs
+    public final void addAll(WeightedVertex<T>... weightedVertices) {
+        for (WeightedVertex<T> vertex : weightedVertices) {
+            this.add(vertex);
         }
     }
 

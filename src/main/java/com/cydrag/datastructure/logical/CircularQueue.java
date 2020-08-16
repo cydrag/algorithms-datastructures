@@ -44,4 +44,10 @@ public class CircularQueue<T> extends ArrayQueue<T> {
     public boolean isFull() {
         return this.numberOfElements == this.array.size();
     }
+
+    @Override
+    public void clear() {
+        super.clear();
+        this.numberOfElements = 0;
+    }
 }

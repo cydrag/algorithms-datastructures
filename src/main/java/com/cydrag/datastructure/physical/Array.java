@@ -25,16 +25,13 @@ public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
         }
     }
 
+    @Override
     public Iterator<T> iterator() {
         return new Itr();
     }
 
     @Override
-    public Iterator<T> reverseIterator() {
-        return new ReverseItr();
-    }
-
-    public ArrayIterator<T> arrayIterator() {
+    public BidirectionalIterator<T> bidirectionalIterator() {
         return new ArrayItr();
     }
 
@@ -44,11 +41,9 @@ public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
 
     private class Itr implements Iterator<T> {
         int cursor;
-        boolean headNext;
 
         private Itr() {
             this.cursor = 0;
-            this.headNext = false;
         }
 
         @Override
@@ -62,31 +57,15 @@ public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
             if (this.cursor < 0) {
                 this.cursor = 0;
             }
+            else if (this.cursor >= Array.this.size) {
+                throw new IndexNotInBoundsException(this.cursor, Array.this.size);
+            }
             return (T)Array.this.array[this.cursor++];
         }
 
         @Override
         public void remove() {
             Array.this.array[this.cursor] = null;
-        }
-    }
-
-    private class ReverseItr implements Iterator<T> {
-        int cursor;
-
-        public ReverseItr() {
-            this.cursor = Array.this.size - 1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return this.cursor != -1;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public T next() {
-            return (T)Array.this.array[this.cursor--];
         }
     }
 
@@ -111,6 +90,9 @@ public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
         public T previous() {
             if (this.cursor >= Array.this.size) {
                 this.cursor = Array.this.size - 1;
+            }
+            else if (this.cursor <= -1) {
+                throw new IndexNotInBoundsException(this.cursor, Array.this.size);
             }
             return (T)Array.this.array[this.cursor--];
         }

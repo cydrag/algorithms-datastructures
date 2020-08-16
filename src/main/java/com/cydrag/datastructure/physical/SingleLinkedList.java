@@ -9,9 +9,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void add(T value, int index) {
-        this.checkAddBounds(index);
-
+    protected void addHook(T value, int index) {
         Node<T> newNode = new Node<>(value);
 
         if (this.head == null) {
@@ -42,9 +40,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void remove(T value) {
-        this.checkEmpty();
-
+    protected void removeHook(T value) {
         if (this.head.getData().equals(value)) {
             if (this.head.getNext() == null) {
                 this.tail = this.head = null;
@@ -77,7 +73,7 @@ public class SingleLinkedList<T> extends LinkedListBase<T> {
     }
 
     @Override
-    public void clear() {
+    protected void clearHook() {
         this.head = this.tail = null;
     }
 }

@@ -136,6 +136,39 @@ public class HashTable<K, V> implements DataStructure<K> {
         return values;
     }
 
+    public LinkedList<Pair<K, V>> pairs() {
+
+        LinkedList<Pair<K, V>> pairs = new SingleLinkedList<>();
+
+        for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
+            if (!bucket.isEmpty()) {
+                for (HashNode<K, V> node : bucket) {
+                    pairs.add(new Pair<>(node.getKey(), node.getValue()));
+                }
+            }
+        }
+
+        return pairs;
+    }
+
+    public static class Pair<K, V> {
+        final K key;
+        final V value;
+
+        Pair(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+    }
+
     @Override
     public void remove(K key) {
         this.getAndRemove(key);
