@@ -2,7 +2,7 @@ package com.cydrag.datastructure.logical;
 
 import java.util.Comparator;
 
-public class BinaryHeap<T extends Comparable<? super T>> extends BinaryTreeArray<T> implements OrderedStructure<T> {
+public class BinaryHeap<T extends Comparable<? super T>> extends BinaryTreeArray<T> implements OrderedDataStructure<T> {
 
     private final Comparator<T> comparator;
 

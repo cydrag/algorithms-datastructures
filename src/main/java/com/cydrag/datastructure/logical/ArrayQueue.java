@@ -1,46 +1,42 @@
 package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.exceptions.EmptyDataStructureException;
-import com.cydrag.datastructure.exceptions.IllegalCapacityException;
-import com.cydrag.datastructure.physical.Array;
+import com.cydrag.datastructure.exceptions.FullDataStructureException;
 
-abstract class ArrayQueue<T> implements Queue<T> {
+public class ArrayQueue<T> extends StaticQueue<T> {
 
-    final Array<T> array;
-    int front, end;
+    public ArrayQueue(int size) {
+        super(size);
+    }
 
-    ArrayQueue(int size) {
-        if (size < 1) {
-            throw new IllegalCapacityException();
+    @Override
+    public void enqueue(T value) {
+        if (this.isFull()) {
+            throw new FullDataStructureException();
         }
-
-        this.array = new Array<>(size);
-        this.front = this.end = 0;
-    }
-
-    public abstract boolean isFull();
-
-    @Override
-    public boolean contains(T value) {
-        return this.array.contains(value);
+        this.array.add(value, this.rear++);
     }
 
     @Override
-    public int size() {
-        return this.array.size();
-    }
-
-    @Override
-    public T peek() {
+    public T dequeue() {
         if (this.isEmpty()) {
             throw new EmptyDataStructureException();
         }
-        return this.array.get(this.front);
+
+        T obj = this.array.get(this.front++);
+        if (this.isEmpty()) {
+            this.front = this.rear = 0;
+        }
+
+        return obj;
     }
 
     @Override
-    public void clear() {
-        this.array.clear();
-        this.front = this.end = 0;
+    public boolean isEmpty() {
+        return this.front == this.rear;
+    }
+
+    public boolean isFull() {
+        return this.rear == this.array.size();
     }
 }

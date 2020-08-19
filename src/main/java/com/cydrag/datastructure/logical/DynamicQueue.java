@@ -1,14 +1,14 @@
 package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 public class DynamicQueue<T> implements Queue<T> {
 
-    private final LinkedList<T> linkedList;
+    final LinkedList<T> linkedList;
 
     public DynamicQueue() {
-        this.linkedList = new SingleLinkedList<>();
+        this.linkedList = new SinglyLinkedList<>();
     }
 
     @Override

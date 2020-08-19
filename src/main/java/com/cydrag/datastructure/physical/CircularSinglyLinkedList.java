@@ -4,9 +4,9 @@ import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
 
-public class CircularSingleLinkedList<T> extends LinkedListBase<T> implements Loopable<T> {
+public class CircularSinglyLinkedList<T> extends LinkedListBase<T> implements Loopable<T> {
 
-    public CircularSingleLinkedList() {
+    public CircularSinglyLinkedList() {
         super();
     }
 

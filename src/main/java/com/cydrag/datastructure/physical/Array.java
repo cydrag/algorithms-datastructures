@@ -6,7 +6,7 @@ import com.cydrag.datastructure.exceptions.NegativeValueException;
 
 import java.util.Iterator;
 
-public class Array<T> implements PhysicalDataStructure<T>, Reversible<T> {
+public class Array<T> implements PhysicalDataStructure<T>, Bidirectional<T> {
 
     private final Object[] array;
     private final int size;

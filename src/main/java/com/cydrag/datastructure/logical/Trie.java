@@ -3,7 +3,7 @@ package com.cydrag.datastructure.logical;
 import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.TrieNode;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 public class Trie implements Tree<String> {
 
@@ -39,7 +39,7 @@ public class Trie implements Tree<String> {
 
     @Override
     public LinkedList<String> levelOrder() {
-        LinkedList<String> linkedList = new SingleLinkedList<>();
+        LinkedList<String> linkedList = new SinglyLinkedList<>();
         this.traverse(this.root, linkedList);
         linkedList.addAtStart("");
         return linkedList;
@@ -77,7 +77,7 @@ public class Trie implements Tree<String> {
     }
 
     public LinkedList<String> words() {
-        LinkedList<String> words = new SingleLinkedList<>();
+        LinkedList<String> words = new SinglyLinkedList<>();
         traverseWord(this.root, words, new StringBuilder());
 
         return words;

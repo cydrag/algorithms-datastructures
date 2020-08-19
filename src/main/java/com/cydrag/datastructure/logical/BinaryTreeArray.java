@@ -4,7 +4,7 @@ import com.cydrag.datastructure.exceptions.FullDataStructureException;
 import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.physical.Array;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 /**
  *
@@ -104,7 +104,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> inOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.inOrder(linkedList, 1);
         return linkedList;
     }
@@ -119,7 +119,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> preOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.preOrderTraverse(linkedList, 1);
         return linkedList;
     }
@@ -134,7 +134,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> postOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.postOrder(linkedList, 1);
         return linkedList;
     }
@@ -149,7 +149,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> levelOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
             linkedList.addAtEnd(this.array.get(i));

@@ -3,7 +3,7 @@ package com.cydrag.datastructure.logical;
 import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.TreeNode;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
 
@@ -117,7 +117,7 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> inOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.inOrder(linkedList, this.root);
         return linkedList;
     }
@@ -132,7 +132,7 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> preOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.preOrder(linkedList, this.root);
         return linkedList;
     }
@@ -147,7 +147,7 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
 
     @Override
     public LinkedList<T> postOrder() {
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         this.postOrder(linkedList, this.root);
         return linkedList;
     }
@@ -163,7 +163,7 @@ abstract class DynamicBinaryTreeBase<T> implements BinaryTree<T> {
     @Override
     public LinkedList<T> levelOrder() {
 
-        LinkedList<T> linkedList = new SingleLinkedList<>();
+        LinkedList<T> linkedList = new SinglyLinkedList<>();
         Queue<TreeNode<T>> queue = new DynamicQueue<>();
 
         if (this.root != null) {

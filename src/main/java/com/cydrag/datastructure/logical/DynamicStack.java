@@ -1,14 +1,14 @@
 package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 public class DynamicStack<T> implements Stack<T> {
 
     private final LinkedList<T> linkedList;
 
     public DynamicStack() {
-        this.linkedList = new SingleLinkedList<>();
+        this.linkedList = new SinglyLinkedList<>();
     }
 
     @Override

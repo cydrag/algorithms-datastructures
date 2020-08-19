@@ -2,9 +2,9 @@ package com.cydrag.datastructure.physical;
 
 import com.cydrag.datastructure.nodes.Node;
 
-public class SingleLinkedList<T> extends LinkedListBase<T> {
+public class SinglyLinkedList<T> extends LinkedListBase<T> {
 
-    public SingleLinkedList() {
+    public SinglyLinkedList() {
         super();
     }
 

@@ -3,10 +3,6 @@ package com.cydrag.example;
 import com.cydrag.datastructure.logical.*;
 import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.nodes.WeightedVertex;
-import com.cydrag.datastructure.physical.BidirectionalIterator;
-import com.cydrag.datastructure.physical.CircularDoubleLinkedList;
-import com.cydrag.datastructure.physical.DoubleLinkedList;
-import com.cydrag.datastructure.physical.LinkedList;
 
 import java.util.Comparator;
 
@@ -101,6 +97,35 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        WeightedGraph<String> graph = new DirectedWeightedGraph<>();
 
+        WeightedVertex<String> v1 = new WeightedVertex<>("1");
+        WeightedVertex<String> v2 = new WeightedVertex<>("2");
+        WeightedVertex<String> v3 = new WeightedVertex<>("3");
+        WeightedVertex<String> v4 = new WeightedVertex<>("4");
+        WeightedVertex<String> v5 = new WeightedVertex<>("5");
+        WeightedVertex<String> v6 = new WeightedVertex<>("6");
+        WeightedVertex<String> v7 = new WeightedVertex<>("7");
+
+        graph.addAll(v1, v2, v3, v4, v5, v6, v7);
+
+//        graph.addEdge(a, a, 6);
+        graph.addEdge(v1, v2, 6);
+        graph.addEdge(v1, v3, 5);
+        graph.addEdge(v1, v4, 5);
+        graph.addEdge(v2, v5, -1);
+        graph.addEdge(v3, v2, -2);
+        graph.addEdge(v3, v5, 1);
+        graph.addEdge(v4, v3, -2);
+        graph.addEdge(v4, v6, -1);
+        graph.addEdge(v5, v7, 3);
+        graph.addEdge(v6, v7, 3);
+
+//        graph.remove(a);
+//        graph.add(a);
+
+        for (WeightedVertex<String> weightedVertex : graph.shortestPathBellmanFord(v1, v7)) {
+            System.out.println(weightedVertex.getData());
+        }
     }
 }

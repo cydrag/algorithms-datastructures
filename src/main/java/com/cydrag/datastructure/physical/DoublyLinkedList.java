@@ -4,11 +4,9 @@ import com.cydrag.datastructure.exceptions.ConcurrentChangeException;
 import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
-import java.util.Iterator;
+public class DoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectional<T> {
 
-public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Reversible<T>, Loopable<T> {
-
-    public CircularDoubleLinkedList() {
+    public DoublyLinkedList() {
         super();
     }
 
@@ -16,20 +14,30 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
     public BidirectionalIterator<T> bidirectionalIterator() {
         return new BidirectionalIterator<>() {
 
-            private Node<T> temp = head;
-            final long modCount = modificationCount;
+            private Node<T> current = head;
+            private Node<T> previous = head;
+            private final long modCount = modificationCount;
 
             @Override
-            public T previous() {
+            public boolean hasNext() {
                 if (this.modCount != modificationCount) {
                     throw new ConcurrentChangeException();
                 }
-                if (this.temp == null) {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (this.modCount != modificationCount) {
+                    throw new ConcurrentChangeException();
+                }
+                if (this.current == null) {
                     throw new NullValueException();
                 }
+                this.previous = this.current;
 
-                T value = this.temp.getData();
-                this.temp = this.temp.getPrevious();
+                T value = this.current.getData();
+                this.current = this.current.getNext();
                 return value;
             }
 
@@ -38,36 +46,24 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
                 if (this.modCount != modificationCount) {
                     throw new ConcurrentChangeException();
                 }
-                return temp != null;
+                return this.previous != null;
             }
 
             @Override
-            public boolean hasNext() {
+            public T previous() {
                 if (this.modCount != modificationCount) {
                     throw new ConcurrentChangeException();
                 }
-                return temp != null;
-            }
-
-            @Override
-            public T next() {
-                if (this.modCount != modificationCount) {
-                    throw new ConcurrentChangeException();
-                }
-                if (this.temp == null) {
+                if (this.previous == null) {
                     throw new NullValueException();
                 }
+                this.current = this.previous;
 
-                T value = this.temp.getData();
-                this.temp = this.temp.getNext();
+                T value = this.previous.getData();
+                this.previous = this.previous.getPrevious();
                 return value;
             }
         };
-    }
-
-    @Override
-    public Iterator<T> loopIterator() {
-        return new LoopIterator<>(this);
     }
 
     @Override
@@ -76,34 +72,22 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
 
         if (this.head == null) {
             this.head = this.tail = newNode;
-            this.head.setNext(this.head);
-            this.head.setPrevious(this.head);
         }
         else if (index == 0) {
             newNode.setNext(this.head);
-            newNode.setPrevious(this.tail);
-
-            this.tail.setNext(newNode);
             this.head.setPrevious(newNode);
-
             this.head = newNode;
         }
         else if (index == this.size()) {
-            newNode.setNext(this.head);
             newNode.setPrevious(this.tail);
-
             this.tail.setNext(newNode);
-            this.head.setPrevious(newNode);
-
             this.tail = newNode;
         }
         else {
-
             Node<T> current = this.head;
             Node<T> previous = current;
 
             int count = 0;
-
             while (count < index) {
                 previous = current;
                 current = current.getNext();
@@ -113,65 +97,59 @@ public class CircularDoubleLinkedList<T> extends LinkedListBase<T> implements Re
             newNode.setNext(current);
             newNode.setPrevious(previous);
 
-            previous.setNext(newNode);
             current.setPrevious(newNode);
+            previous.setNext(newNode);
         }
     }
 
     @Override
     protected void removeHook(T value) {
-        Node<T> previous = this.head;
 
         if (this.head.getData().equals(value)) {
-
-            this.head = this.head.getNext();
-            this.head.setPrevious(this.tail);
-            this.tail.setNext(this.head);
-
-            previous.setNext(null);
-            previous.setPrevious(null);
-
-            if (this.head == previous) {
+            if (this.head.getNext() == null) {
                 this.head = this.tail = null;
             }
+            else {
+                Node<T> prev = this.head;
+                this.head = this.head.getNext();
+                this.head.setPrevious(null);
+                prev.setNext(null);
+            }
+        }
+        else if (this.tail.getData().equals(value)) {
+            Node<T> current = this.tail;
+            this.tail = this.tail.getPrevious();
+            this.tail.setNext(null);
+            current.setPrevious(null);
         }
         else {
-            Node<T> current = this.head.getNext();
+            Node<T> prev = this.head;
+            Node<T> current = prev;
 
-            while (current != head) {
+            while (current != null) {
                 if (current.getData().equals(value)) {
-                    previous.setNext(current.getNext());
+                    prev.setNext(current.getNext());
+                    current.getNext().setPrevious(prev);
                     current.setPrevious(null);
-                    current.getNext().setPrevious(previous);
                     current.setNext(null);
-
-                    if (this.tail == current) {
-                        this.tail = previous;
-                    }
                     break;
                 }
-                previous = current;
+                prev = current;
                 current = current.getNext();
             }
         }
     }
 
     @Override
-    protected void clearHook() {
+    public void clearHook() {
 
-        if (this.head != null) {
+        Node<T> prev = this.head;
 
+        while (this.head != this.tail) {
+            this.head = this.head.getNext();
+            prev.setNext(null);
             this.head.setPrevious(null);
-            this.tail.setNext(null);
-
-            Node<T> prev = this.head;
-
-            while (this.head != this.tail) {
-                this.head = this.head.getNext();
-                prev.setNext(null);
-                this.head.setPrevious(null);
-                prev = this.head;
-            }
+            prev = this.head;
         }
 
         this.head = this.tail = null;

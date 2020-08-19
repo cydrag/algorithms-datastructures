@@ -1,5 +1,5 @@
 package com.cydrag.datastructure.physical;
 
-public interface Reversible<T> extends Iterable<T> {
+public interface Bidirectional<T> extends Iterable<T> {
     BidirectionalIterator<T> bidirectionalIterator();
 }

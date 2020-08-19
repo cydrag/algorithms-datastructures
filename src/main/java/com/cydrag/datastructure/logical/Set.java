@@ -1,10 +1,10 @@
 package com.cydrag.datastructure.logical;
 
-import com.cydrag.datastructure.ExpendableDataStructure;
+import com.cydrag.datastructure.DataStructure;
 
 import java.util.Iterator;
 
-public class Set<T> implements ExpendableDataStructure<T>, Iterable<T> {
+public class Set<T> implements DataStructure<T>, Iterable<T> {
 
     private final HashTable<T, Object> set;
     private static final Object INSERTED = new Object();

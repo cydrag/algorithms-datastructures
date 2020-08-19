@@ -3,7 +3,7 @@ package com.cydrag.datastructure.logical;
 import com.cydrag.datastructure.exceptions.EmptyDataStructureException;
 import com.cydrag.datastructure.exceptions.FullDataStructureException;
 
-public class CircularQueue<T> extends ArrayQueue<T> {
+public class CircularQueue<T> extends StaticQueue<T> {
 
     private int numberOfElements;
 
@@ -19,8 +19,8 @@ public class CircularQueue<T> extends ArrayQueue<T> {
         }
 
         this.numberOfElements++;
-        this.array.add(value, this.end);
-        this.end = (this.end + 1) % this.array.size();
+        this.array.add(value, this.rear);
+        this.rear = (this.rear + 1) % this.array.size();
     }
 
     @Override

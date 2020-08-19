@@ -1,9 +1,9 @@
 package com.cydrag.datastructure.logical;
 
-import com.cydrag.datastructure.ExpendableDataStructure;
+import com.cydrag.datastructure.DataStructure;
 import com.cydrag.datastructure.exceptions.ForbiddenOperationException;
 
-public interface OrderedStructure<T> extends ExpendableDataStructure<T> {
+public interface OrderedDataStructure<T> extends DataStructure<T> {
     @Override
     @Deprecated
     default void remove(T value) {

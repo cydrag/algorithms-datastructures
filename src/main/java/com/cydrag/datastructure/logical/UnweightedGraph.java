@@ -3,7 +3,7 @@ package com.cydrag.datastructure.logical;
 import com.cydrag.datastructure.exceptions.NoSuchVertexException;
 import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
@@ -20,14 +20,14 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
         }
         this.resetVisitation();
 
-        OrderedStructure<Vertex<T>> orderedStructure =
+        OrderedDataStructure<Vertex<T>> orderedDataStructure =
                 (searchStrategy == Graph.SearchStrategy.BREADTH_FIRST_SEARCH) ? new DynamicQueue<>() : new DynamicStack<>();
-        LinkedList<Vertex<T>> traversalList = new SingleLinkedList<>();
+        LinkedList<Vertex<T>> traversalList = new SinglyLinkedList<>();
 
-        orderedStructure.add(rootVertex);
+        orderedDataStructure.add(rootVertex);
 
-        while (!orderedStructure.isEmpty()) {
-            Vertex<T> current = orderedStructure.remove();
+        while (!orderedDataStructure.isEmpty()) {
+            Vertex<T> current = orderedDataStructure.remove();
             if (!current.isVisited()) {
                 traversalList.add(current);
                 current.setVisited(true);
@@ -35,7 +35,7 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
             for (Vertex<T> neighbour : this.adjacencyList.get(current)) {
                 if (!neighbour.isVisited()) {
-                    orderedStructure.add(neighbour);
+                    orderedDataStructure.add(neighbour);
                 }
             }
         }
@@ -85,7 +85,7 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
         this.resetVisitation();
 
-        LinkedList<Vertex<T>> shortestPath = new SingleLinkedList<>();
+        LinkedList<Vertex<T>> shortestPath = new SinglyLinkedList<>();
 
         if (found) {
             while (endVertex != null) {

@@ -5,14 +5,14 @@ import com.cydrag.datastructure.exceptions.FullDataStructureException;
 import com.cydrag.datastructure.exceptions.IllegalCapacityException;
 import com.cydrag.datastructure.physical.Array;
 
-public class FixedStack<T> implements Stack<T> {
+public class ArrayStack<T> implements Stack<T> {
 
     private final Array<T> array;
 
     private int i;
     private int lastIndex;
 
-    public FixedStack(int size) {
+    public ArrayStack(int size) {
         if (size < 1) {
             throw new IllegalCapacityException();
         }

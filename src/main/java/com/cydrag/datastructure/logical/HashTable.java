@@ -2,17 +2,16 @@ package com.cydrag.datastructure.logical;
 
 import com.cydrag.datastructure.DataStructure;
 import com.cydrag.datastructure.exceptions.NullValueException;
-import com.cydrag.datastructure.nodes.HashNode;
 import com.cydrag.datastructure.physical.Array;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 /**
  * Currently no null key support, some operations must be changed if null key is allowed
  */
 public class HashTable<K, V> implements DataStructure<K> {
 
-    private final Array<LinkedList<HashNode<K, V>>> hashtable;
+    private final Array<LinkedList<Pair<K, V>>> hashtable;
     private int numOfElements;
 
     private static final int BUCKET_SIZE = 50;
@@ -22,7 +21,7 @@ public class HashTable<K, V> implements DataStructure<K> {
         this.numOfElements = 0;
 
         for (int i = 0; i < BUCKET_SIZE; i++) {
-            this.hashtable.add(new SingleLinkedList<>(), i);
+            this.hashtable.add(new SinglyLinkedList<>(), i);
         }
     }
 
@@ -41,18 +40,18 @@ public class HashTable<K, V> implements DataStructure<K> {
         this.checkIfNull(key);
 
         int index = this.bucketIndex(key);
-        LinkedList<HashNode<K, V>> bucket = this.hashtable.get(index);
+        LinkedList<Pair<K, V>> bucket = this.hashtable.get(index);
 
         V returnValue = null;
 
         if (bucket.isEmpty()) {
-            bucket.add(new HashNode<>(key, value));
+            bucket.add(new Pair<>(key, value));
             this.numOfElements++;
         }
         else {
             boolean exists = false;
 
-            for (HashNode<K, V> node : bucket) {
+            for (Pair<K, V> node : bucket) {
                 if ((node.getKey() == key) || (node.getKey().equals(key))) {
                     returnValue = node.getValue();
                     node.setValue(value);
@@ -62,7 +61,7 @@ public class HashTable<K, V> implements DataStructure<K> {
             }
 
             if (!exists) {
-                bucket.add(new HashNode<>(key, value));
+                bucket.add(new Pair<>(key, value));
                 this.numOfElements++;
             }
         }
@@ -74,12 +73,12 @@ public class HashTable<K, V> implements DataStructure<K> {
         this.checkIfNull(key);
 
         int index = this.bucketIndex(key);
-        LinkedList<HashNode<K, V>> bucket = this.hashtable.get(index);
+        LinkedList<Pair<K, V>> bucket = this.hashtable.get(index);
 
         V value = null;
-        HashNode<K, V> foundNode = null;
+        Pair<K, V> foundNode = null;
 
-        for (HashNode<K, V> node : bucket) {
+        for (Pair<K, V> node : bucket) {
             if ((node.getKey() == key) || (node.getKey().equals(key))) {
                 foundNode = node;
                 break;
@@ -99,9 +98,9 @@ public class HashTable<K, V> implements DataStructure<K> {
         this.checkIfNull(key);
 
         int index = this.bucketIndex(key);
-        LinkedList<HashNode<K, V>> bucket = this.hashtable.get(index);
+        LinkedList<Pair<K, V>> bucket = this.hashtable.get(index);
 
-        for (HashNode<K, V> node : bucket) {
+        for (Pair<K, V> node : bucket) {
             if ((node.getKey() == key) || (node.getKey().equals(key))) {
                 return node.getValue();
             }
@@ -112,11 +111,11 @@ public class HashTable<K, V> implements DataStructure<K> {
 
     public LinkedList<K> keys() {
 
-        LinkedList<K> keys = new SingleLinkedList<>();
+        LinkedList<K> keys = new SinglyLinkedList<>();
 
-        for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
+        for (LinkedList<Pair<K, V>> bucket : this.hashtable) {
             if (!bucket.isEmpty()) {
-                for (HashNode<K, V> node : bucket) {
+                for (Pair<K, V> node : bucket) {
                     keys.add(node.getKey());
                 }
             }
@@ -126,7 +125,7 @@ public class HashTable<K, V> implements DataStructure<K> {
     }
 
     public LinkedList<V> values() {
-        LinkedList<V> values = new SingleLinkedList<>();
+        LinkedList<V> values = new SinglyLinkedList<>();
         LinkedList<K> keys = this.keys();
 
         for (K key : keys) {
@@ -138,12 +137,12 @@ public class HashTable<K, V> implements DataStructure<K> {
 
     public LinkedList<Pair<K, V>> pairs() {
 
-        LinkedList<Pair<K, V>> pairs = new SingleLinkedList<>();
+        LinkedList<Pair<K, V>> pairs = new SinglyLinkedList<>();
 
-        for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
+        for (LinkedList<Pair<K, V>> bucket : this.hashtable) {
             if (!bucket.isEmpty()) {
-                for (HashNode<K, V> node : bucket) {
-                    pairs.add(new Pair<>(node.getKey(), node.getValue()));
+                for (Pair<K, V> pair : bucket) {
+                    pairs.add(pair);
                 }
             }
         }
@@ -152,10 +151,10 @@ public class HashTable<K, V> implements DataStructure<K> {
     }
 
     public static class Pair<K, V> {
-        final K key;
-        final V value;
+        private final K key;
+        private V value;
 
-        Pair(K key, V value) {
+        public Pair(K key, V value) {
             this.key = key;
             this.value = value;
         }
@@ -167,6 +166,15 @@ public class HashTable<K, V> implements DataStructure<K> {
         public V getValue() {
             return value;
         }
+
+        public void setValue(V value) {
+            this.value = value;
+        }
+    }
+
+    @Override
+    public void add(K key) {
+        this.add(key, null);
     }
 
     @Override
@@ -176,21 +184,7 @@ public class HashTable<K, V> implements DataStructure<K> {
 
     @Override
     public boolean contains(K key) {
-        this.checkIfNull(key);
-
-        int index = this.bucketIndex(key);
-        LinkedList<HashNode<K, V>> bucket = this.hashtable.get(index);
-
-        boolean hasKey = false;
-
-        for (HashNode<K, V> node : bucket) {
-            if ((node.getKey() == key) || (node.getKey().equals(key))) {
-                hasKey = true;
-                break;
-            }
-        }
-
-        return hasKey;
+        return this.get(key) != null;
     }
 
     @Override
@@ -206,7 +200,7 @@ public class HashTable<K, V> implements DataStructure<K> {
     @Override
     public void clear() {
         if (!this.isEmpty()) {
-            for (LinkedList<HashNode<K, V>> bucket : this.hashtable) {
+            for (LinkedList<Pair<K, V>> bucket : this.hashtable) {
                 bucket.clear();
             }
             this.numOfElements = 0;

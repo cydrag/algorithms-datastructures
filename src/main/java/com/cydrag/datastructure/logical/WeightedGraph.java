@@ -4,7 +4,7 @@ import com.cydrag.datastructure.exceptions.NegativeValueException;
 import com.cydrag.datastructure.exceptions.NoSuchVertexException;
 import com.cydrag.datastructure.nodes.WeightedVertex;
 import com.cydrag.datastructure.physical.LinkedList;
-import com.cydrag.datastructure.physical.SingleLinkedList;
+import com.cydrag.datastructure.physical.SinglyLinkedList;
 
 public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
 
@@ -20,14 +20,14 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         }
         this.resetVisitation();
 
-        OrderedStructure<WeightedVertex<T>> orderedStructure =
+        OrderedDataStructure<WeightedVertex<T>> orderedDataStructure =
                 (searchStrategy == Graph.SearchStrategy.BREADTH_FIRST_SEARCH) ? new DynamicQueue<>() : new DynamicStack<>();
-        LinkedList<WeightedVertex<T>> traversalList = new SingleLinkedList<>();
+        LinkedList<WeightedVertex<T>> traversalList = new SinglyLinkedList<>();
 
-        orderedStructure.add(rootVertex);
+        orderedDataStructure.add(rootVertex);
 
-        while (!orderedStructure.isEmpty()) {
-            WeightedVertex<T> current = orderedStructure.remove();
+        while (!orderedDataStructure.isEmpty()) {
+            WeightedVertex<T> current = orderedDataStructure.remove();
             if (!current.isVisited()) {
                 traversalList.add(current);
                 current.setVisited(true);
@@ -35,7 +35,7 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
 
             for (WeightedVertex<T> neighbour : this.adjacencyList.get(current).keys()) {
                 if (!neighbour.isVisited()) {
-                    orderedStructure.add(neighbour);
+                    orderedDataStructure.add(neighbour);
                 }
             }
         }
@@ -94,7 +94,7 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         }
 
         this.resetVisitation();
-        LinkedList<WeightedVertex<T>> shortestPath = new SingleLinkedList<>();
+        LinkedList<WeightedVertex<T>> shortestPath = new SinglyLinkedList<>();
 
         if ((endVertex.getDistance() == Integer.MAX_VALUE) || (startVertex == endVertex)) {
             return shortestPath;
@@ -133,13 +133,13 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         startVertex.setDistance(0);
 
         LinkedList<HashTable.Pair<WeightedVertex<T>, HashTable.Pair<WeightedVertex<T>, Integer>>> allEdges
-                = new SingleLinkedList<>();
+                = new SinglyLinkedList<>();
 
         for (WeightedVertex<T> vertex : this.adjacencyList.keys()) {
             HashTable<WeightedVertex<T>, Integer> edges = this.adjacencyList.get(vertex);
 
             for (HashTable.Pair<WeightedVertex<T>, Integer> edge : edges.pairs()) {
-                allEdges.add(new HashTable.Pair<>(vertex, new HashTable.Pair<>(edge.key, edge.value)));
+                allEdges.add(new HashTable.Pair<>(vertex, new HashTable.Pair<>(edge.getKey(), edge.getValue())));
             }
         }
 
@@ -173,7 +173,7 @@ public abstract class WeightedGraph<T> implements Graph<WeightedVertex<T>> {
         }
 
         this.resetVisitation();
-        LinkedList<WeightedVertex<T>> shortestPath = new SingleLinkedList<>();
+        LinkedList<WeightedVertex<T>> shortestPath = new SinglyLinkedList<>();
 
         if ((endVertex.getDistance() == Integer.MAX_VALUE) || (startVertex == endVertex)) {
             return shortestPath;

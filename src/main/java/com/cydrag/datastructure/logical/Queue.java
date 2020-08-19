@@ -1,6 +1,6 @@
 package com.cydrag.datastructure.logical;
 
-public interface Queue<T> extends OrderedStructure<T> {
+public interface Queue<T> extends OrderedDataStructure<T> {
     @Override
     default void add(T value) {
         this.enqueue(value);
