@@ -1,7 +1,10 @@
 package com.cydrag.datastructure.nodes;
 
-public class Vertex<T> {
+import java.util.Comparator;
 
+public class Vertex<T> implements Comparable<Vertex<T>> {
+
+    private int distance;
     private final T data;
     private boolean visited;
     private Vertex<T> parent;
@@ -10,6 +13,15 @@ public class Vertex<T> {
         this.data = data;
         this.visited = false;
         this.parent = null;
+        this.distance = 0;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 
     public T getData() {
@@ -30,5 +42,11 @@ public class Vertex<T> {
 
     public void setParent(Vertex<T> parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public int compareTo(Vertex<T> o) {
+        Comparator<Vertex<T>> comparator = Comparator.comparing(Vertex::getDistance);
+        return comparator.compare(this, o);
     }
 }

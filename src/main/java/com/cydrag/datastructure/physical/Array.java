@@ -5,6 +5,7 @@ import com.cydrag.datastructure.exceptions.IndexNotInBoundsException;
 import com.cydrag.datastructure.exceptions.NegativeValueException;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class Array<T> implements PhysicalDataStructure<T>, Bidirectional<T> {
 
@@ -152,8 +153,9 @@ public class Array<T> implements PhysicalDataStructure<T>, Bidirectional<T> {
     public void remove(T value) {
         if (value != null) {
             for (int i = 0; i < this.size; i++) {
-                if ((this.array[i] == value) || (value.equals(this.array[i]))) {
+                if (Objects.equals(this.array[i], value)) {
                     this.array[i] = null;
+                    break;
                 }
             }
         }
@@ -162,13 +164,8 @@ public class Array<T> implements PhysicalDataStructure<T>, Bidirectional<T> {
     @Override
     public boolean contains(T value) {
         for (Object o : this.array) {
-            if (o == value) {
+            if (Objects.equals(o, value)) {
                 return true;
-            }
-            else if (o != null) {
-                if (o.equals(value)) {
-                    return true;
-                }
             }
         }
 

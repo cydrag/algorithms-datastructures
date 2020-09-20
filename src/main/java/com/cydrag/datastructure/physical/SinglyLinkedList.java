@@ -2,6 +2,8 @@ package com.cydrag.datastructure.physical;
 
 import com.cydrag.datastructure.nodes.Node;
 
+import java.util.Objects;
+
 public class SinglyLinkedList<T> extends LinkedListBase<T> {
 
     public SinglyLinkedList() {
@@ -41,7 +43,7 @@ public class SinglyLinkedList<T> extends LinkedListBase<T> {
 
     @Override
     protected void removeHook(T value) {
-        if (this.head.getData().equals(value)) {
+        if (Objects.equals(this.head.getData(), value)) {
             if (this.head.getNext() == null) {
                 this.tail = this.head = null;
             }
@@ -56,7 +58,7 @@ public class SinglyLinkedList<T> extends LinkedListBase<T> {
             Node<T> current = this.head;
 
             while (current != null) {
-                if (current.getData().equals(value)) {
+                if (Objects.equals(current.getData(), value)) {
 
                     if (current == this.tail) {
                         this.tail = previous;

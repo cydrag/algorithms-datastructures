@@ -4,6 +4,8 @@ import com.cydrag.datastructure.exceptions.ConcurrentChangeException;
 import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
+import java.util.Objects;
+
 public class DoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectional<T> {
 
     public DoublyLinkedList() {
@@ -105,7 +107,7 @@ public class DoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectio
     @Override
     protected void removeHook(T value) {
 
-        if (this.head.getData().equals(value)) {
+        if (Objects.equals(this.head.getData(), value)) {
             if (this.head.getNext() == null) {
                 this.head = this.tail = null;
             }
@@ -116,7 +118,7 @@ public class DoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectio
                 prev.setNext(null);
             }
         }
-        else if (this.tail.getData().equals(value)) {
+        else if (Objects.equals(this.tail.getData(), value)) {
             Node<T> current = this.tail;
             this.tail = this.tail.getPrevious();
             this.tail.setNext(null);
@@ -127,7 +129,7 @@ public class DoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectio
             Node<T> current = prev;
 
             while (current != null) {
-                if (current.getData().equals(value)) {
+                if (Objects.equals(current.getData(), value)) {
                     prev.setNext(current.getNext());
                     current.getNext().setPrevious(prev);
                     current.setPrevious(null);

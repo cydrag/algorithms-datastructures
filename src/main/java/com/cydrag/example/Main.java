@@ -2,7 +2,6 @@ package com.cydrag.example;
 
 import com.cydrag.datastructure.logical.*;
 import com.cydrag.datastructure.nodes.Vertex;
-import com.cydrag.datastructure.nodes.WeightedVertex;
 
 import java.util.Comparator;
 
@@ -19,17 +18,18 @@ public class Main {
         binaryHeap.add(5);
         binaryHeap.add(4);
 
-        System.out.println("Removed: " + binaryHeap.remove());
-
         for (Integer num : binaryHeap.levelOrder()) {
-            System.out.println(num);
+            System.out.print(num + " ");
+        }
+        System.out.println("\n =====================");
+
+        while (!binaryHeap.isEmpty()) {
+            System.out.println(binaryHeap.peek());
+            binaryHeap.remove(binaryHeap.peek());
         }
     }
 
     private static void test2() {
-        Person p1 = new Person("Adam", 21.00d);
-        Person p2 = new Person("Adam", 32.00d);
-        Person p3 = new Person("Adam", 33.00d);
 
         Vertex<String> v1 = new Vertex<>("v1");
         Vertex<String> v2 = new Vertex<>("v2");
@@ -61,11 +61,11 @@ public class Main {
 
         WeightedGraph<String> graph = new UndirectedWeightedGraph<>();
 
-        WeightedVertex<String> a = new WeightedVertex<>("A");
-        WeightedVertex<String> b = new WeightedVertex<>("B");
-        WeightedVertex<String> c = new WeightedVertex<>("C");
-        WeightedVertex<String> d = new WeightedVertex<>("D");
-        WeightedVertex<String> e = new WeightedVertex<>("E");
+        Vertex<String> a = new Vertex<>("A");
+        Vertex<String> b = new Vertex<>("B");
+        Vertex<String> c = new Vertex<>("C");
+        Vertex<String> d = new Vertex<>("D");
+        Vertex<String> e = new Vertex<>("E");
 
         System.out.println(Math.abs(a.hashCode()) % 50);
         System.out.println(Math.abs(b.hashCode()) % 50);
@@ -91,41 +91,53 @@ public class Main {
 //        graph.remove(a);
 //        graph.add(a);
 
-        for (WeightedVertex<String> weightedVertex : graph.shortestPathDijkstra(a, c)) {
-            System.out.println(weightedVertex.getData());
+        for (Vertex<String> vertex : graph.shortestPathDijkstra(a, c)) {
+            System.out.println(vertex.getData());
         }
     }
 
-    public static void main(String[] args) {
-        WeightedGraph<String> graph = new DirectedWeightedGraph<>();
+    public static void test3() {
+        WeightedGraph<String> graph = new UndirectedWeightedGraph<>();
 
-        WeightedVertex<String> v1 = new WeightedVertex<>("1");
-        WeightedVertex<String> v2 = new WeightedVertex<>("2");
-        WeightedVertex<String> v3 = new WeightedVertex<>("3");
-        WeightedVertex<String> v4 = new WeightedVertex<>("4");
-        WeightedVertex<String> v5 = new WeightedVertex<>("5");
-        WeightedVertex<String> v6 = new WeightedVertex<>("6");
-        WeightedVertex<String> v7 = new WeightedVertex<>("7");
+        Vertex<String> v1 = new Vertex<>("1");
+        Vertex<String> v2 = new Vertex<>("2");
+        Vertex<String> v3 = new Vertex<>("3");
+        Vertex<String> v4 = new Vertex<>("4");
+        Vertex<String> v5 = new Vertex<>("5");
+        Vertex<String> v6 = new Vertex<>("6");
+        Vertex<String> v7 = new Vertex<>("7");
 
         graph.addAll(v1, v2, v3, v4, v5, v6, v7);
 
-//        graph.addEdge(a, a, 6);
+//        graph.addEdge(a, a, 6);     TODO: Think about below for BellmanFord for UndirectedWeightedGraph, works for Directed
         graph.addEdge(v1, v2, 6);
         graph.addEdge(v1, v3, 5);
         graph.addEdge(v1, v4, 5);
-        graph.addEdge(v2, v5, -1);
-        graph.addEdge(v3, v2, -2);
+        graph.addEdge(v2, v5, -1); //
+        graph.addEdge(v3, v2, -2); //
         graph.addEdge(v3, v5, 1);
-        graph.addEdge(v4, v3, -2);
-        graph.addEdge(v4, v6, -1);
+        graph.addEdge(v4, v3, -2); //
+        graph.addEdge(v4, v6, -1); //
         graph.addEdge(v5, v7, 3);
         graph.addEdge(v6, v7, 3);
 
 //        graph.remove(a);
 //        graph.add(a);
 
-        for (WeightedVertex<String> weightedVertex : graph.shortestPathBellmanFord(v1, v7)) {
-            System.out.println(weightedVertex.getData());
+        for (Vertex<String> vertex : graph.shortestPathBellmanFord(v1, v7)) {
+            System.out.println(vertex.getData());
+        }
+    }
+
+    public static void main(String[] args) {
+        AVLTree<Integer> tree = new AVLTree<>();
+
+        tree.add(5);
+        tree.add(3);
+        tree.add(4);
+
+        for (Integer num : tree.levelOrder()) {
+            System.out.println(num);
         }
     }
 }

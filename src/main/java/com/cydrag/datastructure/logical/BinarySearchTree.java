@@ -13,17 +13,17 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
     }
 
     @Override
-    protected void addValue(T value) {
+    protected void addHook(T value) {
         this.root = this.add(this.root, value, 0);
     }
 
     @Override
-    protected void removeValue(T value) {
+    protected void removeHook(T value) {
         this.root = this.remove(this.root, value);
     }
 
     @Override
-    protected boolean containsValue(T value) {
+    protected boolean containsHook(T value) {
         return this.contains(this.root, value);
     }
 
@@ -49,16 +49,16 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
             return null;
         }
         else if (currentNode.getData().compareTo(value) > 0) {
-            currentNode.setLeft(remove(currentNode.getLeft(), value));
+            currentNode.setLeft(this.remove(currentNode.getLeft(), value));
         }
         else if (currentNode.getData().compareTo(value) < 0) {
-            currentNode.setRight(remove(currentNode.getRight(), value));
+            currentNode.setRight(this.remove(currentNode.getRight(), value));
         }
         else {
             if ((currentNode.getLeft() != null) && (currentNode.getRight() != null)) {
-                TreeNode<T> successor = minimumNode(currentNode.getRight());
+                TreeNode<T> successor = successorNode(currentNode.getRight());
                 currentNode.setData(successor.getData());
-                currentNode.setRight(remove(currentNode.getRight(), successor.getData()));
+                currentNode.setRight(this.remove(currentNode.getRight(), successor.getData()));
             }
             else if (currentNode.getLeft() == null) {
                 int currentHeight = currentNode.getHeight();
@@ -78,7 +78,6 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
                 currentNode = null;
             }
         }
-
         return currentNode;
     }
 
@@ -97,11 +96,11 @@ public class BinarySearchTree<T extends Comparable<? super T>> extends DynamicBi
         }
     }
 
-    protected static <T> TreeNode<T> minimumNode(TreeNode<T> root) {
+    protected static <T> TreeNode<T> successorNode(TreeNode<T> root) {
         if (root.getLeft() == null) {
             return root;
         }
 
-        return minimumNode(root.getLeft());
+        return successorNode(root.getLeft());
     }
 }

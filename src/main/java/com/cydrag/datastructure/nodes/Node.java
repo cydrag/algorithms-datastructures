@@ -11,8 +11,6 @@ public class Node<T> {
         this.next = this.previous = null;
     }
 
-    // ...
-
     public T getData() {
         return this.data;
     }

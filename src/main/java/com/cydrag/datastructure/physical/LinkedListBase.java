@@ -7,6 +7,7 @@ import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 abstract class LinkedListBase<T> implements LinkedList<T> {
 
@@ -126,13 +127,8 @@ abstract class LinkedListBase<T> implements LinkedList<T> {
         do {
             T currentElem = temp.getData();
 
-            if (currentElem == value) {
+            if (Objects.equals(currentElem, value)) {
                 return true;
-            }
-            else if (value != null) {
-                if (value.equals(currentElem)) {
-                    return true;
-                }
             }
 
             temp = temp.getNext();

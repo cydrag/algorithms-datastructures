@@ -17,8 +17,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
     }
 
     @Override
-    protected void addValue(T value) {
-
+    protected void addHook(T value) {
         TreeNode<T> newChild = new TreeNode<>(value);
         this.size++;
         int height = (int)(Math.log(this.size) / Math.log(2));
@@ -53,7 +52,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
     }
 
     @Override
-    protected void removeValue(T value) {
+    protected void removeHook(T value) {
 
         boolean found = false;
 
@@ -87,7 +86,7 @@ public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
     }
 
     @Override
-    protected boolean containsValue(T value) {
+    protected boolean containsHook(T value) {
         Queue<TreeNode<T>> children = new DynamicQueue<>();
         children.enqueue(this.root);
 
@@ -110,41 +109,36 @@ public class RegularBinaryTree<T> extends DynamicBinaryTreeBase<T> {
     }
 
     private void removeLastChild() {
-
         if ((this.root.getLeft() == null) && (this.root.getRight() == null)) {
             this.root = null;
-            return;
         }
+        else {
+            Queue<TreeNode<T>> queue = new DynamicQueue<>();
+            TreeNode<T> currentNode = this.root;
+            TreeNode<T> previousNode;
 
-        Queue<TreeNode<T>> queue = new DynamicQueue<>();
-        TreeNode<T> currentNode = this.root;
-        TreeNode<T> previousNode;
+            queue.enqueue(this.root);
 
-        queue.enqueue(this.root);
+            while (!queue.isEmpty()) {
+                previousNode = currentNode;
+                currentNode = queue.dequeue();
 
-        while (!queue.isEmpty()) {
-            previousNode = currentNode;
-            currentNode = queue.dequeue();
-
-            if (currentNode.getLeft() == null) {
-                previousNode.setRight(null);
-                break;
+                if (currentNode.getLeft() == null) {
+                    previousNode.setRight(null);
+                    break;
+                } else if (currentNode.getRight() == null) {
+                    currentNode.setLeft(null);
+                    break;
+                } else {
+                    queue.enqueue(currentNode.getLeft());
+                    queue.enqueue(currentNode.getRight());
+                }
             }
-            else if (currentNode.getRight() == null) {
-                currentNode.setLeft(null);
-                break;
-            }
-            else {
-                queue.enqueue(currentNode.getLeft());
-                queue.enqueue(currentNode.getRight());
-            }
+            queue.clear();
         }
-
-        queue.clear();
     }
 
     private TreeNode<T> getDeepestNode() {
-
         Queue<TreeNode<T>> queue = new DynamicQueue<>();
         queue.enqueue(this.root);
 

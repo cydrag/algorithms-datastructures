@@ -58,8 +58,10 @@ public class TrieNode {
     public void clear() {
         for (Character c : this.holder.keys()) {
             TrieNode trieNode = this.holder.get(c);
+            trieNode.setEndOfWord(false);
             trieNode.clear();
         }
         this.holder.clear();
+        this.setEndOfWord(false);
     }
 }

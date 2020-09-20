@@ -5,6 +5,7 @@ import com.cydrag.datastructure.exceptions.NullValueException;
 import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class CircularDoublyLinkedList<T> extends LinkedListBase<T> implements Bidirectional<T>, Loopable<T> {
 
@@ -120,7 +121,7 @@ public class CircularDoublyLinkedList<T> extends LinkedListBase<T> implements Bi
     @Override
     protected void removeHook(T value) {
         Node<T> previous = this.head;
-        if (this.head.getData().equals(value)) {
+        if (Objects.equals(this.head.getData(), value)) {
 
             this.head = this.head.getNext();
             this.head.setPrevious(this.tail);
@@ -137,7 +138,7 @@ public class CircularDoublyLinkedList<T> extends LinkedListBase<T> implements Bi
             Node<T> current = this.head.getNext();
 
             while (current != head) {
-                if (current.getData().equals(value)) {
+                if (Objects.equals(current.getData(), value)) {
                     previous.setNext(current.getNext());
                     current.setPrevious(null);
                     current.getNext().setPrevious(previous);

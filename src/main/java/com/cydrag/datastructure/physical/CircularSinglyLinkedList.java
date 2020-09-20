@@ -3,6 +3,7 @@ package com.cydrag.datastructure.physical;
 import com.cydrag.datastructure.nodes.Node;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 public class CircularSinglyLinkedList<T> extends LinkedListBase<T> implements Loopable<T> {
 
@@ -53,7 +54,7 @@ public class CircularSinglyLinkedList<T> extends LinkedListBase<T> implements Lo
     protected void removeHook(T value) {
         Node<T> previous = this.head;
 
-        if (this.head.getData().equals(value)) {
+        if (Objects.equals(this.head.getData(), value)) {
             if (this.head == this.tail) {
                 this.tail = this.head = null;
             }
@@ -68,7 +69,7 @@ public class CircularSinglyLinkedList<T> extends LinkedListBase<T> implements Lo
             while (previous.getNext() != this.head) {
                 Node<T> current = previous.getNext();
 
-                if (current.getData().equals(value)) {
+                if (Objects.equals(current.getData(), value)) {
                     if (current == this.tail) {
                         this.tail = previous;
                     }

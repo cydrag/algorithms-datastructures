@@ -5,43 +5,10 @@ import com.cydrag.datastructure.nodes.Vertex;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SinglyLinkedList;
 
-public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
-
-    protected final HashTable<Vertex<T>, Set<Vertex<T>>> adjacencyList;
+public abstract class UnweightedGraph<T> extends Graph<T> {
 
     public UnweightedGraph() {
-        this.adjacencyList = new HashTable<>();
-    }
-
-    public LinkedList<Vertex<T>> searchList(Vertex<T> rootVertex, Graph.SearchStrategy searchStrategy) {
-
-        if (!this.contains(rootVertex)) {
-            throw new NoSuchVertexException(rootVertex);
-        }
-        this.resetVisitation();
-
-        OrderedDataStructure<Vertex<T>> orderedDataStructure =
-                (searchStrategy == Graph.SearchStrategy.BREADTH_FIRST_SEARCH) ? new DynamicQueue<>() : new DynamicStack<>();
-        LinkedList<Vertex<T>> traversalList = new SinglyLinkedList<>();
-
-        orderedDataStructure.add(rootVertex);
-
-        while (!orderedDataStructure.isEmpty()) {
-            Vertex<T> current = orderedDataStructure.remove();
-            if (!current.isVisited()) {
-                traversalList.add(current);
-                current.setVisited(true);
-            }
-
-            for (Vertex<T> neighbour : this.adjacencyList.get(current)) {
-                if (!neighbour.isVisited()) {
-                    orderedDataStructure.add(neighbour);
-                }
-            }
-        }
-
-        this.resetVisitation();
-        return traversalList;
+        super();
     }
 
     public LinkedList<Vertex<T>> shortestPathBreadthFirstSearch(Vertex<T> startVertex, Vertex<T> endVertex) {
@@ -52,8 +19,13 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
             throw new NoSuchVertexException(endVertex);
         }
 
+        LinkedList<Vertex<T>> shortestPath = new SinglyLinkedList<>();
+
+        if (startVertex == endVertex) {
+            return shortestPath;
+        }
+
         boolean found = false;
-        boolean first = true;
 
         this.resetVisitation();
         this.resetParents();
@@ -63,13 +35,12 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
         while (!queue.isEmpty()) {
             Vertex<T> current = queue.dequeue();
-            if (!first) {
-                current.setVisited(true);
-            }
-            first = false;
+            current.setVisited(true);
 
-            for (Vertex<T> neighbour : this.adjacencyList.get(current)) {
-                neighbour.setParent(current);
+            for (Vertex<T> neighbour : this.adjacencyList.get(current).keys()) {
+                if (!neighbour.isVisited()) {
+                    neighbour.setParent(current);
+                }
                 if (neighbour == endVertex) {
                     found = true;
                     queue.clear();
@@ -85,17 +56,9 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
 
         this.resetVisitation();
 
-        LinkedList<Vertex<T>> shortestPath = new SinglyLinkedList<>();
-
         if (found) {
             while (endVertex != null) {
-                if (!endVertex.isVisited()) {
-                    shortestPath.addAtStart(endVertex);
-                    endVertex.setVisited(true);
-                }
-                else {
-                    break;
-                }
+                shortestPath.addAtStart(endVertex);
                 endVertex = endVertex.getParent();
             }
         }
@@ -105,16 +68,37 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
         return shortestPath;
     }
 
-    private void resetVisitation() {
-        for (Vertex<T> vertex : this.adjacencyList.keys()) {
-            vertex.setVisited(false);
+    @Override
+    public boolean isComplete() {
+
+        int numOfVertices = this.adjacencyList.size();
+
+        if (numOfVertices == 0) {
+            return false;
+        }
+        else if (numOfVertices == 1) {
+            return true;
+        }
+        else {
+            int expected = numOfVertices * (numOfVertices - 1);
+            return expected == this.edges().size();
         }
     }
 
-    private void resetParents() {
+    public LinkedList<HashTable.Pair<Vertex<T>, Vertex<T>>> edges() {
+
+        LinkedList<HashTable.Pair<Vertex<T>, Vertex<T>>> allEdges
+                = new SinglyLinkedList<>();
+
         for (Vertex<T> vertex : this.adjacencyList.keys()) {
-            vertex.setParent(null);
+            HashTable<Vertex<T>, Integer> edges = this.adjacencyList.get(vertex);
+
+            for (HashTable.Pair<Vertex<T>, Integer> edge : edges.pairs()) {
+                allEdges.add(new HashTable.Pair<>(vertex, edge.getKey()));
+            }
         }
+
+        return allEdges;
     }
 
     protected abstract void addEdgeHook(Vertex<T> vertex, Vertex<T> neighbourVertex);
@@ -131,38 +115,4 @@ public abstract class UnweightedGraph<T> implements Graph<Vertex<T>> {
         }
     }
 
-    @Override
-    public void add(Vertex<T> vertex) {
-        if (!this.adjacencyList.contains(vertex)) {
-            this.adjacencyList.add(vertex, new Set<>());
-        }
-    }
-
-    @Override
-    public void remove(Vertex<T> vertex) {
-        for (Set<Vertex<T>> neighbour : this.adjacencyList.values()) {
-            neighbour.remove(vertex);
-        }
-        this.adjacencyList.remove(vertex);
-    }
-
-    @Override
-    public boolean contains(Vertex<T> vertex) {
-        return this.adjacencyList.contains(vertex);
-    }
-
-    @Override
-    public int size() {
-        return this.adjacencyList.keys().size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.adjacencyList.isEmpty();
-    }
-
-    @Override
-    public void clear() {
-        this.adjacencyList.clear();
-    }
 }

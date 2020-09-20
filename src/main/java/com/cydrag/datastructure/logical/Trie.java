@@ -40,21 +40,38 @@ public class Trie implements Tree<String> {
     @Override
     public LinkedList<String> levelOrder() {
         LinkedList<String> linkedList = new SinglyLinkedList<>();
-        this.traverse(this.root, linkedList);
-        linkedList.addAtStart("");
-        return linkedList;
-    }
+        TrieNode current = this.root;
 
-    private void traverse(TrieNode current, LinkedList<String> linkedList) {
+        Queue<Character> charsQueue = new DynamicQueue<>();
+        Queue<TrieNode> trieNodesQueue = new DynamicQueue<>();
 
-        if ((current != null) && (!current.isEmpty())) {
+        if (!current.isEmpty()) {
             for (Character c : current.keys()) {
-                traverse(current.get(c), linkedList);
+                charsQueue.add(c);
+                trieNodesQueue.add(current);
             }
 
-            String str = current.characters();
-            linkedList.addAtStart(str);
+            linkedList.add(current.characters());
+
+            while (!charsQueue.isEmpty()) {
+                Character c = charsQueue.dequeue();
+                current = trieNodesQueue.dequeue().get(c);
+
+                if (current != null) {
+                    for (Character chr : current.keys()) {
+                        charsQueue.add(chr);
+                        trieNodesQueue.add(current);
+                    }
+                    if (!current.characters().equals("")) {
+                        linkedList.add(current.characters());
+                    }
+                }
+            }
+            trieNodesQueue.clear();
         }
+
+        linkedList.addAtStart("");
+        return linkedList;
     }
 
     private void traverseWord(TrieNode current, LinkedList<String> list, StringBuilder sb) {
@@ -162,7 +179,7 @@ public class Trie implements Tree<String> {
 
         TrieNode current = this.root;
 
-        for (Character c : value.toCharArray()) {
+        for (Character c : characters) {
             TrieNode temp = current.get(c);
 
             if (temp == null) {
@@ -181,7 +198,6 @@ public class Trie implements Tree<String> {
         return this.root.isEmpty();
     }
 
-    // Think about this, maybe new optimized code in future?
     @Override
     public int size() {
         return this.levelOrder().size();

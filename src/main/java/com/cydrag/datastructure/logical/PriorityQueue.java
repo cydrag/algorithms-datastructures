@@ -17,20 +17,37 @@ public class PriorityQueue<T extends Comparable<? super T>> extends DynamicQueue
 
     @Override
     public void enqueue(T value) {
-
-        if (value == null) {
-            linkedList.addAtEnd(null);
+        if (this.linkedList.isEmpty()) {
+            this.linkedList.addAtStart(value);
         }
         else {
-            if (linkedList.isEmpty()) {
-                linkedList.addAtStart(value);
+            if (value == null) {
+                this.linkedList.addAtEnd(null);
             }
-            for (int i = 0; i < linkedList.size(); i++) {
-                if (linkedList.get(i) != null) {
-                    if (comparator.compare(linkedList.get(i), value) > 0) {
-                        linkedList.add(value, i);
+            else {
+                boolean found = false;
+                int lastIndex = 0;
+
+                for (int i = 0; i < this.linkedList.size(); i++) {
+                    T data = this.linkedList.get(i);
+                    lastIndex = i + 1;
+
+                    if (data != null) {
+                        if (comparator.compare(data, value) > 0) {
+                            this.linkedList.add(value, i);
+                            found = true;
+                            break;
+                        }
+                    }
+                    else {
+                        this.linkedList.add(value, i);
+                        found = true;
                         break;
                     }
+                }
+
+                if (!found) {
+                    this.linkedList.add(value, lastIndex);
                 }
             }
         }

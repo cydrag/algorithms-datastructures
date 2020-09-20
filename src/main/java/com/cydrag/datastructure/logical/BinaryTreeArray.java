@@ -6,6 +6,8 @@ import com.cydrag.datastructure.physical.Array;
 import com.cydrag.datastructure.physical.LinkedList;
 import com.cydrag.datastructure.physical.SinglyLinkedList;
 
+import java.util.Objects;
+
 /**
  *
  * New nodes are always level-order added for now...
@@ -39,7 +41,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
     @Override
     public boolean isFull() {
         if (this.lastUsedIndex == 0) {
-            return false;
+            return true;
         }
         else {
             double result = Math.log(this.lastUsedIndex + 1) / Math.log(2);
@@ -49,7 +51,17 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
 
     @Override
     public boolean isStrict() {
-        return this.lastUsedIndex % 2 == 1;
+        if (this.lastUsedIndex == 0) {
+            return true;
+        }
+        else {
+            return this.lastUsedIndex % 2 == 1;
+        }
+    }
+
+    @Override
+    public boolean isComplete() {
+        return true;
     }
 
     public boolean isFilled() {
@@ -81,7 +93,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         checkIfNull(value);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if ((value == array.get(i)) || (value.equals(array.get(i)))) {
+            if (Objects.equals(value, this.array.get(i))) {
                 this.array.add(this.array.get(this.lastUsedIndex), i);
                 this.array.add(null, this.lastUsedIndex--);
                 break;
@@ -94,7 +106,7 @@ public class BinaryTreeArray<T> implements BinaryTree<T> {
         checkIfNull(value);
 
         for (int i = 1; i <= this.lastUsedIndex; i++) {
-            if ((value == array.get(i)) || (value.equals(this.array.get(i)))) {
+            if (Objects.equals(value, this.array.get(i))) {
                 return true;
             }
         }
